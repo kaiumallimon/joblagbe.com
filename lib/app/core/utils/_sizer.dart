@@ -33,6 +33,15 @@ class Sizer {
   static double tabletRegularFontSize = 16;
 
   static double desktopRegularFontSize = 16;
+
+  static double getFontSize(BuildContext context) {
+    final double width = MediaQuery.of(context).size.width;
+    return width >= Desktop
+        ? desktopRegularFontSize
+        : width <= Desktop && width >= Tablet
+            ? tabletRegularFontSize
+            : mobileRegularFontSize;
+  }
 }
 
 enum Screen { Desktop, Tablet, Mobile }

@@ -15,7 +15,9 @@ class CustomButton extends StatefulWidget {
     this.fontSize = 16,
     this.fontWeight = FontWeight.w500,
     this.isLoading = false,
-    this.icon,
+    this.leadingIcon,
+    this.trailingIcon,
+    this.fontFamily = 'Inter',
   });
 
   final String text;
@@ -28,7 +30,9 @@ class CustomButton extends StatefulWidget {
   final double fontSize;
   final FontWeight fontWeight;
   final bool isLoading;
-  final Widget? icon;
+  final Widget? leadingIcon;
+  final Widget? trailingIcon;
+  final String fontFamily;
 
   @override
   State<CustomButton> createState() => _CustomButtonState();
@@ -67,23 +71,26 @@ class _CustomButtonState extends State<CustomButton> {
                     color: widget.textColor,
                   )
                 : Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      if (widget.icon != null) widget.icon!,
-                      if (widget.icon != null) SizedBox(width: 8),
+                      if (widget.leadingIcon != null) widget.leadingIcon!,
+                      if (widget.leadingIcon != null) SizedBox(width: 8),
                       AnimatedDefaultTextStyle(
                         style: TextStyle(
-                          color: isHovered
-                              ? widget.textColor.withOpacity(0.5)
-                              : widget.textColor,
-                          fontSize: widget.fontSize,
-                          fontWeight: widget.fontWeight,
-                        ),
+                            color: isHovered
+                                ? widget.textColor.withOpacity(0.5)
+                                : widget.textColor,
+                            fontSize: widget.fontSize,
+                            fontWeight: widget.fontWeight,
+                            fontFamily: widget.fontFamily),
                         duration: Duration(milliseconds: 300),
                         child: Text(
                           widget.text,
                         ),
                       ),
+                      if (widget.trailingIcon != null) SizedBox(width: 8),
+                      if (widget.trailingIcon != null) widget.trailingIcon!,
                     ],
                   ),
           ),

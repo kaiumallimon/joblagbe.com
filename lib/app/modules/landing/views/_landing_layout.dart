@@ -11,18 +11,18 @@ class LandingLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     Get.put(ScrollControllerX());
+    Get.put(ScrollControllerX());
 
     return Scaffold(
       backgroundColor: AppColors.white,
       body: SafeArea(
-        child: CustomScrollView(
-          slivers: [
+        child: Column(
+          children: [
             // Sticky Header
             const Header(),
 
             // Content Area
-            SliverFillRemaining(
+            Expanded(
               child: child,
             ),
           ],

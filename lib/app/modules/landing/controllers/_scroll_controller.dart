@@ -15,6 +15,7 @@ class ScrollControllerX extends GetxController {
     if (scrollController!.hasClients) {
       return scrollController!.offset > 0;
     }
+    print("ScrollController has no clients");
     return false;
   }
 
