@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:joblagbe/app/core/constants/_assets.dart';
 import 'package:joblagbe/app/core/constants/_strings.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/utils/_sizer.dart';
@@ -11,7 +13,7 @@ class HeroSection extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: AppColors.primary.withOpacity(.1),
+      color: AppColors.primary.withOpacity(.2),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
@@ -82,7 +84,7 @@ class HeroSection extends StatelessWidget {
                       ),
                     )
                   ],
-                )
+                ),
               ],
             ),
           ),
