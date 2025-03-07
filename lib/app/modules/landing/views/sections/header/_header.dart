@@ -31,7 +31,7 @@ class Header extends StatelessWidget {
             decoration: BoxDecoration(
               color: scrollController.progress.value != 0
                   ? Colors.black.withOpacity(0.05)
-                  : AppColors.primary.withOpacity(0.1),
+                  : AppColors.primary.withOpacity(0.2),
             ),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.center,

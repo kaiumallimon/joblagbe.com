@@ -6,6 +6,7 @@ import 'package:joblagbe/app/modules/landing/views/sections/hero/_hero.dart';
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 
 import '../controllers/_scroll_controller.dart';
+import 'sections/hero/_hero2.dart';
 
 class LandingPage extends StatelessWidget {
   const LandingPage({super.key});
@@ -26,7 +27,7 @@ class LandingPage extends StatelessWidget {
               SliverList(
                 delegate: SliverChildListDelegate([
                   HeroSection(),
-                  Placeholder(),
+                  HeroSection2(),
                   Placeholder(),
                   Placeholder(),
                   Placeholder(),
