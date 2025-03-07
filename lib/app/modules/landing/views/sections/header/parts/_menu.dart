@@ -28,8 +28,8 @@ class HeaderMenu extends StatelessWidget {
                 cursor: SystemMouseCursors.click,
                 child: GestureDetector(
                   onTap: () {
-                    headerController
-                        .onPress(headerController.menuItems.indexOf(item));
+                    headerController.onPress(
+                        context, headerController.menuItems.indexOf(item));
                   },
                   child: Obx(() {
                     return AnimatedContainer(
@@ -40,10 +40,13 @@ class HeaderMenu extends StatelessWidget {
                       decoration: BoxDecoration(
                           border: Border(
                         bottom: BorderSide(
-                            color: headerController.hoverIndex.value ==
+                            color: headerController.selectedIndex.value ==
                                     headerController.menuItems.indexOf(item)
                                 ? AppColors.primary
-                                : Colors.transparent,
+                                : headerController.hoverIndex.value ==
+                                        headerController.menuItems.indexOf(item)
+                                    ? AppColors.primary
+                                    : Colors.transparent,
                             width: 2),
                       )),
                       child: Text(
