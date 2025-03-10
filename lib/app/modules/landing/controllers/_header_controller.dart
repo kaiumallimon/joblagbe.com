@@ -74,16 +74,16 @@ class HeaderController extends GetxController {
 
     switch (index) {
       case 0:
-        GoRouter.of(context).go('/');
+        (context).go('/');
         break;
       case 1:
-        GoRouter.of(context).go('/jobs');
+        (context).go('/jobs');
         break;
       case 2:
-        GoRouter.of(context).go('/blog');
+        (context).go('/blog');
         break;
       case 3:
-        GoRouter.of(context).go('/contact');
+        (context).go('/contact');
         break;
       default:
         break;
