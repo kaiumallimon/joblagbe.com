@@ -47,7 +47,9 @@ class Header extends StatelessWidget {
                     // login
                     CustomButton(
                       text: 'Login',
-                      onPressed: () {},
+                      onPressed: () {
+                        (context).go('/login');
+                      },
                       borderRadius: 120,
                       width: 120,
                       height: 45,
