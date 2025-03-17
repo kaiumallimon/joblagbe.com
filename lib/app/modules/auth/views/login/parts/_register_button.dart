@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../../../../../core/theming/colors/_colors.dart';
 
@@ -40,7 +41,9 @@ class RegisterButtonState extends State<RegisterButton> {
             duration: const Duration(milliseconds: 300),
             opacity: isHovered ? 0.5 : 1,
             child: GestureDetector(
-              onTap: () {},
+              onTap: () {
+                (context).go('/register');
+              },
               child: const Text(
                 'Register',
                 style: TextStyle(
