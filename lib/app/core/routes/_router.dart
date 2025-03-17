@@ -1,27 +1,55 @@
-import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:get/get.dart';
 import 'package:joblagbe/app/modules/404/views/_404_notfound.dart';
+import 'package:joblagbe/app/modules/dashboard/applicant/wrapper/pages/_applicant_dashboard.dart';
 import 'package:joblagbe/app/modules/auth/views/login/_login.dart';
 import 'package:joblagbe/app/modules/auth/views/register/views/pages/_register.dart';
+import 'package:joblagbe/app/modules/dashboard/applicant/home/pages/_applicant_home.dart';
+import 'package:joblagbe/app/modules/dashboard/applicant/jobs/pages/_applicant_jobs.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/wrapper/pages/_recruiter_dashbord_layout.dart';
-import 'package:joblagbe/app/modules/landing/views/categories/views/_categories.dart';
-import 'package:joblagbe/app/modules/landing/views/_landing_layout.dart';
-import 'package:joblagbe/app/modules/landing/views/_landing_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:joblagbe/app/modules/dashboard/recruiter/home/pages/_recruiter_home.dart';
+import 'package:joblagbe/app/modules/dashboard/recruiter/jobs/pages/_recruiter_jobs.dart';
 
-import '../../modules/dashboard/applicant/wrapper/pages/_applicant_dashboard.dart';
-import '../../modules/dashboard/recruiter/home/pages/_recruiter_home.dart';
-import '../../modules/dashboard/recruiter/jobs/pages/_recruiter_jobs.dart';
-import '../../modules/dashboard/recruiter/wrapper/pages/_recruiter_dashboard.dart';
-
-final GlobalKey<NavigatorState> _rootNavigatorKey = GlobalKey<NavigatorState>();
+import '../../modules/auth/controllers/_login_controller.dart';
+import '../../modules/landing/views/_landing_layout.dart';
+import '../../modules/landing/views/_landing_page.dart';
+import '../../modules/landing/views/categories/views/_categories.dart';
 
 class AppRouter {
   static GoRouter router = GoRouter(
     initialLocation: '/',
-    navigatorKey: _rootNavigatorKey,
+    redirect: (context, state) {
+      if (!Get.isRegistered<LoginController>()) return '/login';
+
+      final authController = Get.find<LoginController>();
+
+      // Wait for loading
+      if (authController.isLoading.value) return null;
+
+      // If user is not logged in, redirect to login
+      if (authController.userRole.value.isEmpty) return '/login';
+
+      // Redirect based on role
+      switch (authController.userRole.value) {
+        case 'Recruiter':
+          return state.matchedLocation.startsWith('/dashboard/recruiter')
+              ? null
+              : '/dashboard/recruiter/home';
+        case 'Applicant':
+          return state.matchedLocation.startsWith('/dashboard/applicant')
+              ? null
+              : '/dashboard/applicant/home';
+        case 'Admin':
+          return state.matchedLocation.startsWith('/dashboard/admin')
+              ? null
+              : '/dashboard/admin/home';
+        default:
+          return '/'; // Redirect unknown roles to home
+      }
+    },
+    refreshListenable: Get.find<LoginController>().userRoleNotifier,
     routes: [
+      // Public Routes
       // Shell Route for Landing Pages
       ShellRoute(
         builder: (context, state, child) {
@@ -39,78 +67,62 @@ class AppRouter {
         ],
       ),
 
-      // Auth Routes
+      GoRoute(path: '/login', builder: (context, state) => const LoginPage()),
       GoRoute(
-        path: '/login',
-        parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const LoginPage(),
-      ),
-      GoRoute(
-        path: '/register',
-        parentNavigatorKey: _rootNavigatorKey,
-        builder: (context, state) => const RegisterPage(),
-      ),
+          path: '/register', builder: (context, state) => const RegisterPage()),
 
-      // Role-Based Dashboards
+      // Recruiter Dashboard (Protected)
       ShellRoute(
-        navigatorKey:
-            GlobalKey<NavigatorState>(), // Separate navigator for recruiter
-        builder: (context, state, child) {
-          return RecruiterDashboardLayout(child: child);
-        },
+        builder: (context, state, child) =>
+            RecruiterDashboardLayout(child: child),
+        redirect: (context, state) => _getRedirect('Recruiter'),
         routes: [
           GoRoute(
             path: '/dashboard/recruiter/home',
             builder: (context, state) => const RecruiterHome(),
-            redirect: (context, state) => _redirectUser(context, 'Recruiter'),
+            redirect: (context, state) => _getRedirect('Recruiter'),
           ),
           GoRoute(
             path: '/dashboard/recruiter/jobs',
             builder: (context, state) => const RecruiterJobsPage(),
           ),
-          // GoRoute(
-          //   path: '/dashboard/recruiter/profile',
-          //   builder: (context, state) => const RecruiterProfilePage(),
-          // ),
         ],
       ),
-      GoRoute(
-        path: '/dashboard/applicant',
-        builder: (context, state) => const ApplicantDashboard(),
-        redirect: (context, state) => _redirectUser(context, 'Applicant'),
+
+      // Applicant Dashboard (Protected)
+      ShellRoute(
+        builder: (context, state, child) =>
+            ApplicantDashboardLayout(child: child),
+        redirect: (context, state) => _getRedirect('Applicant'),
+        routes: [
+          GoRoute(
+            path: '/dashboard/applicant/home',
+            builder: (context, state) => const ApplicantHome(),
+            redirect: (context, state) => _getRedirect('Applicant'),
+          ),
+          GoRoute(
+            path: '/dashboard/applicant/jobs',
+            builder: (context, state) => const ApplicantJobs(),
+          ),
+        ],
       ),
-      // GoRoute(
-      //   path: '/dashboard/admin',
-      //   builder: (context, state) => const AdminDashboard(),
-      //   redirect: (context, state) => _redirectUser(context, 'Admin'),
-      // ),
     ],
-    errorBuilder: (context, state) => PageNotFound(),
+    errorBuilder: (context, state) {
+      return PageNotFound();
+    },
   );
 
-  // Redirect Function to Ensure Role-Based Access
-  static Future<String?> _redirectUser(
-      BuildContext context, String requiredRole) async {
-    final user = FirebaseAuth.instance.currentUser;
-    if (user == null) return '/login'; // Redirect to login if not authenticated
+  // Role-Based Redirection Helper
+  static String? _getRedirect(String requiredRole) {
+    final authController = Get.find<LoginController>();
 
-    try {
-      final userDoc = await FirebaseFirestore.instance
-          .collection('db_userAccounts')
-          .doc(user.uid)
-          .get();
+    // Wait for loading
+    if (authController.isLoading.value) return null;
 
-      if (!userDoc.exists) return '/login';
+    // If user is not logged in, redirect to login
+    if (authController.userRole.isEmpty) return '/login';
 
-      final userRole = userDoc.data()?['role'] ?? '';
-
-      if (userRole == requiredRole) {
-        return null; // Allow navigation
-      } else {
-        return '/'; // Redirect unauthorized users to home
-      }
-    } catch (e) {
-      return '/login'; // Redirect on error
-    }
+    // If role doesn't match, redirect to home
+    return (authController.userRole.value == requiredRole) ? null : '/';
   }
 }
