@@ -12,7 +12,9 @@ class CustomTextfield extends StatelessWidget {
       required this.height,
       required this.isPassword,
       this.keyboardType,
+      this.iconSize = 20,
       this.controller,
+      this.iconColor,
       this.onChanged});
 
   final String? hintText;
@@ -24,6 +26,8 @@ class CustomTextfield extends StatelessWidget {
   final TextInputType? keyboardType;
   final TextEditingController? controller;
   final Function(String)? onChanged;
+  final double iconSize;
+  final Color? iconColor;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +42,7 @@ class CustomTextfield extends StatelessWidget {
         decoration: InputDecoration(
           hintText: hintText,
           labelText: labelText,
-          prefixIcon: Icon(prefixIcon),
+          prefixIcon: Icon(prefixIcon, size: iconSize, color: iconColor),
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(color: AppColors.primary, width: 2),
@@ -50,7 +54,7 @@ class CustomTextfield extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
-                color: AppColors.darkPrimary.withOpacity(.2), width: 2),
+                color: AppColors.darkPrimary.withOpacity(.15), width: 2),
           ),
         ),
       ),
