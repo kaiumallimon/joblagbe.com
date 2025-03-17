@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:joblagbe/app/core/constants/_assets.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/widgets/_app_logo.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/controllers/_wrapper_controller.dart';
-import 'package:joblagbe/app/modules/dashboard/recruiter/wrapper/pages/_recruiter_dashboard.dart';
 
 class RecruiterDashboardLayout extends StatelessWidget {
   const RecruiterDashboardLayout({super.key, required this.child});
