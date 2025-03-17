@@ -1,7 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:joblagbe/firebase_options.dart';
 import 'app/_app.dart';
+import 'app/modules/auth/controllers/_login_controller.dart';
 
 void main() async {
   // initialize flutter bindings
@@ -11,6 +14,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  
+  await GetStorage.init(); // ✅ Initialize local storage
+
+  Get.put(LoginController()); // Initialize the app controller
+
   runApp(const MyApp());
 }
