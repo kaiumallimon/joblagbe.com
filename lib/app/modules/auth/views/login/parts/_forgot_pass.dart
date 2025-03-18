@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 class ForgotPassword extends StatefulWidget {
   const ForgotPassword({super.key});
@@ -28,7 +29,9 @@ class _ForgotPasswordState extends State<ForgotPassword> {
         duration: Duration(milliseconds: 300),
         opacity: isHovered ? 0.5 : 1,
         child: GestureDetector(
-          onTap: () {},
+          onTap: () {
+            (context).go('/forgot-password');
+          },
           child: Text(
             'Forgot Password?',
             style: TextStyle(
@@ -44,4 +47,3 @@ class _ForgotPasswordState extends State<ForgotPassword> {
     );
   }
 }
-
