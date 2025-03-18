@@ -1,12 +1,15 @@
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/modules/404/views/_404_notfound.dart';
-import 'package:joblagbe/app/modules/auth/views/login/parts/_forgot_pass.dart';
 import 'package:joblagbe/app/modules/dashboard/applicant/wrapper/pages/_applicant_dashboard.dart';
 import 'package:joblagbe/app/modules/auth/views/login/_login.dart';
 import 'package:joblagbe/app/modules/auth/views/register/views/pages/_register.dart';
 import 'package:joblagbe/app/modules/dashboard/applicant/home/pages/_applicant_home.dart';
 import 'package:joblagbe/app/modules/dashboard/applicant/jobs/pages/_applicant_jobs.dart';
+import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/pages/_add_job.dart';
+import 'package:joblagbe/app/modules/dashboard/recruiter/applications/pages/_applications.dart';
+import 'package:joblagbe/app/modules/dashboard/recruiter/profile/pages/_recruiter_profile.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/wrapper/pages/_recruiter_dashbord_layout.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/home/pages/_recruiter_home.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/jobs/pages/_recruiter_jobs.dart';
@@ -53,11 +56,38 @@ class AppRouter {
           routes: [
             GoRoute(
               path: '/dashboard/recruiter/home',
-              builder: (context, state) => const RecruiterHome(),
+              pageBuilder: (context, state) => _buildFadeTransition(
+                state,
+                const RecruiterHome(),
+              ),
             ),
             GoRoute(
               path: '/dashboard/recruiter/jobs',
-              builder: (context, state) => const RecruiterJobsPage(),
+              pageBuilder: (context, state) => _buildFadeTransition(
+                state,
+                const RecruiterJobsPage(),
+              ),
+            ),
+            GoRoute(
+              path: '/dashboard/recruiter/add-job',
+              pageBuilder: (context, state) => _buildFadeTransition(
+                state,
+                const AddJobPage(),
+              ),
+            ),
+            GoRoute(
+              path: '/dashboard/recruiter/applications',
+              pageBuilder: (context, state) => _buildFadeTransition(
+                state,
+                const ApplicationsPage(),
+              ),
+            ),
+            GoRoute(
+              path: '/dashboard/recruiter/profile',
+              pageBuilder: (context, state) => _buildFadeTransition(
+                state,
+                const RecruiterProfilePage(),
+              ),
             ),
           ],
         ),
@@ -115,4 +145,16 @@ class AppRouter {
             return '/'; // Redirect unknown roles to home
         }
       });
+
+  // Fade Transition
+  static CustomTransitionPage _buildFadeTransition(
+      GoRouterState state, Widget child) {
+    return CustomTransitionPage(
+      key: state.pageKey,
+      child: child,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        return FadeTransition(opacity: animation, child: child);
+      },
+    );
+  }
 }
