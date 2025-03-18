@@ -14,6 +14,22 @@ class RecruiterWrapperController extends GetxController {
       "icon": Icons.work,
       "route": "/dashboard/recruiter/jobs",
     },
+    {
+      "title": "Add Job",
+      "icon": Icons.add,
+      "route": "/dashboard/recruiter/add-job",
+    },
+    {
+      "title": "Applications",
+      "icon": Icons.assignment,
+      "route": "/dashboard/recruiter/applications",
+    },
+    {
+      "title": "Profile",
+      "icon": Icons.account_circle,
+      "route": "/dashboard/recruiter/profile",
+    },
+
     // Add more menu items here if needed
   ].obs; // Make it observable if it needs to change dynamically
 
