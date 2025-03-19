@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 
 class CustomDialog extends StatelessWidget {
@@ -21,6 +20,9 @@ class CustomDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Dialog(
+      insetAnimationDuration: Duration(
+        milliseconds: 300,
+      ),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(20),
       ),
@@ -63,18 +65,24 @@ void showCustomDialog({
   required String title,
   required String content,
   required String buttonText,
-  required VoidCallback onButtonPressed,
+  VoidCallback? onButtonPressed,
   required Color buttonColor,
 }) {
   showDialog(
     context: context,
-    builder: (context) => CustomDialog(
-      title: title,
-      content: content,
-      buttonText: buttonText,
-      onButtonPressed: onButtonPressed,
-      buttonColor: buttonColor,
-    ),
+    builder: (context) {
+      return CustomDialog(
+        title: title,
+        content: content,
+        buttonText: buttonText,
+        onButtonPressed: () {
+          if (Navigator.of(context).canPop()) {
+            Navigator.of(context).pop();
+          }
+        },
+        buttonColor: buttonColor,
+      );
+    },
     barrierDismissible: false,
   );
 }

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
 
 class AddJobController extends GetxController {
   final titleController = TextEditingController();
@@ -55,5 +56,79 @@ class AddJobController extends GetxController {
     titleController.dispose();
     skillsController.dispose();
     locationController.dispose();
+  }
+
+  bool validateAllFields(BuildContext context) {
+    if (titleController.text.isEmpty) {
+      showCustomDialog(
+          context: context,
+          title: 'Error',
+          content: "Title cannot be empty",
+          buttonText: 'Okay',
+          onButtonPressed: Navigator.of(context).pop,
+          buttonColor: Colors.red);
+      return false;
+    }
+    if (descriptionController.text.isEmpty) {
+      showCustomDialog(
+          context: context,
+          title: 'Error',
+          content: "Description cannot be empty",
+          buttonText: 'Okay',
+          onButtonPressed: Navigator.of(context).pop,
+          buttonColor: Colors.red);
+      return false;
+    }
+    if (skillsController.text.isEmpty) {
+      showCustomDialog(
+          context: context,
+          title: 'Error',
+          content: "Enter at least one skill",
+          buttonText: 'Okay',
+          onButtonPressed: Navigator.of(context).pop,
+          buttonColor: Colors.red);
+
+      return false;
+    }
+    if (locationController.text.isEmpty) {
+      showCustomDialog(
+          context: context,
+          title: 'Error',
+          content: "Location cannot be empty",
+          buttonText: 'Okay',
+          onButtonPressed: Navigator.of(context).pop,
+          buttonColor: Colors.red);
+      return false;
+    }
+    if (applicationDeadline.value == null) {
+      showCustomDialog(
+          context: context,
+          title: 'Error',
+          content: "Please select a deadline for the application",
+          buttonText: 'Okay',
+          onButtonPressed: Navigator.of(context).pop,
+          buttonColor: Colors.red);
+      return false;
+    }
+    return true;
+  }
+
+  var toggleView = false.obs;
+
+  void viewAsCandidate(BuildContext context) {
+    try {
+      if (!validateAllFields(context)) {
+        return;
+      }
+      toggleView.value = true;
+    } catch (e) {
+      showCustomDialog(
+          context: Get.context!,
+          title: 'Error',
+          content: "Something went wrong",
+          buttonText: 'Okay',
+          onButtonPressed: Navigator.of(Get.context!).pop,
+          buttonColor: Colors.red);
+    }
   }
 }
