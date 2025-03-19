@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/core/widgets/_custom_textfield.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/controllers/_add_job_controller.dart';
 
 import '../../../../../core/theming/colors/_colors.dart';
 import '../../../../../core/widgets/_dashboard_appbar.dart';
+import 'parts/_deadline_selector.dart';
+import 'parts/_job_experience_selector.dart';
+import 'parts/_job_salary_selector.dart';
+import 'parts/_job_type_selector.dart';
 
 class AddJobPage extends StatelessWidget {
   const AddJobPage({super.key});
@@ -68,34 +72,9 @@ class AddJobPage extends StatelessWidget {
             spacing: 20,
             children: [
               Expanded(
-                child: Obx(() {
-                  return DropdownButtonFormField(
-                    decoration: InputDecoration(
-                        labelText: 'Job Type',
-                        prefixIcon: Icon(Icons.work),
-                        focusedBorder: InputBorder.none,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        fillColor: Colors.transparent,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                              color: AppColors.darkPrimary.withOpacity(.15),
-                              width: 2),
-                        ),
-                        filled: false),
-                    value: controller.selectedJobType.value,
-                    items: controller.jobTypes.map((String jobType) {
-                      return DropdownMenuItem<String>(
-                        value: jobType,
-                        child: Text(jobType),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      controller.selectedJobType.value = newValue!;
-                    },
-                  );
-                }),
+                child: 
+                  AddJobTypeSelector(controller: controller)
+                
               ),
               Expanded(
                 child: CustomTextfield(
@@ -108,34 +87,7 @@ class AddJobPage extends StatelessWidget {
                     controller: controller.locationController),
               ),
               Expanded(
-                child: Obx(() {
-                  return DropdownButtonFormField(
-                    decoration: InputDecoration(
-                        labelText: 'Salary Range',
-                        prefixIcon: Icon(Icons.work),
-                        focusedBorder: InputBorder.none,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        fillColor: Colors.transparent,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                              color: AppColors.darkPrimary.withOpacity(.15),
-                              width: 2),
-                        ),
-                        filled: false),
-                    value: controller.selectedSalaryRange.value,
-                    items: controller.salaryRange.map((String salaryRange) {
-                      return DropdownMenuItem<String>(
-                        value: salaryRange,
-                        child: Text(salaryRange),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      controller.selectedSalaryRange.value = newValue!;
-                    },
-                  );
-                }),
+                child: AddJobSalarySelector(controller: controller),
               )
             ],
           ),
@@ -146,34 +98,7 @@ class AddJobPage extends StatelessWidget {
             spacing: 20,
             children: [
               Expanded(
-                child: Obx(() {
-                  return DropdownButtonFormField(
-                    decoration: InputDecoration(
-                        labelText: 'Experience Level',
-                        prefixIcon: Icon(Icons.work),
-                        focusedBorder: InputBorder.none,
-                        focusColor: Colors.transparent,
-                        hoverColor: Colors.transparent,
-                        fillColor: Colors.transparent,
-                        enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          borderSide: BorderSide(
-                              color: AppColors.darkPrimary.withOpacity(.15),
-                              width: 2),
-                        ),
-                        filled: false),
-                    value: controller.selectedExperienceLevel.value,
-                    items: controller.experienceLevels.map((String expLevel) {
-                      return DropdownMenuItem<String>(
-                        value: expLevel,
-                        child: Text(expLevel),
-                      );
-                    }).toList(),
-                    onChanged: (String? newValue) {
-                      controller.selectedExperienceLevel.value = newValue!;
-                    },
-                  );
-                }),
+                child: AddJobExperienceSelector(controller: controller),
               ),
               Expanded(
                 child: CustomTextfield(
@@ -185,53 +110,21 @@ class AddJobPage extends StatelessWidget {
                     labelText: 'Job Tags',
                     controller: controller.tagsController),
               ),
-              Expanded(
-                child: Obx(() {
-                  return MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () async {
-                        DateTime? pickedDate = await showDatePicker(
-                          context: context,
-                          initialDate: controller.applicationDeadline.value ??
-                              DateTime.now(),
-                          firstDate: DateTime.now(),
-                          lastDate: DateTime(2101),
-                        );
-                        if (pickedDate != null) {
-                          controller.applicationDeadline.value = pickedDate;
-                        }
-                      },
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(
-                            horizontal: 10), // Added padding
-                        alignment: Alignment.centerLeft,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(
-                              color: AppColors.darkPrimary.withOpacity(.15),
-                              width: 2),
-                        ),
-                        width: double.infinity,
-                        height: 50,
-                        child: Center(
-                          child: Text(
-                            controller.applicationDeadline.value == null
-                                ? 'Select Application Deadline'
-                                : DateFormat('yyyy-MM-dd').format(
-                                    controller.applicationDeadline.value!),
-                            style: TextStyle(
-                              color: AppColors.black.withOpacity(.9),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                }),
-              )
+              AddJobDeadlineSelector(controller: controller)
             ],
           ),
+          const SizedBox(
+            height: 40,
+          ),
+          Row(
+            children: [
+              CustomButton(
+                  text: 'Next Page',
+                  onPressed: () {
+                    // controller.addJob();
+                  }),
+            ],
+          )
         ],
       )),
     );
