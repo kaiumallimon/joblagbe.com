@@ -18,6 +18,8 @@ class MyApp extends StatelessWidget {
       routeInformationProvider: AppRouter.router.routeInformationProvider,
       scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
       defaultTransition: Transition.fade,
+
+      
     );
   }
 }

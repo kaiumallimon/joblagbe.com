@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-
+import 'package:quill_html_editor/quill_html_editor.dart';
 import '../theming/colors/_colors.dart';
 
 class CustomTextfield extends StatelessWidget {
@@ -56,6 +56,47 @@ class CustomTextfield extends StatelessWidget {
             borderSide: BorderSide(
                 color: AppColors.darkPrimary.withOpacity(.15), width: 2),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class CustomDescriptionField extends StatelessWidget {
+  const CustomDescriptionField({
+    super.key,
+    required this.controller,
+    this.hintText,
+    this.labelText,
+    this.prefixIcon,
+  });
+
+  final TextEditingController controller;
+  final String? hintText;
+  final String? labelText;
+  final IconData? prefixIcon;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+        border: Border.all(color: AppColors.black.withOpacity(.15), width: 2),
+      ),
+      width: double.infinity,
+      height: 300,
+      child: TextField(
+        controller: controller,
+        maxLines: null,
+        decoration: InputDecoration(
+          prefixIcon: Icon(
+            prefixIcon,
+            size: 20,
+          ),
+          hintText: hintText,
+          labelText: labelText,
+          border: InputBorder.none,
+          contentPadding: EdgeInsets.all(10),
         ),
       ),
     );

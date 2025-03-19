@@ -4,7 +4,7 @@ import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/widgets/_app_logo.dart';
-import 'package:joblagbe/app/modules/dashboard/recruiter/controllers/_wrapper_controller.dart';
+import 'package:joblagbe/app/modules/dashboard/recruiter/wrapper/controllers/_wrapper_controller.dart';
 
 import '../../../../../core/widgets/_custom_button.dart';
 import '../../../../auth/controllers/_login_controller.dart';
