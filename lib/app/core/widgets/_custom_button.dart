@@ -64,6 +64,13 @@ class _CustomButtonState extends State<CustomButton> {
           decoration: BoxDecoration(
             color: isHovered ? widget.color.withOpacity(0.5) : widget.color,
             borderRadius: BorderRadius.circular(widget.borderRadius),
+            boxShadow: [
+              BoxShadow(
+                color: widget.textColor.withOpacity(0.2),
+                blurRadius: 30,
+                offset: Offset(2, 2),
+              ),
+            ],
           ),
           child: Center(
             child: widget.isLoading
