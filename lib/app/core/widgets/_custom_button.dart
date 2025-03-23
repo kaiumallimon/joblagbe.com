@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 import '../theming/colors/_colors.dart';
 
@@ -74,8 +75,9 @@ class _CustomButtonState extends State<CustomButton> {
           ),
           child: Center(
             child: widget.isLoading
-                ? CircularProgressIndicator(
-                    color: widget.textColor,
+                ? LoadingAnimationWidget.twoRotatingArc(
+                    color: AppColors.white,
+                    size: 20,
                   )
                 : Row(
                     crossAxisAlignment: CrossAxisAlignment.center,
