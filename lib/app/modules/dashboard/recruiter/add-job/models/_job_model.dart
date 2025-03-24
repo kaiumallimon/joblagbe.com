@@ -10,7 +10,7 @@ class JobModel {
   String salaryRange;
   String experienceLevel;
   List<String> tags;
-  String deadline;
+  DateTime deadline;
   Timestamp? createdAt;
   String creatorId;
   String company;
@@ -43,7 +43,7 @@ class JobModel {
       "salaryRange": salaryRange,
       "experienceLevel": experienceLevel,
       "tags": tags,
-      "deadline": deadline,
+      "deadline": Timestamp.fromDate(deadline),
       "createdAt": createdAt ?? FieldValue.serverTimestamp(),
       "creatorId": creatorId,
       "company": company,
@@ -63,7 +63,7 @@ class JobModel {
         salaryRange: map["salaryRange"] ?? "",
         experienceLevel: map["experienceLevel"] ?? "",
         tags: List<String>.from(map["tags"] ?? []),
-        deadline: map["deadline"] ?? "",
+        deadline: (map['deadline'] as Timestamp?)?.toDate() ?? DateTime.now(),
         createdAt: map["createdAt"],
         creatorId: map["creatorId"],
         company: map['company'],
