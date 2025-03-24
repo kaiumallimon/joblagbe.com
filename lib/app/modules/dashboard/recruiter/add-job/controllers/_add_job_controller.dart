@@ -57,7 +57,7 @@ class AddJobController extends GetxController {
   }
 
   bool isProfileComplete(BuildContext context) {
-    final profileController = Get.find<RecruiterProfileController>();
+    final RecruiterProfileController profileController = Get.put(RecruiterProfileController());
 
     if (profileController.profileData.value!.isEmpty()) {
       showCustomDialog(
@@ -280,6 +280,8 @@ class AddJobController extends GetxController {
       );
     }
   }
+
+  
 }
 
 class MCQ {
