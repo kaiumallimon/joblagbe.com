@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/models/_job_model.dart';
 
 class RecruiterJobsService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final CollectionReference _jobsCollection =
       FirebaseFirestore.instance.collection('db_jobs');
 
@@ -17,14 +16,14 @@ class RecruiterJobsService {
       // Fetch total job count asynchronously in a separate query
       int totalJobs = await _jobsCollection
           .where('deadline', isGreaterThan: now)
-          .where('creatorId', isEqualTo: postedBy)
+          // .where('creatorId', isEqualTo: postedBy)
           .get()
           .then((snapshot) => snapshot.size);
 
       // Build the main job query
       Query query = _jobsCollection
           .where('deadline', isGreaterThan: now)
-          .where('creatorId', isEqualTo: postedBy)
+          // .where('creatorId', isEqualTo: postedBy)
           .orderBy('createdAt', descending: true)
           .limit(limit);
 
