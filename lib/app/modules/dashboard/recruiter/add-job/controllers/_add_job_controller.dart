@@ -184,18 +184,23 @@ class AddJobController extends GetxController {
     startLoading();
 
     try {
+      final profileData =
+          Get.find<RecruiterProfileController>().profileData.value!;
+
       final job = JobModel(
-        title: titleController.text.trim(),
-        description: descriptionController.text.trim(),
-        skills: skillsController.text.trim().split(','),
-        jobType: selectedJobType.value,
-        location: locationController.text.trim(),
-        salaryRange: selectedSalaryRange.value,
-        experienceLevel: selectedExperienceLevel.value,
-        tags: tagsController.text.trim().split(','),
-        deadline: applicationDeadline.value.toString(),
-        createdAt: Timestamp.now(),
-      );
+          title: titleController.text.trim(),
+          description: descriptionController.text.trim(),
+          skills: skillsController.text.trim().split(','),
+          jobType: selectedJobType.value,
+          location: locationController.text.trim(),
+          salaryRange: selectedSalaryRange.value,
+          experienceLevel: selectedExperienceLevel.value,
+          tags: tagsController.text.trim().split(','),
+          deadline: applicationDeadline.value.toString(),
+          createdAt: Timestamp.now(),
+          company: profileData.companyName!,
+          companyLogoUrl: profileData.companyLogoUrl!,
+          creatorId: profileData.userId);
 
       List<MCQModel> mcqs = mcqList
           .map((mcq) => MCQModel(

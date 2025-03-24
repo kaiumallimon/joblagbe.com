@@ -6,7 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
 import 'package:joblagbe/app/modules/auth/services/_login_services.dart';
-
+import 'dart:html' as html;
 import '../../dashboard/recruiter/profile/controllers/_recruiter_profile_controller.dart';
 
 class LoginController extends GetxController {
@@ -108,6 +108,7 @@ class LoginController extends GetxController {
     await _auth.signOut();
     setUserRole('');
     box.remove('user_role');
+    html.window.location.reload();
   }
 
   void setUserRole(String role) {

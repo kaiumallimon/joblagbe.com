@@ -51,7 +51,6 @@ class RecruiterProfileModel {
   /// Converts the model into a Map for Firestore.
   Map<String, dynamic> toMap() {
     return {
-      'id': profileId,
       'userId': userId,
       'name': name,
       'email': email,
@@ -98,7 +97,7 @@ class RecruiterProfileModel {
   }
 
   /// check if any field remains null/empty:
-    bool isEmpty() {
+  bool isEmpty() {
     return profileId.isEmpty ||
         userId.isEmpty ||
         name.isEmpty ||

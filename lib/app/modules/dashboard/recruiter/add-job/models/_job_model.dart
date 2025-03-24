@@ -12,20 +12,25 @@ class JobModel {
   List<String> tags;
   String deadline;
   Timestamp? createdAt;
+  String creatorId;
+  String company;
+  String companyLogoUrl;
 
-  JobModel({
-    this.id,
-    required this.title,
-    required this.description,
-    required this.skills,
-    required this.jobType,
-    required this.location,
-    required this.salaryRange,
-    required this.experienceLevel,
-    required this.tags,
-    required this.deadline,
-    this.createdAt,
-  });
+  JobModel(
+      {this.id,
+      required this.title,
+      required this.description,
+      required this.skills,
+      required this.jobType,
+      required this.location,
+      required this.salaryRange,
+      required this.experienceLevel,
+      required this.tags,
+      required this.deadline,
+      this.createdAt,
+      required this.creatorId,
+      required this.company,
+      required this.companyLogoUrl});
 
   // Convert to Map for Firestore
   Map<String, dynamic> toMap() {
@@ -40,23 +45,28 @@ class JobModel {
       "tags": tags,
       "deadline": deadline,
       "createdAt": createdAt ?? FieldValue.serverTimestamp(),
+      "creatorId": creatorId,
+      "company": company,
+      "companyLogoUrl": companyLogoUrl
     };
   }
 
   // Convert Firestore document to Job model
   factory JobModel.fromMap(Map<String, dynamic> map, String docId) {
     return JobModel(
-      id: docId,
-      title: map["title"] ?? "",
-      description: map["description"] ?? "",
-      skills: List<String>.from(map["skills"] ?? []),
-      jobType: map["jobType"] ?? "",
-      location: map["location"] ?? "",
-      salaryRange: map["salaryRange"] ?? "",
-      experienceLevel: map["experienceLevel"] ?? "",
-      tags: List<String>.from(map["tags"] ?? []),
-      deadline: map["deadline"] ?? "",
-      createdAt: map["createdAt"],
-    );
+        id: docId,
+        title: map["title"] ?? "",
+        description: map["description"] ?? "",
+        skills: List<String>.from(map["skills"] ?? []),
+        jobType: map["jobType"] ?? "",
+        location: map["location"] ?? "",
+        salaryRange: map["salaryRange"] ?? "",
+        experienceLevel: map["experienceLevel"] ?? "",
+        tags: List<String>.from(map["tags"] ?? []),
+        deadline: map["deadline"] ?? "",
+        createdAt: map["createdAt"],
+        creatorId: map["creatorId"],
+        company: map['company'],
+        companyLogoUrl: map['companyLogoUrl']);
   }
 }
