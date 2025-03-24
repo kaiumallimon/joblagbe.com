@@ -12,7 +12,7 @@ class RecruiterJobsController extends GetxController {
   var filteredJobs = <JobModel>[].obs; // Filtered jobs
   var isLoading = false.obs;
   var hasMore = true.obs;
-  final int limit = 10;
+  final int limit = 4;
   var searchQuery = ''.obs;
   DocumentSnapshot? _lastDocument;
 
@@ -69,6 +69,7 @@ class RecruiterJobsController extends GetxController {
       if (fetchedJobs.isSuccess) {
         jobs.addAll(fetchedJobs.jobs ?? []);
         _lastDocument = fetchedJobs.lastDocument;
+        // print("Last Document: ${_lastDocument?.data()}");
         hasMore(fetchedJobs.jobs?.length == limit);
 
         // Apply current filter to newly fetched jobs
