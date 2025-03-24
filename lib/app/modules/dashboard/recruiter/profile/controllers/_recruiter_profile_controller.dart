@@ -37,6 +37,8 @@ class RecruiterProfileController extends GetxController {
     isEditingMode.value = !isEditingMode.value;
   }
 
+  var isLoading = true.obs;
+
   /// Fetch profile data
   void fetchProfileData() async {
     try {
@@ -45,6 +47,7 @@ class RecruiterProfileController extends GetxController {
 
       profileData.value = response;
       profileData.refresh();
+      isLoading.value = false;
 
       // Update text controllers with fetched data
       nameController.value.text = response.name;
