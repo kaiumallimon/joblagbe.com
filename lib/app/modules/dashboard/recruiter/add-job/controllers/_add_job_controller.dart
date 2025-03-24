@@ -196,7 +196,7 @@ class AddJobController extends GetxController {
           salaryRange: selectedSalaryRange.value,
           experienceLevel: selectedExperienceLevel.value,
           tags: tagsController.text.trim().split(','),
-          deadline: applicationDeadline.value.toString(),
+          deadline: applicationDeadline.value!,
           createdAt: Timestamp.now(),
           company: profileData.companyName!,
           companyLogoUrl: profileData.companyLogoUrl!,
