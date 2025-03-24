@@ -55,7 +55,7 @@ class RecruiterProfileController extends GetxController {
       jobDescriptionController.value.text = response.jobDescription ?? '';
       designationController.value.text = response.designation ?? '';
 
-      print('Profile data fetched successfully: ${profileData.value!.toMap()}');
+      // print('Profile data fetched successfully: ${profileData.value!.toMap()}');
     } catch (e) {
       Get.snackbar("Error", "Failed to fetch profile data: $e",
           snackPosition: SnackPosition.BOTTOM);

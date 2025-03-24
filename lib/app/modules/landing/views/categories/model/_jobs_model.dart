@@ -1,14 +1,14 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 class JobPost {
   String jobId;
   String title;
   String company;
   String? recruiterId;
-  String category;
   String description;
   List<String> requirements;
   String location;
   String salary;
-  String? mcqTestId;
   DateTime createdAt;
   DateTime deadline;
   String companyLogoUrl;
@@ -18,53 +18,45 @@ class JobPost {
     required this.title,
     required this.company,
     this.recruiterId,
-    required this.category,
     required this.description,
     required this.requirements,
     required this.location,
     required this.salary,
-    this.mcqTestId,
     required this.createdAt,
     required this.deadline,
     required this.companyLogoUrl,
   });
 
   // Convert from JSON
-  factory JobPost.fromJson(Map<String, dynamic> json,id) {
+  factory JobPost.fromJson(Map<String, dynamic> json, String id) {
     return JobPost(
       jobId: id,
       title: json['title'],
       company: json['company'],
-      recruiterId: json['recruiterId'],
-      category: json['category'],
+      recruiterId: json['creatorId'],
       description: json['description'],
-      requirements: List<String>.from(json['requirements']),
+      requirements: List<String>.from(json['skills'] ?? []),
       location: json['location'],
-      salary: json['salary'],
-      mcqTestId: json['mcqTestId'],
-      createdAt: DateTime.parse(json['createdAt']),
-      deadline: DateTime.parse(json['deadline']),
-      companyLogoUrl:
-          json['companyLogo'] ?? '', // Default to empty string if null
+      salary: json['salaryRange'],
+      createdAt: (json['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      deadline: (json['deadline'] as Timestamp?)?.toDate() ?? DateTime.now(),
+      companyLogoUrl: json['companyLogoUrl'] ?? '',
     );
   }
 
   // Convert to JSON
   Map<String, dynamic> toJson() {
     return {
-      'jobId': jobId,
       'title': title,
       'company': company,
-      'recruiterId': recruiterId,
-      'category': category,
+      'creatorId': recruiterId,
       'description': description,
-      'requirements': requirements,
+      'skills': requirements,
       'location': location,
-      'salary': salary,
-      'mcqTestId': mcqTestId,
-      'createdAt': createdAt.toIso8601String(),
-      'deadline': deadline.toIso8601String(),
-      'companyLogo': companyLogoUrl,
+      'salaryRange': salary,
+      'createdAt': Timestamp.fromDate(createdAt),
+      'deadline': Timestamp.fromDate(deadline),
+      'companyLogoUrl': companyLogoUrl,
     };
   }
 }
