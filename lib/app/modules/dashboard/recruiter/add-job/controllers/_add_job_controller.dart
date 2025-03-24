@@ -6,6 +6,7 @@ import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/models/_job_model.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/services/_add_job_service.dart';
+import 'package:joblagbe/app/modules/dashboard/recruiter/profile/controllers/_recruiter_profile_controller.dart';
 import '../models/_mcq_model.dart';
 
 class AddJobController extends GetxController {
@@ -55,6 +56,23 @@ class AddJobController extends GetxController {
     super.onClose();
   }
 
+  bool isProfileComplete(BuildContext context) {
+    final profileController = Get.find<RecruiterProfileController>();
+
+    if (profileController.profileData.value!.isEmpty()) {
+      showCustomDialog(
+        context: context,
+        title: 'Error',
+        content: "Please complete your profile first before posting a job",
+        buttonText: 'Okay',
+        buttonColor: Colors.red,
+      );
+      return false;
+    } else {
+      return true;
+    }
+  }
+
   bool validateAllFields(BuildContext context) {
     final fields = {
       'Title': titleController.text,
@@ -96,7 +114,7 @@ class AddJobController extends GetxController {
       if (!validateAllFields(context)) {
         return;
       }
-      toggleView.value = true;
+      toggleView.value = !toggleView.value;
     } catch (e) {
       showCustomDialog(
           context: Get.context!,

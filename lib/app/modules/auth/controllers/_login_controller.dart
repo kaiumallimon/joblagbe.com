@@ -7,6 +7,8 @@ import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
 import 'package:joblagbe/app/modules/auth/services/_login_services.dart';
 
+import '../../dashboard/recruiter/profile/controllers/_recruiter_profile_controller.dart';
+
 class LoginController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final box = GetStorage(); // Local storage
@@ -70,6 +72,9 @@ class LoginController extends GetxController {
 
       if (role == 'Recruiter') {
         context.go('/dashboard/recruiter/home');
+
+        // load recruiter profile data
+        Get.put(RecruiterProfileController());
       } else if (role == 'Applicant') {
         context.go('/dashboard/applicant/home');
       } else if (role == 'Admin') {

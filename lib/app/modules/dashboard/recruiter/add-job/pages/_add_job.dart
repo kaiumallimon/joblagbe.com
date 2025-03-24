@@ -161,7 +161,8 @@ class AddJobForm extends StatelessWidget {
               CustomButton(
                   text: 'Next Page',
                   onPressed: () {
-                    if (controller.validateAllFields(context)) {
+                    if (controller.validateAllFields(context) &&
+                        controller.isProfileComplete(context)) {
                       controller.selectedPage.value = 2;
                     }
                   }),

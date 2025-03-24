@@ -96,4 +96,34 @@ class RecruiterProfileModel {
       jobDescription: jobDescription ?? this.jobDescription,
     );
   }
+
+  /// check if any field remains null/empty:
+    bool isEmpty() {
+    return profileId.isEmpty ||
+        userId.isEmpty ||
+        name.isEmpty ||
+        email.isEmpty ||
+        (phoneNumber == null &&
+            companyName == null &&
+            designation == null &&
+            companyLogoUrl == null &&
+            dob == null &&
+            gender == null &&
+            profilePictureUrl == null &&
+            jobDescription == null);
+  }
+
+  RecruiterProfileModel.basic({
+    required this.userId,
+    required this.name,
+    required this.email,
+  })  : profileId = '',
+        phoneNumber = null,
+        companyName = null,
+        designation = null,
+        companyLogoUrl = null,
+        dob = null,
+        gender = null,
+        profilePictureUrl = null,
+        jobDescription = null;
 }

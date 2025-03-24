@@ -1,19 +1,24 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/profile/controllers/_recruiter_profile_controller.dart';
+import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
-
+import 'dart:html' as html;
 import '../../../../../core/widgets/_dashboard_appbar.dart';
+import 'parts/_custom_dob_selector.dart';
+import 'parts/_custom_profile_textfield.dart';
+import 'parts/_gender_selector.dart';
 
 class RecruiterProfilePage extends StatelessWidget {
   const RecruiterProfilePage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(RecruiterProfileController());
+    final profileController = Get.put(RecruiterProfileController());
+
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: dashboardAppbar('Profile & Settings'),
@@ -21,7 +26,7 @@ class RecruiterProfilePage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         spacing: 20,
         children: [
-          // top profile section
+          // Top profile section
           Container(
             height: 120,
             width: double.infinity,
@@ -32,311 +37,275 @@ class RecruiterProfilePage extends StatelessWidget {
                 Row(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.start,
-                  spacing: 20,
                   children: [
-                    // profile picture
-                    Container(
-                      height: 100,
-                      width: 100,
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: AppColors.darkPrimary),
+                    // Profile picture
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: GestureDetector(
+                        onTap: () {
+                          profileController.pickImage(context);
+                          // html.window.location.reload();
+                        },
+                        child: Obx(() {
+                          return Container(
+                            height: 100,
+                            width: 100,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: AppColors.darkPrimary,
+                            ),
+                            child: profileController
+                                        .profileData.value?.profilePictureUrl !=
+                                    null
+                                ? ClipOval(
+                                    child: Image.network(
+                                      profileController.profileData.value!
+                                          .profilePictureUrl!,
+                                      fit: BoxFit.cover,
+                                    ),
+                                  )
+                                : Center(
+                                    child: profileController.isUploading.value
+                                        ? LoadingAnimationWidget.twoRotatingArc(
+                                            color: AppColors.white,
+                                            size: 30,
+                                          )
+                                        : Icon(
+                                            Icons.camera_alt,
+                                            size: 25,
+                                            color: AppColors.white,
+                                          ),
+                                  ),
+                          );
+                        }),
+                      ),
                     ),
-
-                    // name & email
+                    SizedBox(width: 20),
+                    // Name & email
                     Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        spacing: 5,
-                        children: [
-                          Text(
-                            'Kaium Al Limon',
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      spacing: 5,
+                      children: [
+                        Obx(() {
+                          return Text(
+                            profileController.profileData.value?.name ?? '-',
                             style: TextStyle(
-                                color: AppColors.black,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 23,
-                                height: 1.2),
-                          ),
-                          Text('kalimon291@gmail.com',
-                              style: TextStyle(
-                                color: AppColors.darkBackground,
-                                fontSize: 16,
-                              )),
-                        ])
+                              color: AppColors.black,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 23,
+                              height: 1.2,
+                            ),
+                          );
+                        }),
+                        Obx(() {
+                          return Text(
+                            profileController.profileData.value?.email ?? '-',
+                            style: TextStyle(
+                              color: AppColors.darkBackground,
+                              fontSize: 16,
+                            ),
+                          );
+                        }),
+                      ],
+                    ),
                   ],
                 ),
-                CustomButton(text: "Edit", onPressed: () {})
+                Obx(() {
+                  return CustomButton(
+                    text: profileController.isEditingMode.value
+                        ? "Cancel"
+                        : "Edit",
+                    onPressed: () {
+                      profileController.toggleEditingMode();
+                    },
+                    color: profileController.isEditingMode.value
+                        ? AppColors.darkBackground
+                        : AppColors.primary,
+                    textColor: profileController.isEditingMode.value
+                        ? AppColors.white
+                        : AppColors.black,
+                  );
+                })
               ],
             ),
           ),
 
-          // body section
+          // Body section
           Expanded(
-              child: DynMouseScroll(builder: (context, controller, physics) {
-            return ListView(
-              controller: controller,
-              physics: physics,
-              padding: EdgeInsets.symmetric(horizontal: 20),
-              children: [
-                Text(
-                  'Personal Information',
-                  style: TextStyle(
-                      color: AppColors.black,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold),
-                ),
-                SizedBox(height: 20),
-                Row(
-                  spacing: 20,
+            child: DynMouseScroll(
+              builder: (context, controller, physics) {
+                return ListView(
+                  controller: controller,
+                  physics: physics,
+                  padding: EdgeInsets.symmetric(horizontal: 20),
                   children: [
-                    Expanded(
-                      child: CustomProfileTextBox(
-                        isEditable: false,
-                        hintText: 'Enter your name',
-                        label: 'Name',
-                        text: 'Kaium Al Limon',
+                    Text(
+                      'Personal Information (Required)',
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
-                    Expanded(
-                      child: CustomProfileTextBox(
-                        isEditable: false,
-                        hintText: 'Enter your email',
-                        label: 'Email',
-                        text: 'kalimon291@gmail.com',
+                    SizedBox(height: 20),
+                    Obx(() => Row(
+                          spacing: 20,
+                          children: [
+                            Expanded(
+                              child: CustomProfileTextBox(
+                                isEditable:
+                                    profileController.isEditingMode.value,
+                                hintText: 'Enter your name',
+                                label: 'Name',
+                                // text: 'Kaium Al Limon',
+                                controller:
+                                    profileController.nameController.value,
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomProfileTextBox(
+                                isEditable: false,
+                                hintText: 'Enter your email',
+                                label: 'Email',
+                                // text: 'kalimon291@gmail.com',
+                                controller:
+                                    profileController.emailController.value,
+                              ),
+                            ),
+                          ],
+                        )),
+                    SizedBox(height: 20),
+                    Obx(() => Row(
+                          spacing: 20,
+                          children: [
+                            Expanded(
+                              child: CustomGenderSelector(
+                                isEditable:
+                                    profileController.isEditingMode.value,
+                                hintText: 'Gender',
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomDobSelector(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                  hintText: 'Date of Birth',
+                                  initialDate: profileController
+                                              .profileData.value?.dob !=
+                                          null
+                                      ? (profileController.profileData.value!
+                                              .dob as Timestamp)
+                                          .toDate() // Safe conversion
+                                      : null),
+                            ),
+                          ],
+                        )),
+                    SizedBox(height: 20),
+                    Obx(() => Row(
+                          spacing: 20,
+                          children: [
+                            Expanded(
+                              child: CustomProfileTextBox(
+                                isEditable:
+                                    profileController.isEditingMode.value,
+                                hintText: 'Enter your phone number',
+                                label: 'Phone Number',
+                                // text: '+880 1234567890',
+                                controller:
+                                    profileController.phoneController.value,
+                              ),
+                            ),
+                            Expanded(
+                              child: CustomProfileTextBox(
+                                isEditable:
+                                    profileController.isEditingMode.value,
+                                hintText: 'Enter your company name',
+                                label: 'Company Name',
+                                // text: 'Google Inc.',
+                                controller: profileController
+                                    .companyNameController.value,
+                              ),
+                            ),
+                          ],
+                        )),
+                    SizedBox(height: 20),
+                    Obx(() => Row(
+                          spacing: 20,
+                          children: [
+                            Expanded(
+                              child: CustomProfileTextBox(
+                                isEditable:
+                                    profileController.isEditingMode.value,
+                                hintText: 'Enter your designation',
+                                label: 'Designation',
+                                // text: 'Human Resource Manager',
+                                controller: profileController
+                                    .designationController.value,
+                              ),
+                            ),
+                            Expanded(
+                              child: Obx(() {
+                                return CustomProfileTextBox(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                  hintText: 'Enter your company logo URL',
+                                  label: 'Company Logo URL',
+                                  // text: 'Google Inc.',
+                                  controller: profileController
+                                      .companyLogoController.value,
+                                );
+                              }),
+                            ),
+                          ],
+                        )),
+                    SizedBox(height: 40),
+                    Text(
+                      'Job Description (Optional)',
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
+                    SizedBox(height: 20),
+                    Obx(() => CustomProfileTextBox(
+                          isEditable: profileController.isEditingMode.value,
+                          hintText: 'Enter your job description',
+                          label: 'Job Description',
+                          maxLines: null,
+                          height: 150,
+                          controller:
+                              profileController.jobDescriptionController.value,
+                          // text:
+                          //     'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+                        )),
+                    SizedBox(height: 20),
+                    Obx(() {
+                      if (profileController.isEditingMode.value) {
+                        return Row(
+                          spacing: 20,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomButton(
+                              text: 'Save',
+                              onPressed: () {
+                                profileController.updateProfileData(context);
+                                // html.window.location.reload();
+                              },
+                            ),
+                          ],
+                        );
+                      } else {
+                        return SizedBox.shrink();
+                      }
+                    }),
                   ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  spacing: 20,
-                  children: [
-                    Expanded(
-                        child: CustomGenderSelector(
-                      isEditable: false,
-                      hintText: 'Gender',
-                    )),
-                    Expanded(
-                      child: CustomDobSelector(
-                        isEditable: false,
-                        hintText: 'Date of Birth',
-                        initialDate: DateTime(2000, 1, 1),
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  spacing: 20,
-                  children: [
-                    Expanded(
-                      child: CustomProfileTextBox(
-                        isEditable: false,
-                        hintText: 'Enter your phone number',
-                        label: 'Phone Number',
-                        text: '+880 1234567890',
-                      ),
-                    ),
-                    Expanded(
-                      child: CustomProfileTextBox(
-                        isEditable: false,
-                        hintText: 'Enter your company name',
-                        label: 'Company Name',
-                        text: 'Google Inc.',
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            );
-          }))
-        ],
-      ),
-    );
-  }
-}
-
-class CustomDobSelector extends StatelessWidget {
-  const CustomDobSelector({
-    super.key,
-    required this.isEditable,
-    required this.hintText,
-    this.initialDate,
-  });
-
-  final bool isEditable;
-  final String hintText;
-  final DateTime? initialDate;
-
-  @override
-  Widget build(BuildContext context) {
-    final RecruiterProfileController controller = Get.find();
-
-    return Obx(() {
-      return TextFormField(
-        controller: TextEditingController(
-          text: controller.selectedDob.value != null
-              ? DateFormat('yyyy-MM-dd').format(controller.selectedDob.value!)
-              : '',
-        ),
-        readOnly: true,
-        onTap: isEditable
-            ? () async {
-                DateTime? pickedDate = await showDatePicker(
-                  context: context,
-                  initialDate: controller.selectedDob.value ??
-                      initialDate ??
-                      DateTime.now(),
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime.now(),
                 );
-                if (pickedDate != null) {
-                  controller.selectedDob.value = pickedDate;
-                }
-              }
-            : null,
-        decoration: InputDecoration(
-          labelText: hintText,
-          filled: !isEditable,
-          fillColor: isEditable
-              ? Colors.transparent
-              : AppColors.black.withOpacity(.05),
-          border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide:
-                BorderSide(color: AppColors.black.withOpacity(.2), width: 2),
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide:
-                BorderSide(color: AppColors.black.withOpacity(.2), width: 2),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: AppColors.primary, width: 2),
-          ),
-          labelStyle:
-              TextStyle(color: isEditable ? AppColors.black : Colors.grey),
-        ),
-      );
-    });
-  }
-}
-
-class CustomGenderSelector extends StatelessWidget {
-  const CustomGenderSelector({
-    super.key,
-    required this.isEditable,
-    required this.hintText,
-  });
-
-  final bool isEditable;
-  final String hintText;
-
-  @override
-  Widget build(BuildContext context) {
-    final RecruiterProfileController controller = Get.find();
-
-    return Obx(() => DropdownButtonFormField<String>(
-          value: controller.selectedGender.value,
-          decoration: InputDecoration(
-            labelText: hintText,
-            filled: !isEditable,
-            fillColor: isEditable
-                ? Colors.transparent
-                : AppColors.black.withOpacity(.05),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide:
-                  BorderSide(color: AppColors.black.withOpacity(.15), width: 2),
-            ),
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide:
-                  BorderSide(color: AppColors.black.withOpacity(.15), width: 2),
-            ),
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-              borderSide: BorderSide(color: AppColors.primary, width: 2),
+              },
             ),
           ),
-          icon: Icon(
-            Icons.arrow_drop_down,
-            color: isEditable ? AppColors.black.withOpacity(.5) : Colors.grey,
-          ),
-          isExpanded: true,
-          onChanged: isEditable
-              ? (String? newValue) {
-                  if (newValue != null) {
-                    controller.selectedGender.value = newValue;
-                  }
-                }
-              : null, // Disables dropdown if not editable
-          items: controller.genders.map((String gender) {
-            return DropdownMenuItem<String>(
-              value: gender,
-              child: Text(
-                gender,
-                style: TextStyle(
-                  fontSize: 16,
-                ),
-              ),
-            );
-          }).toList(),
-        ));
-  }
-}
-
-class CustomProfileTextBox extends StatelessWidget {
-  const CustomProfileTextBox(
-      {super.key,
-      this.text,
-      this.label,
-      required this.isEditable,
-      this.controller,
-      this.height = 50,
-      required this.hintText,
-      this.width = double.infinity,
-      this.keyboardType});
-
-  final String? text;
-  final String? label;
-  final bool isEditable;
-  final TextEditingController? controller;
-  final double height;
-  final double width;
-  final String hintText;
-  final TextInputType? keyboardType;
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: height,
-      width: width,
-      child: TextFormField(
-        controller: controller,
-        readOnly: !isEditable,
-        initialValue: text,
-        keyboardType: keyboardType,
-        decoration: InputDecoration(
-            suffixIcon: text == null
-                ? Icon(
-                    Icons.error,
-                    color: Colors.red,
-                  )
-                : null,
-            labelText: label,
-            filled: !isEditable,
-            fillColor: AppColors.black.withOpacity(.05),
-            focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(color: AppColors.primary, width: 2)),
-            enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-                borderSide: BorderSide(
-                    color: AppColors.black.withOpacity(.2), width: 2)),
-            labelStyle:
-                TextStyle(color: isEditable ? AppColors.black : Colors.grey),
-            border: InputBorder.none),
+        ],
       ),
     );
   }

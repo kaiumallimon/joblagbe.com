@@ -14,9 +14,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
 
-  await GetStorage.init(); // ✅ Initialize local storage
+  await GetStorage.init();
 
-  Get.put(LoginController()); // Initialize the app controller
+  Get.put(LoginController());
 
   runApp(const MyApp());
 }
