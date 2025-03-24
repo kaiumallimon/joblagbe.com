@@ -103,4 +103,16 @@ class RecruiterJobsController extends GetxController {
   void refreshCurrentPage(BuildContext context) {
     fetchJobs(context: context, forceRefresh: true);
   }
+
+  var selectedJob = Rxn<JobModel>();
+
+  void setSelectedJob(JobModel? job) {
+    selectedJob.value = job;
+  }
+
+  var hoveredJobIndex = (-1).obs;
+
+  void setHoveredJobIndex(int index) {
+    hoveredJobIndex.value = index;
+  }
 }
