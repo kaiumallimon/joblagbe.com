@@ -9,7 +9,7 @@ class CustomProfileTextBox extends StatelessWidget {
       this.label,
       required this.isEditable,
       this.controller,
-      this.height = 50,
+      this.height = 55,
       required this.hintText,
       this.width = double.infinity,
       // required this.isEmpty,
@@ -38,6 +38,10 @@ class CustomProfileTextBox extends StatelessWidget {
         // initialValue: text,
         keyboardType: keyboardType,
         maxLines: maxLines,
+        style: TextStyle(
+            color: isEditable ? AppColors.black : AppColors.darkBackground,
+            fontSize: 14,
+            fontWeight: FontWeight.w400),
         decoration: InputDecoration(
             // suffixIcon: isEmpty == true
             //     ? Icon(
