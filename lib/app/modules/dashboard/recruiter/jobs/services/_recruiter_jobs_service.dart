@@ -23,8 +23,8 @@ class RecruiterJobsService {
       // Build the main job query
       Query query = _jobsCollection
           .where('deadline', isGreaterThan: now)
-          .orderBy('deadline') // Order by deadline first
-          .orderBy('createdAt', descending: true) // Then order by createdAt
+          .orderBy('createdAt', descending: true)
+          .orderBy('deadline')
           .limit(limit);
 
       if (lastDoc != null) {

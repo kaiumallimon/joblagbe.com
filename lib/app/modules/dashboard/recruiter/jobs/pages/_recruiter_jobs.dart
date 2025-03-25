@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -33,37 +35,34 @@ class RecruiterJobsPage extends StatelessWidget {
           children: [
             // Search bar
             const SizedBox(height: 20),
-            SizedBox(
-              height: 60,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  IconButton.filled(
-                    onPressed: () => jobsController.refreshCurrentPage(context),
-                    icon: Icon(Icons.refresh, color: AppColors.primary),
-                  ),
-                  const SizedBox(width: 20),
-                  Expanded(
-                    child: SizedBox(
-                      height: 50,
-                      child: CupertinoSearchTextField(
-                        placeholder: 'Search for jobs',
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        onChanged: (value) =>
-                            jobsController.searchQuery.value = value,
-                      ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                IconButton.filled(
+                  onPressed: () => jobsController.refreshCurrentPage(context),
+                  icon: Icon(Icons.refresh, color: AppColors.primary),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: SizedBox(
+                    height: 50,
+                    child: CupertinoSearchTextField(
+                      placeholder: 'Search for jobs',
+                      padding: const EdgeInsets.symmetric(horizontal: 20),
+                      onChanged: (value) =>
+                          jobsController.searchQuery.value = value,
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
             const SizedBox(height: 20),
-            Text('Featured Jobs',
-                style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold)),
-            const SizedBox(height: 20),
+            // Text('Featured Jobs',
+            //     style: TextStyle(
+            //         color: AppColors.black,
+            //         fontSize: 20,
+            //         fontWeight: FontWeight.bold)),
+            // const SizedBox(height: 20),
 
             // Job posts list with conditional rendering
             Expanded(
@@ -178,17 +177,26 @@ class RecruiterJobsPage extends StatelessWidget {
                                 Row(
                                   spacing: 20,
                                   children: [
-                                    CircleAvatar(
-                                        backgroundColor: AppColors.black,
-                                        radius: 30,
-                                        backgroundImage: NetworkImage(
-                                          jobsController.selectedJob.value!
-                                              .companyLogoUrl,
-                                          headers: {
-                                            "Access-Control-Allow-Origin":
-                                                "*", // Might be ignored by the browser
-                                          },
-                                        )),
+                                    Container(
+                                      width: 80,
+                                      height: 80,
+                                      decoration: BoxDecoration(
+                                        color:
+                                            AppColors.primary.withOpacity(0.1),
+                                        borderRadius: BorderRadius.circular(10),
+                                      ),
+                                      child: ClipRRect(
+                                        borderRadius: BorderRadius.circular(10),
+                                        child: Image.network(
+                                            jobsController.selectedJob.value!
+                                                .companyLogoUrl,
+                                            fit: BoxFit.cover,
+                                            headers: {
+                                              "Access-Control-Allow-Origin":
+                                                  "*", // Might be ignored by the browser
+                                            }),
+                                      ),
+                                    ),
                                     Expanded(
                                       child: Column(
                                         crossAxisAlignment:
