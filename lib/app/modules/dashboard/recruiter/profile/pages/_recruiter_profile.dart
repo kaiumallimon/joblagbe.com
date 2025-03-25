@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/profile/controllers/_recruiter_profile_controller.dart';
+import 'package:joblagbe/app/modules/dashboard/recruiter/profile/pages/parts/_compay_logo_selector.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 import 'dart:html' as html;
@@ -255,17 +256,10 @@ class RecruiterProfilePage extends StatelessWidget {
                                 ),
                               ),
                               Expanded(
-                                child: Obx(() {
-                                  return CustomProfileTextBox(
-                                    isEditable:
-                                        profileController.isEditingMode.value,
-                                    hintText: 'Enter your company logo URL',
-                                    label: 'Company Logo URL',
-                                    // text: 'Google Inc.',
-                                    controller: profileController
-                                        .companyLogoController.value,
-                                  );
-                                }),
+                                child: CustomLogoSelector(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                ),
                               ),
                             ],
                           )),
