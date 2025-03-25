@@ -148,8 +148,7 @@ class RecruiterProfileController extends GetxController {
     fetchProfileData();
   }
 
-  var selectedImageData = Rxn<Uint8List>(); // Stores selected image bytes
-  var selectedImageName = "".obs; // Stores selected file name
+
   var isUploading = false.obs;
 
   Future<void> pickImage(BuildContext context) async {
@@ -217,6 +216,81 @@ class RecruiterProfileController extends GetxController {
         context: context,
         title: "Error",
         content: "Failed to pick image: $err",
+        buttonText: "Okay",
+        buttonColor: Colors.red,
+      );
+    }
+  }
+
+
+  var isLogoUploading = false.obs;
+
+
+  Future<void> pickLogo(BuildContext context) async {
+    try {
+      // Create a file input element
+      final html.FileUploadInputElement uploadInput =
+          html.FileUploadInputElement();
+      uploadInput.accept = 'image/*';
+      uploadInput.click();
+
+      uploadInput.onChange.listen((e) async {
+        final files = uploadInput.files;
+        if (files == null || files.isEmpty) return;
+
+        final file = files.first;
+        final reader = html.FileReader();
+
+        reader.readAsArrayBuffer(file); // Read file as raw bytes
+
+        reader.onLoadEnd.listen((event) async {
+          try {
+            Uint8List imageBytes = reader.result as Uint8List;
+
+            isLogoUploading.value = true;
+
+            bool success = await profileService.uploadLogo(
+                imageBytes, profileData.value!.profileId);
+
+            isLogoUploading.value = false;
+
+            if (success) {
+              showCustomDialog(
+                context: context,
+                title: "Success",
+                content: "Logo uploaded successfully",
+                buttonText: "Okay",
+                buttonColor: Colors.green,
+              );
+
+              html.window.location
+                  .reload(); // Refresh page to reflect new image
+            } else {
+              showCustomDialog(
+                context: context,
+                title: "Error",
+                content: "Failed to upload Logo",
+                buttonText: "Okay",
+                buttonColor: Colors.red,
+              );
+            }
+          } catch (err) {
+            isUploading.value = false;
+            showCustomDialog(
+              context: context,
+              title: "Error",
+              content: "Failed to process Logo: $err",
+              buttonText: "Okay",
+              buttonColor: Colors.red,
+            );
+          }
+        });
+      });
+    } catch (err) {
+      showCustomDialog(
+        context: context,
+        title: "Error",
+        content: "Failed to pick Logo: $err",
         buttonText: "Okay",
         buttonColor: Colors.red,
       );
