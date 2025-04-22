@@ -62,6 +62,7 @@ class LoginController extends GetxController {
     showCustomLoadingDialog(context: context);
     try {
       isLoading.value = true;
+      clearFields();
       final user = await LoginService().loginUser(email, password);
 
       String role = user['role'] ?? '';

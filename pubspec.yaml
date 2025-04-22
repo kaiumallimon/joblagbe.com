@@ -54,6 +54,8 @@ dependencies:
   html: ^0.15.5
   image_picker: ^1.1.2
   infinite_scroll_pagination: ^5.0.0
+  chips_choice: ^3.0.1
+  awesome_dialog: ^3.2.1
 
 dev_dependencies:
   flutter_test:
@@ -81,7 +83,7 @@ flutter:
   assets:
     - assets/images/
     - assets/logo/
-    - assets/icons/
+    # - assets/icons/
     - assets/svgs/
     - assets/lottie/
   #   - images/a_dot_ham.jpeg

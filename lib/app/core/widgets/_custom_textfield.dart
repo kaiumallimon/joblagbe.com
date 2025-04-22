@@ -69,12 +69,14 @@ class CustomDescriptionField extends StatelessWidget {
     this.hintText,
     this.labelText,
     this.prefixIcon,
+    this.height = 300,
   });
 
   final TextEditingController controller;
   final String? hintText;
   final String? labelText;
   final IconData? prefixIcon;
+  final double height;
 
   @override
   Widget build(BuildContext context) {
@@ -84,7 +86,7 @@ class CustomDescriptionField extends StatelessWidget {
         border: Border.all(color: AppColors.black.withOpacity(.15), width: 2),
       ),
       width: double.infinity,
-      height: 300,
+      height: height,
       child: TextField(
         controller: controller,
         maxLines: null,

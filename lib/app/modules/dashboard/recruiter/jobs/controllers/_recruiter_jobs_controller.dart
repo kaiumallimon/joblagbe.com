@@ -12,7 +12,7 @@ class RecruiterJobsController extends GetxController {
   var filteredJobs = <JobModel>[].obs; // Filtered jobs
   var isLoading = false.obs;
   var hasMore = true.obs;
-  final int limit = 4;
+  final int limit = 10;
   var searchQuery = ''.obs;
   DocumentSnapshot? _lastDocument;
 
@@ -115,5 +115,31 @@ class RecruiterJobsController extends GetxController {
 
   void setHoveredJobIndex(int index) {
     hoveredJobIndex.value = index;
+  }
+
+  // filtering chip data:
+
+  List<String> chipData = [
+    "All",
+    "Posted by Me",
+    "Posted by Others",
+    // "Old",
+    // "Ongoing"
+  ];
+
+  var selectedChip = (0).obs;
+
+  void filterJobByChip() {
+    if (selectedChip.value == 1) {
+      filteredJobs.assignAll(jobs.where((job) {
+        return job.creatorId == FirebaseAuth.instance.currentUser!.uid;
+      }).toList());
+    }
+    
+     else if (selectedChip.value == 2) {
+      filteredJobs.assignAll(jobs.where((job) {
+        return job.creatorId != FirebaseAuth.instance.currentUser!.uid;
+      }).toList());
+    }
   }
 }

@@ -9,6 +9,8 @@ import 'package:joblagbe/app/modules/dashboard/applicant/home/pages/_applicant_h
 import 'package:joblagbe/app/modules/dashboard/applicant/jobs/pages/_applicant_jobs.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/pages/_add_job.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/applications/pages/_applications.dart';
+import 'package:joblagbe/app/modules/dashboard/recruiter/jobs/controllers/_job_edit_controller.dart';
+import 'package:joblagbe/app/modules/dashboard/recruiter/jobs/pages/_recruiter_jobs_edit.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/profile/pages/_recruiter_profile.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/wrapper/pages/_recruiter_dashbord_layout.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/home/pages/_recruiter_home.dart';
@@ -62,12 +64,28 @@ class AppRouter {
               ),
             ),
             GoRoute(
-              path: '/dashboard/recruiter/jobs',
-              pageBuilder: (context, state) => _buildFadeTransition(
-                state,
-                const RecruiterJobsPage(),
-              ),
-            ),
+                path: '/dashboard/recruiter/jobs',
+                pageBuilder: (context, state) => _buildFadeTransition(
+                      state,
+                      const RecruiterJobsPage(),
+                    ),
+                routes: [
+                  GoRoute(
+                    path: "edit/:jobId",
+                    pageBuilder: (context, state) {
+                      final jobId = state.pathParameters['jobId']!;
+                      // Fetch job data using the jobId
+                      Get.put(RecruiterJobEditController(jobId: jobId),tag: jobId);
+
+                      return _buildFadeTransition(
+                        state,
+                        RecruiterJobEditPage(
+                          jobId: jobId,
+                        ),
+                      );
+                    },
+                  )
+                ]),
             GoRoute(
               path: '/dashboard/recruiter/add-job',
               pageBuilder: (context, state) => _buildFadeTransition(
