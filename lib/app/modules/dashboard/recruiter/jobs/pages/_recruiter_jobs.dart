@@ -58,36 +58,36 @@ class RecruiterJobsPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            Obx(
-               () {
-                return ChipsChoice<int>.single(
-                  value: jobsController.selectedChip.value,
-                  choiceItems: C2Choice.listFrom<int, String>(
-                    source: jobsController.chipData,
-                    value: (i, v) => i,
-                    label: (i, v) => v,
-                  ),
-                  onChanged: (value) {
-                    jobsController.selectedChip.value = value;
-                    jobsController.filterJobByChip();
-                  },
-                  choiceCheckmark: true,
-                  choiceStyle: C2ChipStyle.toned(
-                    padding: EdgeInsets.all(8),
-                    foregroundStyle: TextStyle(
-                      fontFamily: "Inter"
-                    ),
-                    selectedStyle: C2ChipStyle.toned(
-                      foregroundStyle: TextStyle(
-                      fontFamily: "Inter",
-                      fontWeight: FontWeight.bold
-                    ),
-                    )
-                  ),
-                );
-              }
-            ),
-            const SizedBox(height: 20),
+            // Obx(
+            //    () {
+            //     return ChipsChoice<int>.single(
+            //       value: jobsController.selectedChip.value,
+            //       choiceItems: C2Choice.listFrom<int, String>(
+            //         source: jobsController.chipData,
+            //         value: (i, v) => i,
+            //         label: (i, v) => v,
+            //       ),
+            //       onChanged: (value) {
+            //         jobsController.selectedChip.value = value;
+            //         jobsController.filterJobByChip();
+            //       },
+            //       choiceCheckmark: true,
+            //       choiceStyle: C2ChipStyle.toned(
+            //         padding: EdgeInsets.all(8),
+            //         foregroundStyle: TextStyle(
+            //           fontFamily: "Inter"
+            //         ),
+            //         selectedStyle: C2ChipStyle.toned(
+            //           foregroundStyle: TextStyle(
+            //           fontFamily: "Inter",
+            //           fontWeight: FontWeight.bold
+            //         ),
+            //         )
+            //       ),
+            //     );
+            //   }
+            // ),
+            // const SizedBox(height: 20),
 
             // Text('Featured Jobs',
             //     style: TextStyle(
@@ -106,7 +106,7 @@ class RecruiterJobsPage extends StatelessWidget {
                     // jobs list
                     Expanded(
                       child: Obx(() {
-                        if (jobsController.isLoading.value &&
+                        if (jobsController.isLoading.value ||
                             jobsController.jobs.isEmpty) {
                           return Center(
                             child: LoadingAnimationWidget.twoRotatingArc(

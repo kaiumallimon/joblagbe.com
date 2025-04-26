@@ -1,19 +1,18 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/utils/_formatter.dart';
 import 'package:joblagbe/app/core/widgets/_custom_button.dart';
-import 'package:joblagbe/app/modules/dashboard/recruiter/jobs/controllers/_recruiter_jobs_controller.dart';
+import 'package:joblagbe/app/modules/dashboard/applicant/jobs/controllers/_applicant_jobs_controller.dart';
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 
-class RecruiterJobDetailedViewCard extends StatelessWidget {
-  const RecruiterJobDetailedViewCard({
+class ApplicantJobDetailedViewCard extends StatelessWidget {
+  const ApplicantJobDetailedViewCard({
     super.key,
     required this.jobsController,
   });
 
-  final RecruiterJobsController jobsController;
+  final ApplicantJobsController jobsController;
 
   @override
   Widget build(BuildContext context) {
@@ -28,6 +27,7 @@ class RecruiterJobDetailedViewCard extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.start,
             spacing: 20,
             children: [
+              // close button and current route
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -297,25 +297,17 @@ class RecruiterJobDetailedViewCard extends StatelessWidget {
 
               const SizedBox(height: 20),
 
-              // edit button
-
-              if (FirebaseAuth.instance.currentUser!.uid ==
-                  jobsController.selectedJob.value!.creatorId)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    CustomButton(
-                        width: 150,
-                        height: 50,
-                        text: 'Edit Post',
-                        onPressed: () {
-                          debugPrint("Editing job: ${jobsController.selectedJob.value!.id}");
-                          (context).go(
-                              '/dashboard/recruiter/jobs/edit/${jobsController.selectedJob.value!.id}',
-                              );
-                        })
-                  ],
-                )
+              // apply button
+              Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  CustomButton(
+                      width: 180,
+                      height: 50,
+                      text: 'Apply Post',
+                      onPressed: () {})
+                ],
+              )
             ],
           ),
         );

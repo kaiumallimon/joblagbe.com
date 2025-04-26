@@ -2,8 +2,6 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
-import 'package:joblagbe/app/core/theming/colors/_colors.dart';
-import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/models/_job_model.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/models/_mcq_model.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/jobs/services/_recruiter_jobs_service.dart';

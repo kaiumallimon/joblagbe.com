@@ -1,13 +1,13 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/models/_job_model.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/jobs/services/_recruiter_jobs_service.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 
-class RecruiterJobsController extends GetxController {
-  final RecruiterJobsService _recruiterJobsService = RecruiterJobsService();
+class ApplicantJobsController extends GetxController{
+    final RecruiterJobsService _recruiterJobsService = RecruiterJobsService();
   var jobs = <JobModel>[].obs; // All jobs
   var filteredJobs = <JobModel>[].obs; // Filtered jobs
   var isLoading = false.obs;
@@ -147,31 +147,4 @@ class RecruiterJobsController extends GetxController {
   void setHoveredJobIndex(int index) {
     hoveredJobIndex.value = index;
   }
-
-  // // filtering chip data:
-
-  // List<String> chipData = [
-  //   "All",
-  //   "Posted by Me",
-  //   "Posted by Others",
-  //   // "Old",
-  //   // "Ongoing"
-  // ];
-
-  // var selectedChip = (0).obs;
-
-  // void filterJobByChip() {
-  //   final query = searchQuery.value.trim().toLowerCase();
-  //   if (query.isEmpty) {
-  //     if (selectedChip.value == 1) {
-  //       filteredJobs.assignAll(jobs.where((job) {
-  //         return job.creatorId == FirebaseAuth.instance.currentUser!.uid;
-  //       }).toList());
-  //     } else if (selectedChip.value == 2) {
-  //       filteredJobs.assignAll(jobs.where((job) {
-  //         return job.creatorId != FirebaseAuth.instance.currentUser!.uid;
-  //       }).toList());
-  //     }
-  //   }
-  // }
 }
