@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:joblagbe/app/modules/dashboard/applicant/profile/models/_applicant_profile_model.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/profile/models/_recruiter_profile_model.dart';
 
 class RegisterService {
@@ -31,6 +32,12 @@ class RegisterService {
         final profileModel = RecruiterProfileModel.basic(
             userId: userId, name: name, email: email);
         await firestore.collection('db_profile').add(profileModel.toMap());
+      } else if (role == 'Applicant') {
+        var profileData = ApplicantProfileModel.basic(
+            userId: userId, fullName: name, email: email);
+        await firestore
+            .collection('db_applicantProfile')
+            .add(profileData.toJson());
       }
     } on FirebaseAuthException catch (e) {
       throw Exception('${e.message}');

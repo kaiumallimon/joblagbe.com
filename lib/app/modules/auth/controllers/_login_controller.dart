@@ -6,6 +6,7 @@ import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
 import 'package:joblagbe/app/modules/auth/services/_login_services.dart';
+import 'package:joblagbe/app/modules/dashboard/applicant/profile/controllers/_profile_controller.dart';
 import 'dart:html' as html;
 import '../../dashboard/recruiter/profile/controllers/_recruiter_profile_controller.dart';
 
@@ -78,6 +79,8 @@ class LoginController extends GetxController {
         Get.put(RecruiterProfileController());
       } else if (role == 'Applicant') {
         context.go('/dashboard/applicant/home');
+        // load applicant profile data
+        Get.put(ApplicantProfileController());
       } else if (role == 'Admin') {
         context.go('/dashboard/admin/home');
       } else {
