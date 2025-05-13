@@ -4,7 +4,7 @@ import '../theming/colors/_colors.dart';
 
 AppBar dashboardAppbar(String title) {
   return AppBar(
-    toolbarHeight: 100,
+    // toolbarHeight: 100,
     backgroundColor: AppColors.white,
     elevation: 0,
     shadowColor: Colors.transparent,
@@ -15,7 +15,7 @@ AppBar dashboardAppbar(String title) {
         title,
         style: TextStyle(
           color: AppColors.darkPrimary,
-          fontSize: 25,
+          fontSize: 22,
           fontWeight: FontWeight.bold,
         ),
       ),

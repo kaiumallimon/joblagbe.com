@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/modules/404/views/_404_notfound.dart';
+import 'package:joblagbe/app/modules/dashboard/applicant/profile/pages/_profile_page.dart';
 import 'package:joblagbe/app/modules/dashboard/applicant/wrapper/pages/_applicant_dashboard.dart';
 import 'package:joblagbe/app/modules/auth/views/login/_login.dart';
 import 'package:joblagbe/app/modules/auth/views/register/views/pages/_register.dart';
@@ -122,6 +123,11 @@ class AppRouter {
             GoRoute(
               path: '/dashboard/applicant/jobs',
               builder: (context, state) => const ApplicantJobs(),
+            ),
+
+            GoRoute(
+              path: '/dashboard/applicant/profile',
+              builder: (context, state) => const ApplicantProfilePage(),
             ),
           ],
         ),

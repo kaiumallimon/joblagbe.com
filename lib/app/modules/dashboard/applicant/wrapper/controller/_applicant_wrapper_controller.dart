@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 
 class ApplicantWrapperController extends GetxController {
@@ -13,6 +14,11 @@ class ApplicantWrapperController extends GetxController {
       "title": "Jobs",
       "icon": Icons.work,
       "route": "/dashboard/applicant/jobs",
+    },
+    {
+      "title": "Profile",
+      "icon": Icons.person,
+      "route": "/dashboard/applicant/profile",
     },
     // Add more menu items here if needed
   ].obs; // Make it observable if it needs to change dynamically
@@ -32,6 +38,18 @@ class ApplicantWrapperController extends GetxController {
         selectedMenuIndex.value = i;
         break;
       }
+    }
+  }
+
+  void showSavedInfo()async{
+    var storage = GetStorage();
+
+    var userInfo = storage.read('userInfo');
+
+    if (userInfo != null) {
+      print("User Info: $userInfo");
+    } else {
+      print("No user info found.");
     }
   }
 }

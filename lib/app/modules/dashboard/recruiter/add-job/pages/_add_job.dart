@@ -73,7 +73,7 @@ class AddJobForm extends StatelessWidget {
           ),
           Text('Job Details',
               style: TextStyle(
-                fontSize: 20,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
                 color: AppColors.black.withOpacity(.9),
               )),
