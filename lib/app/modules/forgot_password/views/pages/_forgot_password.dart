@@ -4,7 +4,7 @@ import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/utils/_sizer.dart';
 import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/core/widgets/_custom_textfield.dart';
-import 'package:joblagbe/app/modules/forgot_password/controller/_password_reset_controller.dart';
+import 'package:joblagbe/app/modules/forgot_password/controllers/_password_reset_controller.dart';
 
 import '../../../../core/widgets/_app_logo.dart';
 

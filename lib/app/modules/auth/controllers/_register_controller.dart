@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
-import 'package:joblagbe/app/modules/auth/services/_register_services.dart';
+import 'package:joblagbe/app/data/services/_register_services.dart';
 
 class RegisterController extends GetxController {
   final TextEditingController nameController = TextEditingController();

@@ -4,10 +4,10 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
-import 'package:joblagbe/app/modules/auth/services/_login_services.dart';
-import 'package:joblagbe/app/modules/dashboard/applicant/profile/controllers/_profile_controller.dart';
+import 'package:joblagbe/app/data/services/_login_services.dart';
+import 'package:joblagbe/app/modules/dashboard/applicant/controllers/_applicant_profile_controller.dart';
 import 'dart:html' as html;
-import '../../dashboard/recruiter/profile/controllers/_recruiter_profile_controller.dart';
+import '../../dashboard/recruiter/controllers/_recruiter_profile_controller.dart';
 
 class LoginController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;
