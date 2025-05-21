@@ -4,7 +4,6 @@ import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
-import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
 import 'package:joblagbe/app/modules/auth/services/_login_services.dart';
 import 'package:joblagbe/app/modules/dashboard/applicant/profile/controllers/_profile_controller.dart';
 import 'dart:html' as html;
@@ -49,18 +48,14 @@ class LoginController extends GetxController {
     String password = passwordController.text.trim();
 
     if (!validateEmail(email) || !validatePassword(password)) {
-      showCustomDialog(
-        context: context,
-        title: "Error",
-        content: "Please fill all fields",
-        buttonText: "Okay",
-        onButtonPressed: () => Navigator.of(context).pop(),
-        buttonColor: Colors.red,
+      customDialog(
+        "Error",
+        "Please fill all fields",
       );
       return;
     }
 
-    showCustomLoadingDialog(context: context);
+    showCustomLoadingDialog();
     try {
       isLoading.value = true;
       clearFields();
@@ -84,24 +79,16 @@ class LoginController extends GetxController {
       } else if (role == 'Admin') {
         context.go('/dashboard/admin/home');
       } else {
-        showCustomDialog(
-          context: context,
-          title: "Error",
-          content: "Invalid user role.",
-          buttonText: "Okay",
-          onButtonPressed: () => Navigator.of(context).pop(),
-          buttonColor: Colors.red,
+        customDialog(
+          "Error",
+          "Invalid user role.",
         );
       }
     } catch (error) {
       Navigator.of(context).pop(); // Close loading dialog
-      showCustomDialog(
-        context: context,
-        title: "Login Error",
-        content: error.toString(),
-        buttonText: "Okay",
-        onButtonPressed: () => Navigator.of(context).pop(),
-        buttonColor: Colors.red,
+      customDialog(
+        "Login Error",
+        error.toString(),
       );
     } finally {
       isLoading.value = false;

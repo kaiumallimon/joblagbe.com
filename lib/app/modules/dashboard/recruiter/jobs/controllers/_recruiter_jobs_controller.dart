@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
+import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/models/_job_model.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/jobs/services/_recruiter_jobs_service.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -107,24 +107,18 @@ class RecruiterJobsController extends GetxController {
         filterJobs();
       } else {
         if (!loadMore) {
-          showCustomDialog(
-            context: context,
-            title: "Error",
-            content: fetchedJobs.message ?? "Failed to fetch jobs",
-            buttonText: "Okay",
-            buttonColor: Colors.red,
+          customDialog(
+            "Error",
+            fetchedJobs.message ?? "Failed to fetch jobs",
           );
         }
       }
     } catch (err) {
       print("Error fetching jobs: $err");
       if (!loadMore) {
-        showCustomDialog(
-          context: context,
-          title: "Error",
-          content: "Failed to fetch jobs. Please try again. ${err.toString()}",
-          buttonText: "Okay",
-          buttonColor: Colors.red,
+        customDialog(
+          "Error",
+          "Failed to fetch jobs. Please try again. ${err.toString()}",
         );
       }
     } finally {

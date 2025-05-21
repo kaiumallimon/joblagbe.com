@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:go_router/go_router.dart';
-import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/models/_job_model.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/add-job/services/_add_job_service.dart';
@@ -57,15 +55,13 @@ class AddJobController extends GetxController {
   }
 
   bool isProfileComplete(BuildContext context) {
-    final RecruiterProfileController profileController = Get.put(RecruiterProfileController());
+    final RecruiterProfileController profileController =
+        Get.put(RecruiterProfileController());
 
     if (profileController.profileData.value!.isEmpty()) {
-      showCustomDialog(
-        context: context,
-        title: 'Error',
-        content: "Please complete your profile first before posting a job",
-        buttonText: 'Okay',
-        buttonColor: Colors.red,
+      customDialog(
+        "Error",
+        "Please complete your profile first before posting a job",
       );
       return false;
     } else {
@@ -83,26 +79,18 @@ class AddJobController extends GetxController {
 
     for (var entry in fields.entries) {
       if (entry.value.isEmpty) {
-        showCustomDialog(
-          context: context,
-          title: 'Error',
-          content: "${entry.key} cannot be empty",
-          buttonText: 'Okay',
-          onButtonPressed: Navigator.of(context).pop,
-          buttonColor: Colors.red,
+        customDialog(
+          "Error",
+          "${entry.key} cannot be empty",
         );
         return false;
       }
     }
 
     if (applicationDeadline.value == null) {
-      showCustomDialog(
-        context: context,
-        title: 'Error',
-        content: "Please select a deadline for the application",
-        buttonText: 'Okay',
-        onButtonPressed: Navigator.of(context).pop,
-        buttonColor: Colors.red,
+      customDialog(
+        "Error",
+        "Please select a deadline for the application",
       );
       return false;
     }
@@ -116,13 +104,10 @@ class AddJobController extends GetxController {
       }
       toggleView.value = !toggleView.value;
     } catch (e) {
-      showCustomDialog(
-          context: Get.context!,
-          title: 'Error',
-          content: "Something went wrong",
-          buttonText: 'Okay',
-          onButtonPressed: Navigator.of(Get.context!).pop,
-          buttonColor: Colors.red);
+      customDialog(
+        "Error",
+        "Something went wrong",
+      );
     }
   }
 
@@ -155,13 +140,9 @@ class AddJobController extends GetxController {
     for (var mcq in mcqList) {
       if (mcq.questionController.text.isEmpty ||
           mcq.optionControllers.any((controller) => controller.text.isEmpty)) {
-        showCustomDialog(
-          context: context,
-          title: 'Error',
-          content: "All fields in MCQs must be filled",
-          buttonText: 'Okay',
-          onButtonPressed: Navigator.of(context).pop,
-          buttonColor: Colors.red,
+        customDialog(
+          "Error",
+          "All fields in MCQs must be filled",
         );
         return false;
       }
@@ -219,15 +200,9 @@ class AddJobController extends GetxController {
         // ✅ Ensure the loading dialog is dismissed
         stopLoading();
 
-        showCustomDialog(
-          context: context,
-          title: 'Error',
-          content: "Failed to upload job",
-          buttonText: 'Okay',
-          onButtonPressed: () {
-            if (context.mounted) Navigator.of(context).pop();
-          },
-          buttonColor: Colors.red,
+        customDialog(
+          "Error",
+          "Failed to upload job",
         );
         return;
       }
@@ -255,12 +230,9 @@ class AddJobController extends GetxController {
       // ✅ Now show the success message safely
       Future.delayed(Duration(milliseconds: 200), () {
         if (context.mounted) {
-          showCustomDialog(
-            context: context,
-            title: 'Success',
-            content: "Job posted successfully",
-            buttonText: 'Okay',
-            buttonColor: Colors.green,
+          customDialog(
+            "Success",
+            "Job posted successfully",
           );
         }
       });
@@ -268,20 +240,12 @@ class AddJobController extends GetxController {
       // ✅ Ensure loading dialog is dismissed in case of an error
       stopLoading();
 
-      showCustomDialog(
-        context: context,
-        title: 'Error',
-        content: "Something went wrong",
-        buttonText: 'Okay',
-        onButtonPressed: () {
-          if (context.mounted) Navigator.of(context).pop();
-        },
-        buttonColor: Colors.red,
+      customDialog(
+        "Error",
+        "Something went wrong",
       );
     }
   }
-
-  
 }
 
 class MCQ {

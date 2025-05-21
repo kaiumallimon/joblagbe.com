@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/modules/404/views/_404_notfound.dart';
+import 'package:joblagbe/app/modules/dashboard/admin/add_course/pages/_add_course.dart';
+import 'package:joblagbe/app/modules/dashboard/admin/courses/pages/_courses.dart';
+import 'package:joblagbe/app/modules/dashboard/admin/home/pages/_admin_home.dart';
+import 'package:joblagbe/app/modules/dashboard/admin/wrapper/pages/_admin_wrapper.dart';
 import 'package:joblagbe/app/modules/dashboard/applicant/profile/pages/_profile_page.dart';
 import 'package:joblagbe/app/modules/dashboard/applicant/wrapper/pages/_applicant_dashboard.dart';
 import 'package:joblagbe/app/modules/auth/views/login/_login.dart';
@@ -16,6 +20,7 @@ import 'package:joblagbe/app/modules/dashboard/recruiter/profile/pages/_recruite
 import 'package:joblagbe/app/modules/dashboard/recruiter/wrapper/pages/_recruiter_dashbord_layout.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/home/pages/_recruiter_home.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/jobs/pages/_recruiter_jobs.dart';
+import 'package:joblagbe/main.dart';
 
 import '../../modules/auth/controllers/_login_controller.dart';
 import '../../modules/forgot_password/views/pages/_forgot_password.dart';
@@ -25,6 +30,7 @@ import '../../modules/landing/views/categories/views/_categories.dart';
 
 class AppRouter {
   static GoRouter router = GoRouter(
+      navigatorKey: navigatorKey,
       initialLocation: '/',
       refreshListenable: Get.find<LoginController>().userRoleNotifier,
       routes: [
@@ -76,7 +82,8 @@ class AppRouter {
                     pageBuilder: (context, state) {
                       final jobId = state.pathParameters['jobId']!;
                       // Fetch job data using the jobId
-                      Get.put(RecruiterJobEditController(jobId: jobId),tag: jobId);
+                      Get.put(RecruiterJobEditController(jobId: jobId),
+                          tag: jobId);
 
                       return _buildFadeTransition(
                         state,
@@ -124,10 +131,29 @@ class AppRouter {
               path: '/dashboard/applicant/jobs',
               builder: (context, state) => const ApplicantJobs(),
             ),
-
             GoRoute(
               path: '/dashboard/applicant/profile',
               builder: (context, state) => const ApplicantProfilePage(),
+            ),
+          ],
+        ),
+
+        // ✅ Admin Dashboard (Protected)
+        ShellRoute(
+          builder: (context, state, child) =>
+              AdminDashboardLayout(child: child),
+          routes: [
+            GoRoute(
+              path: '/dashboard/admin/home',
+              builder: (context, state) => const AdminHomePage(),
+            ),
+            GoRoute(
+              path: '/dashboard/admin/courses',
+              builder: (context, state) => const AdminManageCourses(),
+            ),
+            GoRoute(
+              path: '/dashboard/admin/add-course',
+              builder: (context, state) => const AdminAddCourse(),
             ),
           ],
         ),

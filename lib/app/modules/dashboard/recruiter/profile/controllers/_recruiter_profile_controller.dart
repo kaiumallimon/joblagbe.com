@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
-import 'package:joblagbe/app/core/widgets/_custom_dialog.dart';
+import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/profile/models/_recruiter_profile_model.dart';
 import 'package:joblagbe/app/modules/dashboard/recruiter/profile/services/_recruiter_profile_service.dart';
 // ignore: avoid_web_libraries_in_flutter
@@ -122,22 +122,18 @@ class RecruiterProfileController extends GetxController {
             : null,
       );
       profileData.refresh();
-      showCustomDialog(
-          context: context,
-          title: "Success",
-          content: "Profile upated successfully",
-          buttonText: "Okay",
-          buttonColor: AppColors.primary);
+      customDialog(
+        "Success",
+        "Profile upated successfully",
+      );
 
       toggleEditingMode();
       html.window.location.reload();
     } catch (e) {
-      showCustomDialog(
-          context: context,
-          title: "Error",
-          content: "Failed to update profile: $e",
-          buttonText: "Okay",
-          buttonColor: Colors.red);
+      customDialog(
+        "Error",
+        "Failed to update profile: $e",
+      );
       // Get.snackbar("Error", "Failed to update profile: $e", snackPosition: SnackPosition.BOTTOM);
     }
   }
@@ -180,44 +176,32 @@ class RecruiterProfileController extends GetxController {
             isUploading.value = false;
 
             if (success) {
-              showCustomDialog(
-                context: context,
-                title: "Success",
-                content: "Image uploaded successfully",
-                buttonText: "Okay",
-                buttonColor: Colors.green,
+              customDialog(
+                "Success",
+                "Image uploaded successfully",
               );
 
               html.window.location
                   .reload(); // Refresh page to reflect new image
             } else {
-              showCustomDialog(
-                context: context,
-                title: "Error",
-                content: "Failed to upload image",
-                buttonText: "Okay",
-                buttonColor: Colors.red,
+              customDialog(
+                "Error",
+                "Failed to upload image",
               );
             }
           } catch (err) {
             isUploading.value = false;
-            showCustomDialog(
-              context: context,
-              title: "Error",
-              content: "Failed to process image: $err",
-              buttonText: "Okay",
-              buttonColor: Colors.red,
+            customDialog(
+              "Error",
+              "Failed to process image: $err",
             );
           }
         });
       });
     } catch (err) {
-      showCustomDialog(
-        context: context,
-        title: "Error",
-        content: "Failed to pick image: $err",
-        buttonText: "Okay",
-        buttonColor: Colors.red,
+      customDialog(
+        "Error",
+        "Failed to pick image: $err",
       );
     }
   }
@@ -255,44 +239,32 @@ class RecruiterProfileController extends GetxController {
             isLogoUploading.value = false;
 
             if (success) {
-              showCustomDialog(
-                context: context,
-                title: "Success",
-                content: "Logo uploaded successfully",
-                buttonText: "Okay",
-                buttonColor: Colors.green,
+              customDialog(
+                "Success",
+                "Logo uploaded successfully",
               );
 
               html.window.location
                   .reload(); // Refresh page to reflect new image
             } else {
-              showCustomDialog(
-                context: context,
-                title: "Error",
-                content: "Failed to upload Logo",
-                buttonText: "Okay",
-                buttonColor: Colors.red,
+              customDialog(
+                "Error",
+                "Failed to upload Logo",
               );
             }
           } catch (err) {
             isUploading.value = false;
-            showCustomDialog(
-              context: context,
-              title: "Error",
-              content: "Failed to process Logo: $err",
-              buttonText: "Okay",
-              buttonColor: Colors.red,
+            customDialog(
+              "Error",
+              "Failed to process Logo: $err",
             );
           }
         });
       });
     } catch (err) {
-      showCustomDialog(
-        context: context,
-        title: "Error",
-        content: "Failed to pick Logo: $err",
-        buttonText: "Okay",
-        buttonColor: Colors.red,
+      customDialog(
+        "Error",
+        "Failed to pick Logo: $err",
       );
     }
   }
