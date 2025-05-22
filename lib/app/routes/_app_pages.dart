@@ -1,3 +1,5 @@
+import 'package:joblagbe/app/modules/admin/views/pages/_admin_add_categories_page.dart';
+import 'package:joblagbe/app/modules/admin/views/pages/_admin_categories_page.dart';
 import 'package:joblagbe/app/routes/_routing_imports.dart';
 
 class AppPages {
@@ -122,4 +124,18 @@ class AppPages {
     path: '/dashboard/admin/add-course',
     builder: (context, state) => const AdminAddCourse(),
   );
+
+  // ✅ admin add categories page
+  static GoRoute adminAddCategoriesPage = GoRoute(
+    path: '/dashboard/admin/add-categories',
+    builder: (context, state) => const AdminAddCategoriesPage(),
+  );
+
+  // ✅ admin categories page
+  static GoRoute adminCategoriesPage = GoRoute(
+    path: '/dashboard/admin/categories',
+    builder: (context, state) => const AdminCategoriesPage(),
+  );
+  
+  
 }

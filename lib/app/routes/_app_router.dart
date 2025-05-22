@@ -2,9 +2,9 @@ import 'package:go_router/go_router.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/modules/404/views/_404_notfound.dart';
 import 'package:joblagbe/app/modules/auth/controllers/_login_controller.dart';
-import 'package:joblagbe/app/modules/dashboard/admin/views/pages/_admin_dashboard_layout_page.dart';
-import 'package:joblagbe/app/modules/dashboard/applicant/views/pages/_applicant_dashboard_layout_page.dart';
-import 'package:joblagbe/app/modules/dashboard/recruiter/views/pages/_recruiter_dashbord_layout_page.dart';
+import 'package:joblagbe/app/modules/admin/views/pages/_admin_dashboard_layout_page.dart';
+import 'package:joblagbe/app/modules/applicant/views/pages/_applicant_dashboard_layout_page.dart';
+import 'package:joblagbe/app/modules/recruiter/views/pages/_recruiter_dashbord_layout_page.dart';
 import 'package:joblagbe/app/modules/landing/views/_landing_layout.dart';
 import 'package:joblagbe/app/routes/_app_pages.dart';
 import 'package:joblagbe/app/routes/_routing_redirections.dart';
@@ -60,6 +60,8 @@ class AppRouter {
             AppPages.adminHomePage,
             AppPages.adminCoursesPage,
             AppPages.adminAddCoursePage,
+            AppPages.adminCategoriesPage,
+            AppPages.adminAddCategoriesPage,
           ],
         ),
       ],

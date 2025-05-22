@@ -1,3 +1,5 @@
+// ignore_for_file: must_be_immutable, deprecated_member_use, avoid_web_libraries_in_flutter
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -5,9 +7,9 @@ import 'package:get_storage/get_storage.dart';
 import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/data/services/_login_services.dart';
-import 'package:joblagbe/app/modules/dashboard/applicant/controllers/_applicant_profile_controller.dart';
+import 'package:joblagbe/app/modules/applicant/controllers/_applicant_profile_controller.dart';
 import 'dart:html' as html;
-import '../../dashboard/recruiter/controllers/_recruiter_profile_controller.dart';
+import '../../recruiter/controllers/_recruiter_profile_controller.dart';
 
 class LoginController extends GetxController {
   final FirebaseAuth _auth = FirebaseAuth.instance;

@@ -20,5 +20,18 @@ AppBar dashboardAppbar(String title) {
         ),
       ),
     ),
+    bottom: PreferredSize(
+      preferredSize: Size.fromHeight(1.0),
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border(
+            bottom: BorderSide(
+              color: AppColors.darkPrimary.withOpacity(0.1),
+              width: 1.0,
+            ),
+          ),
+        ),
+      ),
+    ),
   );
 }
