@@ -1,8 +1,11 @@
+// ignore_for_file: unused_import
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/foundation.dart';
 import 'package:joblagbe/app/data/models/_recruiter_profile_model.dart';
+// ignore: avoid_web_libraries_in_flutter
 import 'dart:html' as html;
 
 class RecruiterProfileService {
@@ -38,7 +41,7 @@ class RecruiterProfileService {
           .collection('db_profile')
           .doc(profileId)
           .update(updatedData);
-      print("Profile updated successfully!");
+      debugPrint("Profile updated successfully!");
     } catch (e) {
       throw Exception("Error updating recruiter profile: $e");
     }
@@ -48,9 +51,9 @@ class RecruiterProfileService {
   Future<bool> uploadImage(Uint8List imageBytes, String profileId) async {
     try {
       if (kIsWeb) {
-        String uid = await FirebaseAuth.instance.currentUser!.uid;
+        String uid = FirebaseAuth.instance.currentUser!.uid;
 
-        print('Logged in user ID: $uid');
+        debugPrint('Logged in user ID: $uid');
         final Reference ref = storage
             .ref()
             .child('images/${DateTime.now().millisecondsSinceEpoch}.jpg');
@@ -74,7 +77,7 @@ class RecruiterProfileService {
         throw UnsupportedError("Invalid platform: Only supported on web");
       }
     } catch (e) {
-      print('Error uploading image: $e');
+      debugPrint('Error uploading image: $e');
       return false;
     }
   }
@@ -84,9 +87,9 @@ class RecruiterProfileService {
   Future<bool> uploadLogo(Uint8List imageBytes, String profileId) async {
     try {
       if (kIsWeb) {
-        String uid = await FirebaseAuth.instance.currentUser!.uid;
+        String uid =  FirebaseAuth.instance.currentUser!.uid;
 
-        print('Logged in user ID: $uid');
+        debugPrint('Logged in user ID: $uid');
         final Reference ref = storage
             .ref()
             .child('images/${DateTime.now().millisecondsSinceEpoch}.jpg');
@@ -110,7 +113,7 @@ class RecruiterProfileService {
         throw UnsupportedError("Invalid platform: Only supported on web");
       }
     } catch (e) {
-      print('Error uploading image: $e');
+      debugPrint('Error uploading image: $e');
       return false;
     }
   }

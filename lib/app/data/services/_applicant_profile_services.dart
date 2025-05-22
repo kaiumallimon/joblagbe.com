@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:joblagbe/app/data/models/_applicant_profile_model.dart';
 
 class ApplicantProfileService {
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
   final CollectionReference _applicantProfileCollection =
       FirebaseFirestore.instance.collection('db_applicantProfile');

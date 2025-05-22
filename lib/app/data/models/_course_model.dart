@@ -4,6 +4,7 @@ class Course {
   final String description;
   final String thumbnailUrl;
   final String category;
+  final List<String> tags;
   final String createdBy;
   final String createdAt;
 
@@ -14,6 +15,7 @@ class Course {
     required this.description,
     required this.thumbnailUrl,
     required this.category,
+    required this.tags,
     required this.createdBy,
     required this.createdAt,
   });
@@ -26,6 +28,7 @@ class Course {
       description: json['description'],
       thumbnailUrl: json['thumbnailUrl'],
       category: json['category'],
+      tags: json['tags'],
       createdBy: json['createdBy'],
       createdAt: json['createdAt'],
     );
@@ -38,6 +41,7 @@ class Course {
       'description': description,
       'thumbnailUrl': thumbnailUrl,
       'category': category,
+      'tags': tags,
       'createdBy': createdBy,
       'createdAt': createdAt,
     };

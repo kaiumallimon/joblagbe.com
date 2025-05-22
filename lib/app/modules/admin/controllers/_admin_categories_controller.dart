@@ -11,6 +11,7 @@ class AdminCategoriesController extends GetxController {
   List<JobCategory> get categories => _filteredCategories;
 
   final RxString searchQuery = ''.obs;
+  var isLoading = false.obs;
 
   @override
   void onInit() {
@@ -39,23 +40,24 @@ class AdminCategoriesController extends GetxController {
     }
   }
 
-  var isLoading = false.obs;
-
   Future<void> fetchCategories() async {
     try {
       isLoading.value = true;
       final categories = await adminCategoryServices.getAllCategories();
       if (categories == null) {
-        isLoading.value = false;
+        _categories.clear();
+        _filteredCategories.clear();
         customDialog("Error", "No categories found");
       } else {
         _categories.assignAll(categories);
         _filteredCategories.assignAll(categories);
-        isLoading.value = false;
       }
     } catch (e) {
-      isLoading.value = false;
+      _categories.clear();
+      _filteredCategories.clear();
       customDialog("Error", e.toString());
+    } finally {
+      isLoading.value = false;
     }
   }
 }

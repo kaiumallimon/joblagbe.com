@@ -73,12 +73,27 @@ class AdminCategoriesPage extends StatelessWidget {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            category.name,
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: AppColors.darkPrimary,
-                            ),
+                          Row(
+                            spacing: 10,
+                            children: [
+                              Text(
+                                '${adminCategoriesController.categories.indexOf(category) + 1}.',
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Expanded(
+                                child: Text(
+                                  category.name,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: TextStyle(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppColors.darkPrimary,
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                           if (category.description != null &&
                               category.description!.isNotEmpty)

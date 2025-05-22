@@ -4,40 +4,30 @@ import 'package:joblagbe/app/data/models/_course_lesson_model.dart';
 
 class AdminCourseService {
   final courseCollection = FirebaseFirestore.instance.collection('db_courses');
-  final lessonCollection = FirebaseFirestore.instance.collection('db_course_lessons');
+  final lessonCollection =
+      FirebaseFirestore.instance.collection('db_course_lessons');
 
-  Future<void> createCourse(Course course, List<CourseLesson> lessons) async {
+  Future<String?> createCourse(Course course) async {
     try {
-      // Create the course document
-      await courseCollection.doc(course.id).set(course.toJson());
+      final docRef = await courseCollection.add(course.toJson());
+      return docRef.id;
+    } catch (e) {
+      throw Exception(e.toString());
+    }
+  }
 
-      // Create lesson documents
+  Future<Map<String, dynamic>> addLessons(List<CourseLesson> lessons) async {
+    try {
+      // batch write
+      final batch = FirebaseFirestore.instance.batch();
       for (var lesson in lessons) {
-        await lessonCollection.doc(lesson.id).set(lesson.toJson());
+        final lessonDocRef = lessonCollection.doc();
+        batch.set(lessonDocRef, lesson.toJson());
       }
-    } catch (e) {
-      throw Exception('Failed to create course: $e');
-    }
-  }
-
-  Future<List<Course>> getAllCourses() async {
-    try {
-      final snapshot = await courseCollection.get();
-      return snapshot.docs.map((doc) => Course.fromJson(json: doc.data(), id: doc.id)).toList();
-    } catch (e) {
-      throw Exception('Failed to get courses: $e');
-    }
-  }
-
-  Future<List<CourseLesson>> getCourseLessons(String courseId) async {
-    try {
-      final snapshot = await lessonCollection
-          .where('courseId', isEqualTo: courseId)
-          .orderBy('orderIndex')
-          .get();
-      return snapshot.docs.map((doc) => CourseLesson.fromJson(json: doc.data(), id: doc.id)).toList();
-    } catch (e) {
-      throw Exception('Failed to get course lessons: $e');
+      await batch.commit();
+      return {'success': true, 'message': 'Lessons added successfully'};
+    } catch (error) {
+      return {'success': false, 'message': error.toString()};
     }
   }
 }
