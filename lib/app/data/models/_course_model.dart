@@ -28,7 +28,7 @@ class Course {
       description: json['description'],
       thumbnailUrl: json['thumbnailUrl'],
       category: json['category'],
-      tags: json['tags'],
+      tags: List<String>.from(json['tags'] ?? []),
       createdBy: json['createdBy'],
       createdAt: json['createdAt'],
     );

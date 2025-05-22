@@ -19,21 +19,24 @@ class AdminCategoriesPage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: TextField(
-              onChanged: (value) => adminCategoriesController.searchQuery.value = value,
+              onChanged: (value) =>
+                  adminCategoriesController.searchQuery.value = value,
               decoration: InputDecoration(
                 hintText: 'Search categories...',
                 prefixIcon: Icon(Icons.search),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: AppColors.primary.withOpacity(0.3)),
+                  borderSide: BorderSide(
+                      color: AppColors.primary.withOpacity(0.3), width: 2),
                 ),
                 enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: AppColors.primary.withOpacity(0.3)),
+                  borderSide: BorderSide(
+                      color: AppColors.primary.withOpacity(0.3), width: 2),
                 ),
                 focusedBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
-                  borderSide: BorderSide(color: AppColors.primary),
+                  borderSide: BorderSide(color: AppColors.primary, width: 2),
                 ),
               ),
             ),
@@ -58,7 +61,8 @@ class AdminCategoriesPage extends StatelessWidget {
                 child: Wrap(
                   spacing: 12,
                   runSpacing: 12,
-                  children: adminCategoriesController.categories.map((category) {
+                  children:
+                      adminCategoriesController.categories.map((category) {
                     return Container(
                       width: MediaQuery.of(context).size.width * 0.4,
                       padding: EdgeInsets.all(15),
@@ -122,7 +126,8 @@ class AdminCategoriesPage extends StatelessWidget {
                                   ),
                                 ),
                                 IconButton(
-                                  icon: Icon(Icons.delete_outline, color: Colors.red),
+                                  icon: Icon(Icons.delete_outline,
+                                      color: Colors.red),
                                   onPressed: () {
                                     // TODO: Implement delete functionality
                                   },

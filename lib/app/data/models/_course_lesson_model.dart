@@ -6,6 +6,8 @@ class CourseLesson {
   String videoUrl;
   int orderIndex;
   String createdAt;
+  int? duration;
+  List<String>? resources;
 
   // constructor
   CourseLesson({
@@ -16,6 +18,8 @@ class CourseLesson {
     required this.videoUrl,
     required this.orderIndex,
     required this.createdAt,
+    this.duration,
+    this.resources,
   });
 
   // factory constructor
@@ -28,6 +32,8 @@ class CourseLesson {
       videoUrl: json['videoUrl'],
       orderIndex: json['orderIndex'],
       createdAt: json['createdAt'],
+      duration: json['duration'],
+      resources: json['resources'] != null ? List<String>.from(json['resources']) : null,
     );
   }
 
@@ -40,6 +46,8 @@ class CourseLesson {
       'videoUrl': videoUrl,
       'orderIndex': orderIndex,
       'createdAt': createdAt,
+      'duration': duration,
+      'resources': resources,
     };
   }
 }

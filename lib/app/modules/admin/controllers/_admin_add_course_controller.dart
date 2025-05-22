@@ -7,7 +7,6 @@ import 'package:joblagbe/app/data/models/_course_model.dart';
 import 'package:joblagbe/app/data/models/_job_category_model.dart';
 import 'package:joblagbe/app/data/services/_admin_category_services.dart';
 import 'package:joblagbe/app/data/services/_admin_course_service.dart';
-import 'package:joblagbe/app/modules/admin/controllers/_admin_categories_controller.dart';
 
 class AdminAddCourseController extends GetxController {
   // course controllers
@@ -171,17 +170,14 @@ class AdminAddCourseController extends GetxController {
     descriptionController.clear();
     thumbnailUrlController.clear();
     tagsController.clear();
-    for (var controllers in lessonControllers) {
-      for (var controller in controllers) {
-        controller.clear();
-      }
-    }
+    lessonControllers.clear();
+    selectedCategory.value = null;
+  }
 
-    @override
-    void onClose() {
-      // Clean up controllers
-      clearControllers();
-      super.onClose();
-    }
+  @override
+  void onClose() {
+    // Clean up controllers
+    clearControllers();
+    super.onClose();
   }
 }

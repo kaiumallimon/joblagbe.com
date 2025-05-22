@@ -53,9 +53,16 @@ class AdminWrapperController extends GetxController {
 
   void syncMenuWithRoute(BuildContext context) {
     String currentRoute = GoRouter.of(context).state.path!;
+    
+    // Find the base route by removing any additional segments
+    String baseRoute = currentRoute;
+    if (currentRoute.contains('/view/')) {
+      baseRoute = currentRoute.substring(0, currentRoute.indexOf('/view/'));
+    }
 
+    // Find the matching menu item
     for (int i = 0; i < sideMenus.length; i++) {
-      if (currentRoute == sideMenus[i]["route"]) {
+      if (baseRoute == sideMenus[i]["route"]) {
         selectedMenuIndex.value = i;
         break;
       }

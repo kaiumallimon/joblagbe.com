@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:joblagbe/main.dart';
 
 import '../theming/colors/_colors.dart';
 
-AppBar dashboardAppbar(String title) {
+AppBar dashboardAppbar(String title, {
+  bool showBackButton = false,
+}) {
   return AppBar(
     // toolbarHeight: 100,
+    leading: showBackButton
+        ? IconButton(
+            onPressed: () => navigatorKey.currentState!.pop(),
+            icon: const Icon(Icons.arrow_back),
+          )
+        : null,
     backgroundColor: AppColors.white,
     elevation: 0,
     shadowColor: Colors.transparent,

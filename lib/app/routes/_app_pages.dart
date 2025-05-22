@@ -1,5 +1,7 @@
 import 'package:joblagbe/app/modules/admin/views/pages/_admin_add_categories_page.dart';
 import 'package:joblagbe/app/modules/admin/views/pages/_admin_categories_page.dart';
+import 'package:joblagbe/app/modules/admin/views/pages/_admin_course_view_page.dart';
+import 'package:joblagbe/app/data/models/_course_model.dart';
 import 'package:joblagbe/app/routes/_routing_imports.dart';
 
 class AppPages {
@@ -116,7 +118,22 @@ class AppPages {
   // ✅ admin courses page
   static GoRoute adminCoursesPage = GoRoute(
     path: '/dashboard/admin/courses',
-    builder: (context, state) => const AdminManageCourses(),
+    builder: (context, state) {
+      // If there's a courseId in the state, show the course view
+      if (state.extra != null) {
+        final course = state.extra as Course?;
+        if (course != null) {
+          return AdminCourseViewPage(course: course);
+        }
+        // If we have a courseId but no course object, fetch it
+        final courseId = state.uri.queryParameters['courseId'];
+        if (courseId != null) {
+          return AdminCourseViewPageWithId(courseId: courseId);
+        }
+      }
+      // Otherwise show the courses list
+      return const AdminManageCourses();
+    },
   );
 
   // ✅ admin add course page
