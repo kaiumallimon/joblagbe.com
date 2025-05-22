@@ -1,5 +1,5 @@
 class CourseLesson {
-  String id;
+  String? id;
   String courseId;
   String title;
   String description;
@@ -9,7 +9,7 @@ class CourseLesson {
 
   // constructor
   CourseLesson({
-    required this.id,
+    this.id,
     required this.courseId,
     required this.title,
     required this.description,
@@ -19,9 +19,9 @@ class CourseLesson {
   });
 
   // factory constructor
-  factory CourseLesson.fromJson(Map<String, dynamic> json) {
+  factory CourseLesson.fromJson({required Map<String, dynamic> json, String? id}) {
     return CourseLesson(
-      id: json['id'],
+      id: id,
       courseId: json['courseId'],
       title: json['title'],
       description: json['description'],
@@ -34,7 +34,6 @@ class CourseLesson {
   // toJson method
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
       'courseId': courseId,
       'title': title,
       'description': description,

@@ -70,6 +70,7 @@ class CustomDescriptionField extends StatelessWidget {
     this.prefixIcon,
     this.height = 300,
     this.width,
+    this.onChanged,
   });
 
   final TextEditingController controller;
@@ -78,6 +79,7 @@ class CustomDescriptionField extends StatelessWidget {
   final IconData? prefixIcon;
   final double height;
   final double? width;
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -90,6 +92,7 @@ class CustomDescriptionField extends StatelessWidget {
       height: height,
       child: TextField(
         controller: controller,
+        onChanged: onChanged,
         maxLines: null,
         decoration: InputDecoration(
           prefixIcon: Icon(

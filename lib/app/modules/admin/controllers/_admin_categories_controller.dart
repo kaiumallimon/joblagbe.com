@@ -7,12 +7,36 @@ class AdminCategoriesController extends GetxController {
   final AdminCategoryServices adminCategoryServices = AdminCategoryServices();
 
   final RxList<JobCategory> _categories = <JobCategory>[].obs;
-  List<JobCategory> get categories => _categories;
+  final RxList<JobCategory> _filteredCategories = <JobCategory>[].obs;
+  List<JobCategory> get categories => _filteredCategories;
+
+  final RxString searchQuery = ''.obs;
 
   @override
   void onInit() {
     super.onInit();
+    ever(searchQuery, (_) => _filterCategories());
+  }
+
+  @override
+  void onReady() {
+    super.onReady();
     fetchCategories();
+  }
+
+  void _filterCategories() {
+    if (searchQuery.value.isEmpty) {
+      _filteredCategories.assignAll(_categories);
+    } else {
+      final query = searchQuery.value.toLowerCase();
+      _filteredCategories.assignAll(
+        _categories.where((category) {
+          final name = category.name.toLowerCase();
+          final description = category.description?.toLowerCase() ?? '';
+          return name.contains(query) || description.contains(query);
+        }).toList(),
+      );
+    }
   }
 
   var isLoading = false.obs;
@@ -26,6 +50,7 @@ class AdminCategoriesController extends GetxController {
         customDialog("Error", "No categories found");
       } else {
         _categories.assignAll(categories);
+        _filteredCategories.assignAll(categories);
         isLoading.value = false;
       }
     } catch (e) {
