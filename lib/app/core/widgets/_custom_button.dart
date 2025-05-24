@@ -67,7 +67,7 @@ class _CustomButtonState extends State<CustomButton> {
             borderRadius: BorderRadius.circular(widget.borderRadius),
             boxShadow: [
               BoxShadow(
-                color: widget.textColor.withOpacity(0.2),
+                color: widget.textColor.withOpacity(0.1),
                 blurRadius: 30,
                 offset: Offset(2, 2),
               ),

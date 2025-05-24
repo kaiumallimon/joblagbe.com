@@ -20,30 +20,29 @@ class AdminManageCourses extends StatelessWidget {
       body: Column(
         children: [
           Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: TextField(
-            onChanged: (value) =>
-                adminCoursesController.filterCourses(value),
-            decoration: InputDecoration(
-              hintText: 'Search courses...',
-              prefixIcon: Icon(Icons.search),
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                    color: AppColors.primary.withOpacity(0.3), width: 2),
-              ),
-              enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(
-                    color: AppColors.primary.withOpacity(0.3), width: 2),
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: AppColors.primary, width: 2),
+            padding: const EdgeInsets.all(16.0),
+            child: TextField(
+              onChanged: (value) => adminCoursesController.filterCourses(value),
+              decoration: InputDecoration(
+                hintText: 'Search courses...',
+                prefixIcon: Icon(Icons.search),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                      color: AppColors.primary.withOpacity(0.3), width: 2),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(
+                      color: AppColors.primary.withOpacity(0.3), width: 2),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                  borderSide: BorderSide(color: AppColors.primary, width: 2),
+                ),
               ),
             ),
           ),
-        ),
           SizedBox(height: 20),
           Expanded(
             child: Obx(() {
@@ -65,10 +64,11 @@ class AdminManageCourses extends StatelessWidget {
                   child: Wrap(
                     spacing: 20,
                     runSpacing: 20,
-                    children: adminCoursesController.filteredCourses.map((course) {
+                    children:
+                        adminCoursesController.filteredCourses.map((course) {
                       return Container(
                         width: MediaQuery.of(context).size.width * 0.4,
-                        height: 200,
+                        height: 300,
                         decoration: BoxDecoration(
                           color: AppColors.primary.withOpacity(0.1),
                           borderRadius: BorderRadius.circular(12),
@@ -78,7 +78,8 @@ class AdminManageCourses extends StatelessWidget {
                           ),
                         ),
                         child: InkWell(
-                          onTap: () => context.go('/dashboard/admin/courses', extra: course),
+                          onTap: () => context.go('/dashboard/admin/courses',
+                              extra: course),
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,

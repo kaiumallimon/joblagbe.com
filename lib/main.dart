@@ -5,6 +5,7 @@ import 'package:get_storage/get_storage.dart';
 import 'package:joblagbe/firebase_options.dart';
 import 'app/_app.dart';
 import 'app/modules/auth/controllers/_login_controller.dart';
+
 final GlobalKey<NavigatorState> navigatorKey = GlobalKey<NavigatorState>();
 void main() async {
   // initialize flutter bindings

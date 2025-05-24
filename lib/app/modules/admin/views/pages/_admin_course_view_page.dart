@@ -6,6 +6,7 @@ import 'package:joblagbe/app/core/widgets/_dashboard_appbar.dart';
 import 'package:joblagbe/app/data/models/_course_model.dart';
 import 'package:joblagbe/app/data/services/_admin_course_service.dart';
 import 'package:joblagbe/app/modules/admin/controllers/_admin_course_view_controller.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class AdminCourseViewPage extends StatelessWidget {
   const AdminCourseViewPage({super.key, required this.course});
@@ -14,7 +15,8 @@ class AdminCourseViewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(AdminCourseViewController(course: course), tag: course.id);
+    final controller =
+        Get.put(AdminCourseViewController(course: course), tag: course.id);
 
     return Scaffold(
       appBar: AppBar(
@@ -151,7 +153,8 @@ class AdminCourseViewPage extends StatelessWidget {
                         itemBuilder: (context, index) {
                           final lesson = controller.lessons[index];
                           return Obx(() {
-                            final isSelected = index == controller.selectedLessonIndex.value;
+                            final isSelected =
+                                index == controller.selectedLessonIndex.value;
                             return Container(
                               decoration: BoxDecoration(
                                 color: isSelected
@@ -182,7 +185,9 @@ class AdminCourseViewPage extends StatelessWidget {
                                   ),
                                   child: Icon(
                                     Icons.play_arrow,
-                                    color: isSelected ? Colors.white : Colors.grey[600],
+                                    color: isSelected
+                                        ? Colors.white
+                                        : Colors.grey[600],
                                     size: 20,
                                   ),
                                 ),
@@ -195,13 +200,6 @@ class AdminCourseViewPage extends StatelessWidget {
                                     color: isSelected
                                         ? AppColors.primary
                                         : Colors.black87,
-                                  ),
-                                ),
-                                subtitle: Text(
-                                  '${lesson.duration ?? '0'} min',
-                                  style: TextStyle(
-                                    color: Colors.grey[600],
-                                    fontSize: 12,
                                   ),
                                 ),
                                 onTap: () => controller.selectLesson(lesson),
@@ -267,108 +265,50 @@ class AdminCourseViewPage extends StatelessWidget {
                     children: [
                       // Video player section
                       if (lesson.videoUrl.isNotEmpty)
-                        Container(
-                          height: 400,
-                          width: double.infinity,
-                          decoration: BoxDecoration(
-                            color: Colors.black,
-                            boxShadow: [
-                              BoxShadow(
-                                color: Colors.black.withOpacity(0.1),
-                                blurRadius: 10,
-                                offset: Offset(0, 2),
-                              ),
-                            ],
-                          ),
-                          child: Stack(
-                            children: [
-                              // Placeholder for video player
-                              Center(
-                                child: Icon(
-                                  Icons.play_circle_outline,
-                                  size: 64,
-                                  color: Colors.white.withOpacity(0.8),
+                        Obx(() {
+                          if (controller.currentYoutubeController.value ==
+                              null) {
+                            return Container(
+                              height: 400,
+                              width: double.infinity,
+                              color: Colors.black,
+                              child: Center(
+                                child: CircularProgressIndicator(
+                                  color: Colors.white,
                                 ),
                               ),
-                              // Video controls overlay
-                              Positioned(
-                                bottom: 0,
-                                left: 0,
-                                right: 0,
-                                child: Container(
-                                  padding: EdgeInsets.all(16),
-                                  decoration: BoxDecoration(
-                                    gradient: LinearGradient(
-                                      begin: Alignment.bottomCenter,
-                                      end: Alignment.topCenter,
-                                      colors: [
-                                        Colors.black.withOpacity(0.8),
-                                        Colors.transparent,
-                                      ],
-                                    ),
-                                  ),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.min,
-                                    children: [
-                                      // Progress bar
-                                      Slider(
-                                        value: controller.videoProgress.value,
-                                        onChanged: controller.updateProgress,
-                                        activeColor: AppColors.primary,
-                                      ),
-                                      // Controls
-                                      Row(
-                                        children: [
-                                          IconButton(
-                                            icon: Icon(
-                                              controller.isPlaying.value
-                                                  ? Icons.pause
-                                                  : Icons.play_arrow,
-                                              color: Colors.white,
-                                            ),
-                                            onPressed: controller.togglePlayPause,
-                                          ),
-                                          SizedBox(width: 8),
-                                          Text(
-                                            '${controller.formatDuration(controller.currentTime.value)} / ${controller.formatDuration(controller.videoDuration.value)}',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 14,
-                                            ),
-                                          ),
-                                          Spacer(),
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.skip_previous,
-                                              color: Colors.white,
-                                            ),
-                                            onPressed: controller.previousLesson,
-                                          ),
-                                          IconButton(
-                                            icon: Icon(
-                                              Icons.skip_next,
-                                              color: Colors.white,
-                                            ),
-                                            onPressed: controller.nextLesson,
-                                          ),
-                                          IconButton(
-                                            icon: Icon(
-                                              controller.isFullscreen.value
-                                                  ? Icons.fullscreen_exit
-                                                  : Icons.fullscreen,
-                                              color: Colors.white,
-                                            ),
-                                            onPressed: controller.toggleFullscreen,
-                                          ),
-                                        ],
-                                      ),
-                                    ],
-                                  ),
+                            );
+                          }
+                          return Container(
+                            height: 400,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              color: Colors.black,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: Colors.black.withOpacity(0.1),
+                                  blurRadius: 10,
+                                  offset: Offset(0, 2),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
+                              ],
+                            ),
+                            child: Obx(() {
+                              final ytController =
+                                  controller.currentYoutubeController.value;
+                              if (ytController == null) {
+                                return const SizedBox(
+                                    height: 200,
+                                    child: Center(child: Text("No video")));
+                              }
+                              return YoutubePlayer(
+                                key:
+                                    ValueKey(ytController), // This is critical!
+                                controller: ytController,
+                                aspectRatio: 16 / 9,
+                              );
+                            }),
+                          );
+                        }),
                       // Lesson content
                       Padding(
                         padding: EdgeInsets.all(24),
@@ -493,8 +433,8 @@ class AdminCourseViewPageWithId extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder<Course?>(
       future: AdminCourseService().getAllCourses().then(
-        (courses) => courses?.firstWhere((c) => c.id == courseId),
-      ),
+            (courses) => courses?.firstWhere((c) => c.id == courseId),
+          ),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
