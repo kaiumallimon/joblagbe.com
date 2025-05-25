@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+
 class DateTimeFormatter {
   String getJobPostedTime(DateTime datetime) {
     Duration difference = DateTime.now().difference(datetime);
@@ -17,7 +19,6 @@ class DateTimeFormatter {
     }
   }
 
-
   String formatJobDeadline(DateTime datetime) {
     Duration difference = datetime.difference(DateTime.now());
 
@@ -30,5 +31,10 @@ class DateTimeFormatter {
     } else {
       return "${difference.inDays} days left";
     }
+  }
+
+  String getFormattedCurrentDateTime() {
+    // return : Saturday, 25 May 2025
+    return DateFormat('EEEE, dd MMMM yyyy').format(DateTime.now());
   }
 }

@@ -3,8 +3,10 @@ import 'package:joblagbe/main.dart';
 
 import '../theming/colors/_colors.dart';
 
-AppBar dashboardAppbar(String title, {
+AppBar dashboardAppbar(
+  String title, {
   bool showBackButton = false,
+  double? fontSize,
 }) {
   return AppBar(
     // toolbarHeight: 100,
@@ -24,7 +26,7 @@ AppBar dashboardAppbar(String title, {
         title,
         style: TextStyle(
           color: AppColors.darkPrimary,
-          fontSize: 22,
+          fontSize: fontSize ?? 22,
           fontWeight: FontWeight.bold,
         ),
       ),
