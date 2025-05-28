@@ -15,6 +15,7 @@ class JobModel {
   String creatorId;
   String company;
   String companyLogoUrl;
+  String? category;
 
   JobModel(
       {this.id,
@@ -28,6 +29,7 @@ class JobModel {
       required this.tags,
       required this.deadline,
       this.createdAt,
+      this.category,
       required this.creatorId,
       required this.company,
       required this.companyLogoUrl});
@@ -47,7 +49,8 @@ class JobModel {
       "createdAt": createdAt ?? FieldValue.serverTimestamp(),
       "creatorId": creatorId,
       "company": company,
-      "companyLogoUrl": companyLogoUrl
+      "companyLogoUrl": companyLogoUrl,
+      "category": category,
     };
   }
 
@@ -67,6 +70,7 @@ class JobModel {
         createdAt: map["createdAt"],
         creatorId: map["creatorId"],
         company: map['company'],
+        category: map['category'],
         companyLogoUrl: map['companyLogoUrl']);
   }
 }

@@ -22,301 +22,396 @@ class RecruiterJobDetailedViewCard extends StatelessWidget {
         return SingleChildScrollView(
           controller: controller,
           physics: physics,
-          padding: EdgeInsets.symmetric(vertical: 20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.start,
-            spacing: 20,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  // current go route
-                  Expanded(
-                    child: TextField(
-                      controller: TextEditingController(
-                        text:
-                            '${GoRouter.of(context).state.fullPath}/${jobsController.selectedJob.value!.id}',
-                      ),
-                      readOnly: true,
-                      maxLines: 1,
-                      style: TextStyle(
-                        color: Colors.black.withOpacity(.7),
-                        fontWeight: FontWeight.w500,
-                      ),
-                      decoration: InputDecoration(
-                        border: InputBorder.none,
-                        isDense: true,
-                        contentPadding: EdgeInsets.zero,
+          padding: EdgeInsets.all(16),
+          child: Container(
+            padding: EdgeInsets.all(15),
+            decoration: BoxDecoration(
+              color: AppColors.primary.withOpacity(0.05),
+              borderRadius: BorderRadius.circular(12),
+              border: Border.all(
+                color: AppColors.primary.withOpacity(0.2),
+                width: 1,
+              ),
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              spacing: 16,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: TextField(
+                        controller: TextEditingController(
+                          text:
+                              '${GoRouter.of(context).state.fullPath}/${jobsController.selectedJob.value!.id}',
+                        ),
+                        readOnly: true,
+                        maxLines: 1,
+                        style: TextStyle(
+                          color: Colors.black.withOpacity(.7),
+                          fontWeight: FontWeight.w500,
+                        ),
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          isDense: true,
+                          contentPadding: EdgeInsets.zero,
+                        ),
                       ),
                     ),
-                  ),
-
-                  IconButton.filled(
+                    IconButton.filled(
                       onPressed: () {
                         jobsController.setSelectedJob(null);
                       },
                       style: IconButton.styleFrom(backgroundColor: Colors.red),
-                      icon: Icon(Icons.close)),
-                ],
-              ),
-
-              // company logo and job title
-              // and deadline
-              Row(
-                spacing: 20,
-                children: [
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(10),
+                      icon: Icon(Icons.close),
                     ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(10),
-                      child: Image.network(
-                          jobsController.selectedJob.value!.companyLogoUrl,
-                          fit: BoxFit.cover,
-                          headers: {
-                            "Access-Control-Allow-Origin":
-                                "*", // Might be ignored by the browser
-                          }),
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      spacing: 5,
-                      children: [
-                        Text(
-                          jobsController.selectedJob.value!.title,
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Text(
-                          DateTimeFormatter().formatJobDeadline(
-                              jobsController.selectedJob.value!.deadline),
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-
-              // job type, location, and salary
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  // job type
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          Icons.work,
-                          color: AppColors.black,
-                        ),
-                        Text(
-                          jobsController.selectedJob.value!.jobType,
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // location
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          Icons.location_on,
-                          color: AppColors.black,
-                        ),
-                        Text(
-                          jobsController.selectedJob.value!.location,
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-
-                  // salary
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
-                      borderRadius: BorderRadius.circular(5),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      spacing: 10,
-                      children: [
-                        Icon(
-                          Icons.attach_money,
-                          color: AppColors.black,
-                        ),
-                        Text(
-                          "${jobsController.selectedJob.value!.salaryRange} BDT",
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  )
-                ],
-              ),
-
-              const SizedBox(height: 20),
-              // job description
-              Text(
-                'Job Description',
-                style: TextStyle(
-                  color: AppColors.black,
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
+                  ],
                 ),
-              ),
 
-              Text(
-                jobsController.selectedJob.value!.description,
-                style: TextStyle(
-                  color: AppColors.black,
-                  fontSize: 16,
-                ),
-              ),
-
-              const SizedBox(height: 20),
-              // Required skills
-              Text('Requirements',
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-
-              Text('The applicant must be proficient in the following skills:',
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 16,
-                  )),
-
-              ...jobsController.selectedJob.value!.skills.map(
-                (skill) => Text(
-                  "- $skill",
-                  style: TextStyle(
-                      color: AppColors.black, fontSize: 14, height: 1),
-                ),
-              ),
-
-              const SizedBox(height: 20),
-
-              // experience level
-              Text(
-                  'Experience Level: ${jobsController.selectedJob.value!.experienceLevel}',
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-
-              // message
-              Text(
-                'If you meet these requirements, you can apply for the job by clicking the "Apply" button below.',
-                style: TextStyle(
-                  color: AppColors.black,
-                  fontSize: 16,
-                ),
-              ),
-
-              const SizedBox(height: 10),
-
-              // tags
-              Text('Tags',
-                  style: TextStyle(
-                    color: AppColors.black,
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                  )),
-
-              // tags (wrapped)
-              Wrap(
-                spacing: 10,
-                runSpacing: 10,
-                children: jobsController.selectedJob.value!.tags
-                    .map((tag) => Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 20, vertical: 10),
-                          decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.2),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Text(
-                            tag,
+                // company logo and job title
+                Row(
+                  spacing: 16,
+                  children: [
+                    Container(
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                        color: AppColors.primary.withOpacity(0.05),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: AppColors.primary.withOpacity(0.2),
+                          width: 1,
+                        ),
+                      ),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Image.network(
+                            jobsController.selectedJob.value!.companyLogoUrl,
+                            fit: BoxFit.cover,
+                            headers: {
+                              "Access-Control-Allow-Origin": "*",
+                            }),
+                      ),
+                    ),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        spacing: 4,
+                        children: [
+                          Text(
+                            jobsController.selectedJob.value!.title,
                             style: TextStyle(
                               color: AppColors.black,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w500,
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
                             ),
                           ),
-                        ))
-                    .toList(),
-              ),
-
-              const SizedBox(height: 20),
-
-              // edit button
-
-              if (FirebaseAuth.instance.currentUser!.uid ==
-                  jobsController.selectedJob.value!.creatorId)
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    CustomButton(
-                        width: 150,
-                        height: 50,
-                        text: 'Edit Post',
-                        onPressed: () {
-                          debugPrint("Editing job: ${jobsController.selectedJob.value!.id}");
-                          (context).go(
-                              '/dashboard/recruiter/jobs/edit/${jobsController.selectedJob.value!.id}',
-                              );
-                        })
+                          Text(
+                            DateTimeFormatter().formatJobDeadline(
+                                jobsController.selectedJob.value!.deadline),
+                            style: TextStyle(
+                              color: AppColors.black.withOpacity(0.7),
+                              fontSize: 14,
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
                   ],
-                )
-            ],
+                ),
+
+                // job type, location, and salary
+                Wrap(
+                  spacing: 8,
+                  runSpacing: 8,
+                  children: [
+                    // category
+                    if (jobsController.selectedJob.value!.category != null)
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.05),
+                            borderRadius: BorderRadius.circular(8),
+                            border: Border.all(
+                              color: AppColors.primary.withOpacity(0.2),
+                              width: 1,
+                            ),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            spacing: 8,
+                            children: [
+                              Icon(
+                                Icons.attach_money,
+                                color: AppColors.black.withOpacity(0.7),
+                                size: 16,
+                              ),
+                              Text(
+                                jobsController.selectedJob.value!.category!,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: TextStyle(
+                                  color: AppColors.black.withOpacity(0.7),
+                                  fontSize: 13,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+
+                    // job type
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: AppColors.primary.withOpacity(0.2),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 8,
+                          children: [
+                            Icon(
+                              Icons.work,
+                              color: AppColors.black.withOpacity(0.7),
+                              size: 16,
+                            ),
+                            Text(
+                              jobsController.selectedJob.value!.jobType,
+                              style: TextStyle(
+                                color: AppColors.black.withOpacity(0.7),
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // location
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: AppColors.primary.withOpacity(0.2),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 8,
+                          children: [
+                            Icon(
+                              Icons.location_on,
+                              color: AppColors.black.withOpacity(0.7),
+                              size: 16,
+                            ),
+                            Text(
+                              jobsController.selectedJob.value!.location,
+                              style: TextStyle(
+                                color: AppColors.black.withOpacity(0.7),
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+
+                    // salary
+                    MouseRegion(
+                      cursor: SystemMouseCursors.click,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        decoration: BoxDecoration(
+                          color: AppColors.primary.withOpacity(0.05),
+                          borderRadius: BorderRadius.circular(8),
+                          border: Border.all(
+                            color: AppColors.primary.withOpacity(0.2),
+                            width: 1,
+                          ),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          spacing: 8,
+                          children: [
+                            Icon(
+                              Icons.attach_money,
+                              color: AppColors.black.withOpacity(0.7),
+                              size: 16,
+                            ),
+                            Text(
+                              "${jobsController.selectedJob.value!.salaryRange} BDT",
+                              style: TextStyle(
+                                color: AppColors.black.withOpacity(0.7),
+                                fontSize: 13,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    )
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+                // job description
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8,
+                  children: [
+                    Text(
+                      'Job Description',
+                      style: TextStyle(
+                        color: AppColors.black,
+                        fontSize: 16,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      jobsController.selectedJob.value!.description,
+                      style: TextStyle(
+                        color: AppColors.black.withOpacity(0.7),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+                // Required skills
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8,
+                  children: [
+                    Text('Requirements',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    Text(
+                        'The applicant must be proficient in the following skills:',
+                        style: TextStyle(
+                          color: AppColors.black.withOpacity(0.7),
+                          fontSize: 14,
+                        )),
+                    ...jobsController.selectedJob.value!.skills.map(
+                      (skill) => Text(
+                        "- $skill",
+                        style: TextStyle(
+                            color: AppColors.black.withOpacity(0.7),
+                            fontSize: 13,
+                            height: 1.5),
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+
+                // experience level
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8,
+                  children: [
+                    Text(
+                        'Experience Level: ${jobsController.selectedJob.value!.experienceLevel}',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    Text(
+                      'If you meet these requirements, you can apply for the job by clicking the "Apply" button below.',
+                      style: TextStyle(
+                        color: AppColors.black.withOpacity(0.7),
+                        fontSize: 14,
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+
+                // tags
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  spacing: 8,
+                  children: [
+                    Text('Tags',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold,
+                        )),
+                    Wrap(
+                      spacing: 8,
+                      runSpacing: 8,
+                      children: jobsController.selectedJob.value!.tags
+                          .map((tag) => Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 12, vertical: 6),
+                                decoration: BoxDecoration(
+                                  color: AppColors.primary.withOpacity(0.1),
+                                  borderRadius: BorderRadius.circular(6),
+                                ),
+                                child: Text(
+                                  tag,
+                                  style: TextStyle(
+                                    color: AppColors.black.withOpacity(0.7),
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                              ))
+                          .toList(),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 16),
+
+                // edit button
+                if (FirebaseAuth.instance.currentUser!.uid ==
+                    jobsController.selectedJob.value!.creatorId)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      CustomButton(
+                          width: 150,
+                          height: 45,
+                          text: 'Edit Post',
+                          onPressed: () {
+                            debugPrint(
+                                "Editing job: ${jobsController.selectedJob.value!.id}");
+                            (context).go(
+                              '/dashboard/recruiter/jobs/edit/${jobsController.selectedJob.value!.id}',
+                            );
+                          })
+                    ],
+                  )
+              ],
+            ),
           ),
         );
       }),

@@ -2,9 +2,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
+import 'package:joblagbe/app/data/models/_job_category_model.dart';
 import 'package:joblagbe/app/data/models/_job_model.dart';
 import 'package:joblagbe/app/data/models/_mcq_model.dart';
 import 'package:joblagbe/app/data/services/_add_job_service.dart';
+import 'package:joblagbe/app/data/services/_admin_category_services.dart';
 import 'package:joblagbe/app/modules/recruiter/controllers/_recruiter_profile_controller.dart';
 
 class AddJobController extends GetxController {
@@ -43,6 +45,29 @@ class AddJobController extends GetxController {
   RxList<MCQ> mcqList = <MCQ>[].obs;
   RxInt passMark = 0.obs;
   RxBool isLoading = false.obs;
+  var categories = <JobCategory>[].obs;
+  var selectedCategory = Rxn<JobCategory>();
+
+  Future<void> loadCategories() async {
+    isLoading.value = true;
+    try {
+      final categories = await AdminCategoryServices().getAllCategories();
+      // Wait for categories to be loaded
+      this.categories.assignAll(categories ?? []);
+      // Reset selected category when categories are loaded
+      selectedCategory.value = null;
+    } catch (e) {
+      customDialog("Error", e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  @override
+  void onInit() {
+    super.onInit();
+    loadCategories();
+  }
 
   @override
   void onClose() {
@@ -179,6 +204,7 @@ class AddJobController extends GetxController {
           tags: tagsController.text.trim().split(','),
           deadline: applicationDeadline.value!,
           createdAt: Timestamp.now(),
+          category: selectedCategory.value?.name,
           company: profileData.companyName!,
           companyLogoUrl: profileData.companyLogoUrl!,
           creatorId: profileData.userId);

@@ -4,6 +4,7 @@ import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/core/widgets/_custom_textfield.dart';
 import 'package:joblagbe/app/modules/recruiter/controllers/_recruiter_add_job_controller.dart';
 import 'package:joblagbe/app/modules/recruiter/views/pages/_add_job_mcq_page.dart';
+import 'package:joblagbe/app/modules/recruiter/views/widgets/_job_category_selector.dart';
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 
 import '../../../../core/theming/colors/_colors.dart';
@@ -99,14 +100,25 @@ class AddJobForm extends StatelessWidget {
           const SizedBox(
             height: 20,
           ),
-          CustomTextfield(
-              width: double.infinity,
-              height: 50,
-              isPassword: false,
-              hintText: 'Enter Job Skills',
-              prefixIcon: Icons.work,
-              labelText: 'Job Skills',
-              controller: controller.skillsController),
+          Row(
+            spacing: 15,
+            children: [
+              Expanded(
+                child: CustomTextfield(
+                    width: double.infinity,
+                    height: 50,
+                    isPassword: false,
+                    hintText: 'Enter Job Skills',
+                    prefixIcon: Icons.work,
+                    labelText: 'Job Skills',
+                    controller: controller.skillsController),
+              ),
+              Expanded(
+                  child: AddJobCategorySelector(
+                controller: controller,
+              ))
+            ],
+          ),
           const SizedBox(
             height: 20,
           ),
