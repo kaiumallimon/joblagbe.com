@@ -15,9 +15,6 @@ class ApplicantProfileModel {
   final List<Education>? education;
   final List<Certification>? certifications;
   final List<Testimonial>? testimonials;
-  final String? jobTypePreference;
-  final String? workModelPreference;
-  final List<String>? preferredIndustries;
   final String? resumeUrl;
 
   ApplicantProfileModel({
@@ -37,9 +34,6 @@ class ApplicantProfileModel {
     this.education,
     this.certifications,
     this.testimonials,
-    this.jobTypePreference,
-    this.workModelPreference,
-    this.preferredIndustries,
     this.resumeUrl,
   });
 
@@ -79,11 +73,6 @@ class ApplicantProfileModel {
               .map((e) => Testimonial.fromJson(e))
               .toList()
           : null,
-      jobTypePreference: json['jobTypePreference'],
-      workModelPreference: json['workModelPreference'],
-      preferredIndustries: json['preferredIndustries'] != null
-          ? List<String>.from(json['preferredIndustries'])
-          : null,
       resumeUrl: json['resumeUrl'],
     );
   }
@@ -104,9 +93,6 @@ class ApplicantProfileModel {
         'education': education?.map((e) => e.toJson()).toList(),
         'certifications': certifications?.map((e) => e.toJson()).toList(),
         'testimonials': testimonials?.map((e) => e.toJson()).toList(),
-        'jobTypePreference': jobTypePreference,
-        'workModelPreference': workModelPreference,
-        'preferredIndustries': preferredIndustries,
         'resumeUrl': resumeUrl,
       };
 
@@ -128,10 +114,47 @@ class ApplicantProfileModel {
         education = null,
         certifications = null,
         testimonials = null,
-        jobTypePreference = null,
-        workModelPreference = null,
-        preferredIndustries = null,
         resumeUrl = null;
+
+  ApplicantProfileModel copyWith({
+    String? id,
+    String? userId,
+    String? fullName,
+    String? email,
+    DateTime? dob,
+    String? professionalTitle,
+    String? location,
+    String? phone,
+    String? profilePhotoUrl,
+    String? bio,
+    List<String>? skills,
+    List<WorkExperience>? experiences,
+    List<Project>? portfolio,
+    List<Education>? education,
+    List<Certification>? certifications,
+    List<Testimonial>? testimonials,
+    String? resumeUrl,
+  }) {
+    return ApplicantProfileModel(
+      id: id ?? this.id,
+      userId: userId ?? this.userId,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      dob: dob ?? this.dob,
+      professionalTitle: professionalTitle ?? this.professionalTitle,
+      location: location ?? this.location,
+      phone: phone ?? this.phone,
+      profilePhotoUrl: profilePhotoUrl ?? this.profilePhotoUrl,
+      bio: bio ?? this.bio,
+      skills: skills ?? this.skills,
+      experiences: experiences ?? this.experiences,
+      portfolio: portfolio ?? this.portfolio,
+      education: education ?? this.education,
+      certifications: certifications ?? this.certifications,
+      testimonials: testimonials ?? this.testimonials,
+      resumeUrl: resumeUrl ?? this.resumeUrl,
+    );
+  }
 }
 
 class WorkExperience {

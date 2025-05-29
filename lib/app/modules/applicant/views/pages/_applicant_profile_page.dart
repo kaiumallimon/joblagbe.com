@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
+import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/core/widgets/_dashboard_appbar.dart';
 import 'package:joblagbe/app/modules/applicant/controllers/_applicant_profile_controller.dart';
-import 'package:joblagbe/app/modules/recruiter/views/widgets/_recruiter_profile_custom_dob_selector.dart';
+import 'package:joblagbe/app/modules/applicant/views/widgets/_applicant_dob_selector.dart';
+import 'package:joblagbe/app/modules/applicant/views/widgets/_applicant_gender_selector.dart';
+import 'package:joblagbe/app/modules/applicant/views/widgets/_applicant_resume_uploader.dart';
 import 'package:joblagbe/app/modules/recruiter/views/widgets/_recruiter_profile_custom_profile_textfield.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
@@ -14,7 +16,7 @@ class ApplicantProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var profileController = Get.put(ApplicantProfileController());
+    final profileController = Get.put(ApplicantProfileController());
 
     return Scaffold(
       backgroundColor: AppColors.white,
@@ -22,242 +24,293 @@ class ApplicantProfilePage extends StatelessWidget {
       body: Obx(() {
         if (profileController.isLoading.value) {
           return Center(
-            child: LoadingAnimationWidget.threeRotatingDots(
-              color: AppColors.darkPrimary,
+            child: LoadingAnimationWidget.twoRotatingArc(
+              color: AppColors.primary,
               size: 30,
             ),
           );
         }
-        return Padding(
-          padding: const EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 10,
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              // Profile picture
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                mainAxisAlignment: MainAxisAlignment.start,
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            // Top profile section
+            Container(
+              height: 120,
+              width: double.infinity,
+              padding: EdgeInsets.symmetric(horizontal: 20),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  MouseRegion(
-                    cursor: SystemMouseCursors.click,
-                    child: GestureDetector(
-                      onTap: () {
-                        // profileController.pickImage(context);
-                        // html.window.location.reload();
-                      },
-                      child: Obx(() {
-                        return Container(
-                          height: 100,
-                          width: 100,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: AppColors.darkPrimary,
-                          ),
-                          child: profileController.applicantProfileData.value
-                                      ?.profilePhotoUrl !=
-                                  null
-                              ? ClipOval(
-                                  child: Image.network(
-                                    profileController.applicantProfileData
-                                        .value!.profilePhotoUrl!,
-                                    fit: BoxFit.cover,
-                                  ),
-                                )
-                              : Center(
-                                  child: profileController.isUploading.value
-                                      ? LoadingAnimationWidget.twoRotatingArc(
-                                          color: AppColors.white,
-                                          size: 30,
-                                        )
-                                      : Icon(
-                                          Icons.camera_alt,
-                                          size: 25,
-                                          color: AppColors.white,
-                                        ),
-                                ),
-                        );
-                      }),
-                    ),
-                  ),
-
-                  SizedBox(width: 20),
-                  // Name & email
-                  Column(
+                  Row(
                     mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    spacing: 5,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      Obx(() {
-                        return Text(
-                          profileController
-                                  .applicantProfileData.value?.fullName ??
-                              '-',
-                          style: TextStyle(
-                            color: AppColors.black,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 23,
-                            height: 1.2,
-                          ),
-                        );
-                      }),
-                      Obx(() {
-                        return Text(
-                          profileController.applicantProfileData.value?.email ??
-                              '-',
-                          style: TextStyle(
-                            color: AppColors.darkBackground,
-                            fontSize: 16,
-                          ),
-                        );
-                      }),
-                    ],
-                  ),
-                ],
-              ),
-
-              SizedBox(height: 20),
-
-              Expanded(child:
-                  DynMouseScroll(builder: (context, controller, physics) {
-                return SingleChildScrollView(
-                  controller: controller,
-                  physics: physics,
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // personal informations
-                      Text(
-                        'Personal Information',
-                        style: TextStyle(
-                          color: AppColors.black,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 18,
+                      // Profile picture
+                      MouseRegion(
+                        cursor: SystemMouseCursors.click,
+                        child: GestureDetector(
+                          onTap: () {
+                            profileController.pickImage(context);
+                          },
+                          child: Obx(() {
+                            return Container(
+                              height: 100,
+                              width: 100,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: AppColors.darkPrimary,
+                              ),
+                              child: profileController.applicantProfileData
+                                          .value?.profilePhotoUrl !=
+                                      null
+                                  ? ClipOval(
+                                      child: Image.network(
+                                        profileController.applicantProfileData
+                                            .value!.profilePhotoUrl!,
+                                        fit: BoxFit.cover,
+                                      ),
+                                    )
+                                  : Center(
+                                      child: profileController.isUploading.value
+                                          ? LoadingAnimationWidget
+                                              .twoRotatingArc(
+                                              color: AppColors.white,
+                                              size: 30,
+                                            )
+                                          : Icon(
+                                              Icons.camera_alt,
+                                              size: 25,
+                                              color: AppColors.white,
+                                            ),
+                                    ),
+                            );
+                          }),
                         ),
                       ),
-
-                      SizedBox(height: 10),
-
+                      SizedBox(width: 20),
                       // Name & email
-
-                      Obx(() {
-                        return Row(
-                          children: [
-                            // Name
-                            Expanded(
-                                child: CustomProfileTextBox(
-                              isEditable: false,
-                              hintText: 'Enter your name',
-                              label: 'Name',
-                              controller: TextEditingController(
-                                text: profileController
-                                        .applicantProfileData.value?.fullName ??
-                                    '-',
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Obx(() {
+                            return Text(
+                              profileController
+                                      .applicantProfileData.value?.fullName ??
+                                  '-',
+                              style: TextStyle(
+                                color: AppColors.black,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 23,
+                                height: 1.2,
                               ),
-                            )),
-
-                            SizedBox(width: 20),
-
-                            // email
-
-                            Expanded(
-                                child: CustomProfileTextBox(
-                              isEditable: false,
-                              label: 'Email',
-                              hintText: 'Enter your email',
-                              controller: TextEditingController(
-                                text: profileController
-                                        .applicantProfileData.value?.email ??
-                                    '-',
+                            );
+                          }),
+                          Obx(() {
+                            return Text(
+                              profileController
+                                      .applicantProfileData.value?.email ??
+                                  '-',
+                              style: TextStyle(
+                                color: AppColors.darkBackground,
+                                fontSize: 16,
                               ),
-                            ))
-                          ],
-                        );
-                      }),
-
-                      SizedBox(height: 20),
-
-                      // Phone, Location, dob
-
-                      Obx(() {
-                        return Row(
-                          children: [
-                            // Name
-                            Expanded(
-                                child: CustomProfileTextBox(
-                              isEditable: false,
-                              hintText: 'Enter your phone number',
-                              label: 'Phone',
-                              controller: TextEditingController(
-                                  text: profileController
-                                          .applicantProfileData.value?.phone ??
-                                      'N/A'),
-                            )),
-
-                            SizedBox(width: 20),
-
-                            // email
-
-                            Expanded(
-                                child: CustomProfileTextBox(
-                              isEditable: false,
-                              label: 'Location',
-                              hintText: 'Enter your address',
-                              controller: TextEditingController(
-                                text: profileController
-                                        .applicantProfileData.value?.location ??
-                                    'N/A',
-                              ),
-                            )),
-
-                            // Expanded(
-                            //   child: CustomDobSelector(
-                            //     controller: profileController,
-                            //       isEditable: false,
-                            //       hintText: 'Date of Birth',
-                            //       initialDate: profileController
-                            //                   .applicantProfileData
-                            //                   .value
-                            //                   ?.dob !=
-                            //               null
-                            //           ? (profileController
-                            //               .applicantProfileData.value!.dob)
-                            //           // Safe conversion
-                            //           : null),
-                            // ),
-                          ],
-                        );
-                      }),
-
-                      SizedBox(height: 20),
-
-                      // bio
-                      Obx(() {
-                        return Row(
-                          children: [
-                            Expanded(
-                                child: CustomProfileTextBox(
-                              maxLines: 3,
-                              height: 150,
-                              isEditable: false,
-                              hintText: 'Enter your bio',
-                              label: 'Bio',
-                              controller: TextEditingController(
-                                  text: profileController
-                                          .applicantProfileData.value?.phone ??
-                                      'N/A'),
-                            )),
-                          ],
-                        );
-                      }),
+                            );
+                          }),
+                        ],
+                      ),
                     ],
                   ),
-                );
-              }))
-            ],
-          ),
+                  Obx(() {
+                    return CustomButton(
+                      text: profileController.isEditingMode.value
+                          ? "Cancel"
+                          : "Edit",
+                      onPressed: () {
+                        profileController.toggleEditingMode();
+                      },
+                      color: profileController.isEditingMode.value
+                          ? AppColors.darkBackground
+                          : AppColors.primary,
+                      textColor: profileController.isEditingMode.value
+                          ? AppColors.white
+                          : AppColors.black,
+                    );
+                  })
+                ],
+              ),
+            ),
+
+            // Body section
+            Expanded(
+              child: DynMouseScroll(
+                builder: (context, controller, physics) {
+                  return ListView(
+                    controller: controller,
+                    physics: physics,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    children: [
+                      Text(
+                        'Personal Information (Required)',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Obx(() => Row(
+                            children: [
+                              Expanded(
+                                child: CustomProfileTextBox(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                  hintText: 'Enter your name',
+                                  label: 'Name',
+                                  controller:
+                                      profileController.nameController.value,
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: CustomProfileTextBox(
+                                  isEditable: false,
+                                  hintText: 'Enter your email',
+                                  label: 'Email',
+                                  controller:
+                                      profileController.emailController.value,
+                                ),
+                              ),
+                            ],
+                          )),
+                      SizedBox(height: 20),
+                      Obx(() => Row(
+                            spacing: 15,
+                            children: [
+                              Expanded(
+                                child: ApplicantGenderSelector(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                  hintText: 'Gender',
+                                ),
+                              ),
+                              Expanded(
+                                child: ApplicantDobSelector(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                  hintText: 'Date of Birth',
+                                  initialDate:
+                                      profileController.selectedDob.value,
+                                ),
+                              ),
+                            ],
+                          )),
+                      SizedBox(height: 20),
+                      Obx(() => Row(
+                            children: [
+                              Expanded(
+                                child: CustomProfileTextBox(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                  hintText: 'Enter your phone number',
+                                  label: 'Phone Number',
+                                  controller:
+                                      profileController.phoneController.value,
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: CustomProfileTextBox(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                  hintText: 'Enter your location',
+                                  label: 'Location',
+                                  controller: profileController
+                                      .locationController.value,
+                                ),
+                              ),
+                            ],
+                          )),
+                      SizedBox(height: 20),
+                      Obx(() => Row(
+                            children: [
+                              Expanded(
+                                child: CustomProfileTextBox(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                  hintText: 'Enter your professional title',
+                                  label: 'Professional Title',
+                                  controller: profileController
+                                      .professionalTitleController.value,
+                                ),
+                              ),
+                              SizedBox(width: 20),
+                              Expanded(
+                                child: CustomProfileTextBox(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                  hintText:
+                                      'Enter your skills (comma separated)',
+                                  label: 'Skills',
+                                  controller:
+                                      profileController.skillsController.value,
+                                ),
+                              ),
+                            ],
+                          )),
+                      SizedBox(height: 20),
+                      Obx(() => CustomProfileTextBox(
+                            isEditable: profileController.isEditingMode.value,
+                            hintText: 'Enter your bio',
+                            label: 'Bio',
+                            maxLines: 3,
+                            height: 100,
+                            controller: profileController.bioController.value,
+                          )),
+                      SizedBox(height: 40),
+                      Text(
+                        'Resume',
+                        style: TextStyle(
+                          color: AppColors.black,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 20),
+                      Obx(() => Row(
+                            children: [
+                              Expanded(
+                                child: ApplicantResumeUploader(
+                                  isEditable:
+                                      profileController.isEditingMode.value,
+                                ),
+                              ),
+                            ],
+                          )),
+                      SizedBox(height: 40),
+                      Obx(() {
+                        if (profileController.isEditingMode.value) {
+                          return Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CustomButton(
+                                text: 'Save',
+                                onPressed: () {
+                                  profileController.updateProfileData(context);
+                                },
+                              ),
+                            ],
+                          );
+                        } else {
+                          return SizedBox.shrink();
+                        }
+                      }),
+                    ],
+                  );
+                },
+              ),
+            ),
+          ],
         );
       }),
     );
