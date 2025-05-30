@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:joblagbe/app/modules/recruiter/controllers/_recruiter_jobs_controller.dart';
-// import 'package:joblagbe/app/modules/dashboard/recruiter/jobs/controllers/_recruiter_jobs_controller.dart';
 
 import '../../../../core/theming/colors/_colors.dart';
 import '../../../../core/utils/_formatter.dart';

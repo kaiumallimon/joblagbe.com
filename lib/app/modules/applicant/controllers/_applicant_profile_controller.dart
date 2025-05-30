@@ -2,7 +2,6 @@ import 'dart:typed_data';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/data/models/_applicant_profile_model.dart';
 import 'package:joblagbe/app/data/services/_applicant_profile_services.dart';
@@ -32,7 +31,7 @@ class ApplicantProfileController extends GetxController {
 
   var selectedDob = Rxn<DateTime>();
   var genders = ["Male", "Female"].obs;
-  var selectedGender = "Male".obs;
+  var selectedGender = Rxn<String?>();
 
   void fetchApplicantProfileData() async {
     isLoading.value = true;
@@ -49,6 +48,7 @@ class ApplicantProfileController extends GetxController {
       professionalTitleController.value.text = response.professionalTitle ?? '';
       skillsController.value.text = response.skills?.join(', ') ?? '';
       selectedDob.value = response.dob;
+      selectedGender.value = response.gender;
       isLoading.value = false;
     } else {
       isLoading.value = false;
