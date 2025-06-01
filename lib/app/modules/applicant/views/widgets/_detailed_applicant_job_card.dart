@@ -1,5 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_state_manager/get_state_manager.dart';
 import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/utils/_formatter.dart';
@@ -396,17 +396,16 @@ class ApplicantJobDetailedViewCard extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.end,
                   children: [
-                    CustomButton(
-                        width: 150,
-                        height: 45,
-                        text: 'Apply Now',
-                        onPressed: () {
-                          // debugPrint(
-                          //     "Editing job: ${jobsController.selectedJob.value!.id}");
-                          // (context).go(
-                          //   '/dashboard/recruiter/jobs/edit/${jobsController.selectedJob.value!.id}',
-                          // );
-                        })
+                    Obx(() {
+                      return CustomButton(
+                          width: 150,
+                          height: 45,
+                          text: 'Apply Now',
+                          isLoading: jobsController.isCheckingProfile.value,
+                          onPressed: () async {
+                            await jobsController.applyJob(context);
+                          });
+                    })
                   ],
                 )
               ],

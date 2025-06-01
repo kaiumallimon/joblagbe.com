@@ -92,14 +92,15 @@ Future<void> showCustomLoadingDialog() async {
           ),
         ),
       ).frosted(
-          blur: 15,
-          borderRadius: BorderRadius.circular(10),
-          frostColor: AppColors.white.withOpacity(.1),
-          frostOpacity: .5,
-        );
+        blur: 15,
+        borderRadius: BorderRadius.circular(10),
+        frostColor: AppColors.white.withOpacity(.1),
+        frostOpacity: .5,
+      );
     },
   );
 }
+
 Future<void> closeCustomLoadingDialog() async {
   final context = navigatorKey.currentContext;
   if (context != null && context.mounted) {
@@ -107,3 +108,66 @@ Future<void> closeCustomLoadingDialog() async {
   }
 }
 
+Future<void> showConfirmationDialog(
+  String message,
+  VoidCallback onConfirm,
+) async {
+  final context = navigatorKey.currentContext;
+  if (context != null && context.mounted) {
+    await showDialog(
+      context: context,
+      useSafeArea: true,
+      barrierDismissible: false,
+      builder: (context) => AlertDialog(
+        backgroundColor: AppColors.white,
+        shadowColor: AppColors.black.withOpacity(.2),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+        title: Text(
+          'Confirmation',
+          style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.bold,
+                color: AppColors.darkPrimary,
+              ),
+        ),
+        content: Text(
+          message,
+          style: Theme.of(context).textTheme.bodyMedium,
+        ),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: Text(
+              'Cancel',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.darkPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              onConfirm();
+            },
+            child: Text(
+              'Confirm',
+              style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                    color: AppColors.darkPrimary,
+                    fontWeight: FontWeight.bold,
+                  ),
+            ),
+          ),
+        ],
+      ).frosted(
+        blur: 15,
+        borderRadius: BorderRadius.circular(10),
+        frostColor: AppColors.white.withOpacity(.1),
+        frostOpacity: .5,
+      ),
+    );
+  }
+}

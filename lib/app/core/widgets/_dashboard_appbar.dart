@@ -7,6 +7,7 @@ AppBar dashboardAppbar(
   String title, {
   bool showBackButton = false,
   double? fontSize,
+  List<Widget>? actions,
 }) {
   return AppBar(
     // toolbarHeight: 100,
@@ -44,5 +45,7 @@ AppBar dashboardAppbar(
         ),
       ),
     ),
+
+    actions: actions ?? [],
   );
 }

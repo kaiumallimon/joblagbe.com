@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
@@ -13,7 +12,6 @@ class ApplicantJobs extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     final jobsController = Get.put(ApplicantJobsController());
 
     // Fetch initial jobs when the page is loaded
@@ -29,34 +27,45 @@ class ApplicantJobs extends StatelessWidget {
         child: Column(
           children: [
             // search bar
-            Container(
-              color: Colors.white,
+            Padding(
+              padding: const EdgeInsets.all(16.0),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton.filled(
-                    onPressed: (){
-                      jobsController.refreshCurrentPage(context);
-                    },
-                    icon: Icon(Icons.refresh, color: AppColors.primary),
-                  ),
-                  const SizedBox(width: 20),
                   Expanded(
-                    child: SizedBox(
-                      height: 50,
-                      child: CupertinoSearchTextField(
-                        placeholder: 'Search for jobs',
-                        padding: const EdgeInsets.symmetric(horizontal: 20),
-                        onChanged: (value) {
-                          jobsController.searchQuery.value = value;
-                        },
+                    child: TextField(
+                      onChanged: (value) =>
+                          jobsController.searchQuery.value = value,
+                      decoration: InputDecoration(
+                        hintText: 'Search jobs...',
+                        prefixIcon: Icon(Icons.search),
+                        border: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                              color: AppColors.primary.withOpacity(0.3),
+                              width: 2),
+                        ),
+                        enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide: BorderSide(
+                              color: AppColors.primary.withOpacity(0.3),
+                              width: 2),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(12),
+                          borderSide:
+                              BorderSide(color: AppColors.primary, width: 2),
+                        ),
                       ),
                     ),
+                  ),
+                  const SizedBox(width: 16),
+                  IconButton.filled(
+                    onPressed: () => jobsController.refreshCurrentPage(context),
+                    icon: Icon(Icons.refresh, color: AppColors.primary),
                   ),
                 ],
               ),
             ),
-            const SizedBox(height: 20),
             // content
             Expanded(
               child: Obx(() {

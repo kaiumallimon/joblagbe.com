@@ -2,9 +2,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/data/models/_job_model.dart';
+import 'package:joblagbe/app/data/services/_applicant_profile_services.dart';
 import 'package:joblagbe/app/data/services/_recruiter_jobs_service.dart';
+import 'package:joblagbe/main.dart';
 
 class ApplicantJobsController extends GetxController {
   final RecruiterJobsService _recruiterJobsService = RecruiterJobsService();
@@ -140,5 +143,59 @@ class ApplicantJobsController extends GetxController {
 
   void setHoveredJobIndex(int index) {
     hoveredJobIndex.value = index;
+  }
+
+  Future<void> applyJob(BuildContext context) async {
+    try {
+      if (selectedJob.value == null) {
+        customDialog(
+          "Error",
+          "No job selected. Please select a job to apply for.",
+        );
+        return;
+      }
+
+      if (!await isProfileComplete()) {
+        customDialog(
+          "Profile Incomplete",
+          "Please complete your profile before applying for jobs.",
+        );
+        return;
+      }
+
+      showConfirmationDialog("Are you sure to apply this job?", () {
+        // Ensure we have a valid job ID
+        if (selectedJob.value?.id == null || selectedJob.value!.id!.isEmpty) {
+          customDialog(
+            "Error",
+            "Invalid job data. Please try again.",
+          );
+          return;
+        }
+
+        // Navigate to apply page with the job data
+        context.go('/dashboard/applicant/jobs/apply', extra: selectedJob.value);
+      });
+    } catch (error) {
+      customDialog(
+        "Error",
+        "Failed to apply for the job. Please try again.",
+      );
+    }
+  }
+
+  var isCheckingProfile = false.obs;
+
+  Future<bool> isProfileComplete() async {
+    try {
+      isCheckingProfile(true);
+      bool isComplete =
+          await ApplicantProfileService().checkProfileCompletion();
+      isCheckingProfile(false);
+      return isComplete;
+    } catch (error) {
+      isCheckingProfile(false);
+      rethrow;
+    }
   }
 }

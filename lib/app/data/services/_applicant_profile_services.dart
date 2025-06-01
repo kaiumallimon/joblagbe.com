@@ -115,4 +115,36 @@ class ApplicantProfileService {
       return false;
     }
   }
+
+  Future<bool> checkProfileCompletion() async {
+    try {
+      String uid = FirebaseAuth.instance.currentUser!.uid;
+      ApplicantProfileModel? profile = await getApplicantProfileData(uid);
+
+      if (profile == null) return false;
+
+      // Check required fields
+      if (profile.fullName.trim().isEmpty ||
+          profile.email.trim().isEmpty ||
+          profile.userId.trim().isEmpty) {
+        return false;
+      }
+
+      // Check optional but important fields
+      if (profile.professionalTitle == null ||
+          profile.location == null ||
+          profile.phone == null ||
+          profile.dob == null ||
+          profile.gender == null ||
+          profile.skills == null ||
+          profile.skills!.isEmpty ||
+          profile.resumeUrl == null) {
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      rethrow;
+    }
+  }
 }
