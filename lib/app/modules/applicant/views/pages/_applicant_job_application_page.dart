@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
@@ -62,12 +63,46 @@ class ApplicantJobApplicationPage extends StatelessWidget {
 
     return Scaffold(
       backgroundColor: AppColors.white,
-      appBar: dashboardAppbar('Job Application Test'),
+      appBar: dashboardAppbar('Job Application Test', actions: [
+        Obx(() {
+          if (controller.applicationProgress.value == null) {
+            return const SizedBox.shrink();
+          }
+          return RichText(
+            text: TextSpan(
+              text: 'Chances left: ',
+              style: TextStyle(
+                color: AppColors.black,
+                fontSize: 16,
+                fontFamily: 'Poppins',
+              ),
+              children: [
+                TextSpan(
+                  text: controller.getChancesLeft().toString(),
+                  style: TextStyle(
+                    color: AppColors.darkPrimary,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Poppins',
+                    fontSize: 18,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+      ]),
       body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+        // Show loading indicator while loading MCQs or application progress
+        if (controller.isLoading.value ||
+            controller.applicationProgress.value == null) {
+          return const Center(
+            child: CupertinoActivityIndicator(
+              color: AppColors.primary,
+            ),
+          );
         }
 
+        // Show message if no questions are available
         if (controller.mcqQuestions.isEmpty) {
           return const Center(
             child: Text('No questions available for this job.'),

@@ -7,7 +7,6 @@ import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/data/models/_job_model.dart';
 import 'package:joblagbe/app/data/services/_applicant_profile_services.dart';
 import 'package:joblagbe/app/data/services/_recruiter_jobs_service.dart';
-import 'package:joblagbe/main.dart';
 
 class ApplicantJobsController extends GetxController {
   final RecruiterJobsService _recruiterJobsService = RecruiterJobsService();

@@ -4,7 +4,7 @@ class ApplicationProgressModel {
   final String? id;
   final String? jobId;
   final String? applicantId;
-  final bool testPassed;
+  final bool? testPassed;
   final int chancesLeft;
   final int maxChances;
   final String? assignedCourseId;
@@ -14,12 +14,14 @@ class ApplicationProgressModel {
   final int? testScore;
   final String? recruiterFeedback;
   final int? passMarkForTest;
+  final bool? usedFirstChance;
+  final bool? usedSecondChance;
 
   ApplicationProgressModel({
     this.id,
     this.jobId,
     this.applicantId,
-    this.testPassed = false,
+    this.testPassed,
     this.chancesLeft = 2,
     this.maxChances = 2,
     this.assignedCourseId,
@@ -29,6 +31,8 @@ class ApplicationProgressModel {
     this.testScore,
     this.recruiterFeedback,
     this.passMarkForTest,
+    this.usedFirstChance = false,
+    this.usedSecondChance = false,
   });
 
   factory ApplicationProgressModel.fromJson(
@@ -37,7 +41,7 @@ class ApplicationProgressModel {
         id: id,
         jobId: json['jobId'] as String?,
         applicantId: json['applicantId'] as String?,
-        testPassed: json['testPassed'] as bool? ?? false,
+        testPassed: json['testPassed'] as bool?,
         chancesLeft: json['chancesLeft'] as int? ?? 2,
         maxChances: json['maxChances'] as int? ?? 2,
         assignedCourseId: json['assignedCourseId'] as String?,
@@ -53,7 +57,9 @@ class ApplicationProgressModel {
             : null,
         testScore: json['testScore'] as int?,
         recruiterFeedback: json['recruiterFeedback'] as String?,
-        passMarkForTest: json['passMarkForTest'] as int?);
+        passMarkForTest: json['passMarkForTest'] as int?,
+        usedFirstChance: json['usedFirstChance'] as bool? ?? false,
+        usedSecondChance: json['usedSecondChance'] as bool? ?? false);
   }
 
   Map<String, dynamic> toJson() {
@@ -70,6 +76,8 @@ class ApplicationProgressModel {
       'testScore': testScore,
       'recruiterFeedback': recruiterFeedback,
       'passMarkForTest': passMarkForTest,
+      'usedFirstChance': usedFirstChance,
+      'usedSecondChance': usedSecondChance,
     };
   }
 }

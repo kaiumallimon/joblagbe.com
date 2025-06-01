@@ -1,10 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/material.dart';
+import 'package:joblagbe/app/data/models/_application_model.dart';
 import 'package:joblagbe/app/data/models/_mcq_model.dart';
 
 class ApplicantJobApplicationService {
   final jobMCQCollection = FirebaseFirestore.instance.collection('db_mcqs');
   final jobApplicationsCollection =
       FirebaseFirestore.instance.collection('db_job_applications');
+
+  final jobProgressCollection =
+      FirebaseFirestore.instance.collection('db_job_progress');
 
   // ✅ get MCQs for a job
   Future<List<MCQModel>> getMCQs(String jobId) async {
@@ -157,6 +162,42 @@ class ApplicantJobApplicationService {
       await batch.commit();
     } catch (e) {
       throw Exception('Failed to add dummy MCQs: $e');
+    }
+  }
+
+  Future<ApplicationProgressModel?> addJobProgress(
+      ApplicationProgressModel progress) async {
+    try {
+      // Check if already exists with jobId and applicantId
+      final existingProgress = await jobProgressCollection
+          .where('jobId', isEqualTo: progress.jobId)
+          .where('applicantId', isEqualTo: progress.applicantId)
+          .get();
+
+      if (existingProgress.docs.isNotEmpty) {
+        debugPrint('Existing progress found');
+        // Return existing progress
+        return ApplicationProgressModel.fromJson(
+          existingProgress.docs.first.data(),
+          existingProgress.docs.first.id,
+        );
+      }
+
+      // If it doesn't exist, add new progress
+      final response = await jobProgressCollection.add(progress.toJson());
+
+      // Get the newly created document snapshot
+      final snapshot = await response.get();
+
+      debugPrint("Application progress added successfully!");
+      debugPrint('${snapshot.data()}');
+
+      return ApplicationProgressModel.fromJson(
+        snapshot.data() as Map<String, dynamic>,
+        snapshot.id,
+      );
+    } catch (e) {
+      throw Exception('Failed to add job progress: $e');
     }
   }
 }

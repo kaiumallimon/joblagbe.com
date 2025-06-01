@@ -47,5 +47,6 @@ AppBar dashboardAppbar(
     ),
 
     actions: actions ?? [],
+    actionsPadding: EdgeInsets.symmetric(horizontal: 15),
   );
 }
