@@ -5,6 +5,7 @@ import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/data/models/_application_model.dart';
 import 'package:joblagbe/app/data/models/_job_model.dart';
 import 'package:joblagbe/app/data/models/_mcq_model.dart';
+import 'package:joblagbe/app/data/models/_course_model.dart';
 import 'package:joblagbe/app/data/services/_applicant_job_application_service.dart';
 
 class ApplicantJobsApplicationController extends GetxController {
@@ -29,6 +30,12 @@ class ApplicantJobsApplicationController extends GetxController {
     // applicantJobApplicationService.addDummyMCQs(currentJob.id ?? "");
 
     // Add application progress to the database
+
+    // Check course completion status if needed
+    if (chancesLeft.value == 1 &&
+        applicationProgress.value?.assignedCourseId != null) {
+      checkCourseCompletion();
+    }
   }
 
   /*
@@ -79,6 +86,8 @@ class ApplicantJobsApplicationController extends GetxController {
   * returns: Future<void>
   */
 
+  var isTestCompleted = false.obs;
+
   Future<void> submitTest() async {
     // Check if all questions are answered
     if (selectedAnswers.contains(-1)) {
@@ -97,19 +106,35 @@ class ApplicantJobsApplicationController extends GetxController {
         }
       }
 
+      final marks = correctAnswers * 10;
+      final progress = applicationProgress.value;
+
+      if (progress == null) {
+        throw Exception('Application progress not found');
+      }
+
       // Check if passed
-      bool passed =
-          (correctAnswers / mcqQuestions.length * 100) >= (getPassMark() ?? 0);
+      bool passed = marks >= getPassMark()!;
 
-      // Submit application with test results
-      // await applicantJobApplicationService.submitApplication(
-      //   jobId: currentJob.id ?? "",
-      //   testAnswers: selectedAnswers,
-      //   score: correctAnswers,
-      //   totalQuestions: mcqQuestions.length,
-      //   passed: passed,
-      // );
+      // Update progress based on test result
+      await applicantJobApplicationService.updateJobProgress(
+        progress.id!,
+        testPassed: passed,
+        chancesLeft: chancesLeft.value - 1,
+        status:
+            passed ? ApplicationStatus.submitted : ApplicationStatus.inProgress,
+        updatedAt: DateTime.now(),
+        usedFirstChance: true,
+        usedSecondChance: progress.usedSecondChance,
+        testScore: marks,
+      );
 
+      // If not passed, fetch relevant courses first
+      if (!passed) {
+        await getRelevantCourses();
+      }
+
+      isTestCompleted.value = true;
       isSubmitting.value = false;
 
       if (passed) {
@@ -118,10 +143,18 @@ class ApplicantJobsApplicationController extends GetxController {
           'Congratulations! You have passed the test. Your application has been submitted.',
         );
       } else {
-        customDialog(
-          'Test Results',
-          'Unfortunately, you did not pass the test. Please try again later.',
-        );
+        // Only show dialog after courses are loaded
+        if (relevantCourses.isNotEmpty) {
+          customDialog(
+            'Test Results',
+            'Unfortunately, you did not pass the test. We recommend completing these relevant courses to improve your chances:',
+          );
+        } else {
+          customDialog(
+            'Test Results',
+            'Unfortunately, you did not pass the test. Please try again later.',
+          );
+        }
       }
     } catch (error) {
       isSubmitting.value = false;
@@ -163,7 +196,6 @@ class ApplicantJobsApplicationController extends GetxController {
         status: ApplicationStatus.inProgress,
         passMarkForTest: getPassMark() ?? 0,
         createdAt: DateTime.now(),
-        updatedAt: DateTime.now(),
         applicantId: FirebaseAuth.instance.currentUser?.uid,
       );
 
@@ -184,22 +216,133 @@ class ApplicantJobsApplicationController extends GetxController {
     }
   }
 
-  int getChancesLeft() {
+  RxInt get chancesLeft {
     final progress = applicationProgress.value;
 
     if (progress == null) {
-      return 2;
+      return 2.obs;
     }
 
     final usedFirst = progress.usedFirstChance ?? false;
     final usedSecond = progress.usedSecondChance ?? false;
 
     if (!usedFirst && !usedSecond) {
-      return 2;
+      return 2.obs;
     } else if (usedFirst && !usedSecond) {
-      return 1;
+      return 1.obs;
     } else {
-      return 0;
+      return 0.obs;
+    }
+  }
+
+  // Add relevant courses list
+  var relevantCourses = <Course>[].obs;
+  var isLoadingCourses = false.obs;
+
+  // Add getter to check if we should show the test
+  bool get shouldShowTest {
+    if (chancesLeft.value == 1 &&
+        applicationProgress.value?.assignedCourseId == null) {
+      return false;
+    }
+    return true;
+  }
+
+  // Add method to initialize courses if needed
+  void initializeCoursesIfNeeded() {
+    if (chancesLeft.value == 1 &&
+        applicationProgress.value?.assignedCourseId == null &&
+        relevantCourses.isEmpty &&
+        !isLoadingCourses.value) {
+      getRelevantCourses();
+    }
+  }
+
+  // Add getter to check if all chances are used
+  bool get areAllChancesUsed {
+    final progress = applicationProgress.value;
+    if (progress == null) return false;
+    return (progress.usedFirstChance ?? false) &&
+        (progress.usedSecondChance ?? false);
+  }
+
+  // Add getter to check if course is completed
+  Future<bool> isCourseCompleted() async {
+    final progress = applicationProgress.value;
+    if (progress == null || progress.assignedCourseId == null) return false;
+
+    final userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId == null) return false;
+
+    try {
+      final courseProgress =
+          await applicantJobApplicationService.getCourseProgress(
+        progress.assignedCourseId!,
+        userId,
+      );
+
+      return courseProgress?.isCompleted ?? false;
+    } catch (error) {
+      debugPrint('Error checking course progress: $error');
+      return false;
+    }
+  }
+
+  // Add observable for course completion status
+  var courseCompletionStatus = false.obs;
+
+  // Check course completion status
+  Future<void> checkCourseCompletion() async {
+    courseCompletionStatus.value = await isCourseCompleted();
+  }
+
+  // Fetch relevant courses
+  Future<void> getRelevantCourses() async {
+    debugPrint('Starting to fetch relevant courses...');
+    try {
+      isLoadingCourses.value = true;
+      relevantCourses.clear(); // Clear existing courses before loading
+
+      final courses = await applicantJobApplicationService.getRelevantCourses(
+          currentJob.category ?? "", currentJob.tags);
+
+      debugPrint('Courses fetched: ${courses?.length ?? 0}');
+
+      if (courses != null && courses.isNotEmpty) {
+        relevantCourses.value = courses;
+        debugPrint('Courses set to state: ${relevantCourses.length}');
+      } else {
+        relevantCourses.clear();
+        debugPrint('No courses found, clearing state');
+      }
+    } catch (error) {
+      debugPrint('Error fetching relevant courses: $error');
+      relevantCourses.clear();
+    } finally {
+      debugPrint('Setting isLoadingCourses to false');
+      isLoadingCourses.value = false;
+    }
+  }
+
+  // Enroll in a course
+  Future<void> enrollInCourse(String courseId) async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) {
+        throw Exception('User not logged in');
+      }
+
+      await applicantJobApplicationService.enrollInCourse(courseId, userId);
+
+      // Refresh application progress to get updated assigned course
+      await addApplicationProgress();
+
+      customDialog(
+        'Success',
+        'Successfully enrolled in the course! You can now access it from your dashboard.',
+      );
+    } catch (error) {
+      customDialog('Error', error.toString());
     }
   }
 }

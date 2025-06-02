@@ -27,7 +27,7 @@ Future<void> customDialog(
                 color: title == 'Error' ? Colors.red : AppColors.darkPrimary,
               ),
         ),
-        content: Text(
+        content: SelectableText(
           message,
           style: Theme.of(context).textTheme.bodyMedium,
         ),

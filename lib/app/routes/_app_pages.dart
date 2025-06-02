@@ -6,6 +6,8 @@ import 'package:joblagbe/app/modules/admin/views/pages/_admin_course_view_page.d
 import 'package:joblagbe/app/data/models/_course_model.dart';
 import 'package:joblagbe/app/modules/applicant/controllers/_applicant_jobs_application_controller.dart';
 import 'package:joblagbe/app/modules/applicant/controllers/_applicant_wrapper_controller.dart';
+import 'package:joblagbe/app/modules/applicant/views/pages/_applicant_course_view_page.dart';
+import 'package:joblagbe/app/modules/applicant/views/pages/_applicant_courses_page.dart';
 import 'package:joblagbe/app/modules/applicant/views/pages/_applicant_job_application_page.dart';
 import 'package:joblagbe/app/routes/_routing_imports.dart';
 
@@ -151,6 +153,21 @@ class AppPages {
             }
           },
         )
+      ]);
+  // ✅ applicant courses page
+  static GoRoute applicantCoursePage = GoRoute(
+      path: '/dashboard/applicant/courses',
+      builder: (context, state) {
+        return const ApplicantCoursePage();
+      },
+      routes: [
+        GoRoute(
+          path: 'view/:courseId',
+          builder: (context, state) {
+            final courseId = state.pathParameters['courseId']!;
+            return ApplicantCourseViewPageWithId(courseId: courseId);
+          },
+        ),
       ]);
 
   // ✅ applicant profile page

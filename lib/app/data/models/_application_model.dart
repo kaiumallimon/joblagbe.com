@@ -10,7 +10,6 @@ class ApplicationProgressModel {
   final String? assignedCourseId;
   final ApplicationStatus status;
   final DateTime? createdAt;
-  final DateTime? updatedAt;
   final int? testScore;
   final String? recruiterFeedback;
   final int? passMarkForTest;
@@ -27,7 +26,6 @@ class ApplicationProgressModel {
     this.assignedCourseId,
     this.status = ApplicationStatus.inProgress,
     this.createdAt,
-    this.updatedAt,
     this.testScore,
     this.recruiterFeedback,
     this.passMarkForTest,
@@ -52,9 +50,7 @@ class ApplicationProgressModel {
         createdAt: json['createdAt'] != null
             ? DateTime.parse(json['createdAt'])
             : null,
-        updatedAt: json['updatedAt'] != null
-            ? DateTime.parse(json['updatedAt'])
-            : null,
+
         testScore: json['testScore'] as int?,
         recruiterFeedback: json['recruiterFeedback'] as String?,
         passMarkForTest: json['passMarkForTest'] as int?,
@@ -72,7 +68,6 @@ class ApplicationProgressModel {
       'assignedCourseId': assignedCourseId,
       'status': status.toString().split('.').last,
       'createdAt': createdAt?.toIso8601String(),
-      'updatedAt': updatedAt?.toIso8601String(),
       'testScore': testScore,
       'recruiterFeedback': recruiterFeedback,
       'passMarkForTest': passMarkForTest,

@@ -15,6 +15,12 @@ class ApplicantWrapperController extends GetxController {
       "icon": Icons.work,
       "route": "/dashboard/applicant/jobs",
     },
+
+    {
+      "title": "Courses",
+      "icon": Icons.school,
+      "route": "/dashboard/applicant/courses",
+    },
     {
       "title": "Profile",
       "icon": Icons.person,
@@ -41,7 +47,7 @@ class ApplicantWrapperController extends GetxController {
     }
   }
 
-  void showSavedInfo()async{
+  void showSavedInfo() async {
     var storage = GetStorage();
 
     var userInfo = storage.read('userInfo');

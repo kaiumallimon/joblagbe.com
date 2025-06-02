@@ -11,45 +11,60 @@ create table course_progress (
 
 */
 
-class CourseProgress {
-  String id;
-  String userId;
-  String courseId;
-  String lessonId;
-  bool completed;
-  String completedAt;
+class CourseProgressModel {
+  final String? id;
+  final String? courseId;
+  final String? userId;
+  final DateTime? startedAt;
+  final DateTime? completedAt;
+  final double progressPercentage;
+  final bool isCompleted;
+  final Map<String, dynamic> lessonProgress;
 
-  // constructor
-  CourseProgress({
-    required this.id,
-    required this.userId,
-    required this.courseId,
-    required this.lessonId,
-    required this.completed,
-    required this.completedAt,
+  CourseProgressModel({
+    this.id,
+    this.courseId,
+    this.userId,
+    this.startedAt,
+    this.completedAt,
+    this.progressPercentage = 0.0,
+    this.isCompleted = false,
+    required this.lessonProgress,
   });
 
-  // factory constructor
-  factory CourseProgress.fromJson(Map<String, dynamic> json) {
-    return CourseProgress(
-      id: json['id'],
-      userId: json['userId'],
-      courseId: json['courseId'],
-      lessonId: json['lessonId'],
-      completed: json['completed'],
-      completedAt: json['completedAt'],
+  factory CourseProgressModel.fromJson(Map<String, dynamic> json, String? id) {
+    DateTime? parseDate(String? dateStr) {
+      if (dateStr == null || dateStr.isEmpty) return null;
+      try {
+        return DateTime.parse(dateStr);
+      } catch (e) {
+        return null;
+      }
+    }
+
+    return CourseProgressModel(
+      id: id,
+      courseId: json['courseId'] as String?,
+      userId: json['userId'] as String?,
+      startedAt: parseDate(json['startedAt'] as String?),
+      completedAt: parseDate(json['completedAt'] as String?),
+      progressPercentage:
+          (json['progressPercentage'] as num?)?.toDouble() ?? 0.0,
+      isCompleted: json['isCompleted'] as bool? ?? false,
+      lessonProgress: json['lessonProgress'] as Map<String, dynamic>? ??
+          <String, dynamic>{},
     );
   }
 
-  // toJson method
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'userId': userId,
       'courseId': courseId,
-      'lessonId': lessonId,
-      'completed': completed,
-      'completedAt': completedAt,
+      'userId': userId,
+      'startedAt': startedAt?.toIso8601String(),
+      'completedAt': completedAt?.toIso8601String(),
+      'progressPercentage': progressPercentage,
+      'isCompleted': isCompleted,
+      'lessonProgress': lessonProgress,
     };
   }
 }

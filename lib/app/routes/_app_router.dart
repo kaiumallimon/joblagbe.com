@@ -10,7 +10,6 @@ import 'package:joblagbe/app/routes/_app_pages.dart';
 import 'package:joblagbe/app/routes/_routing_redirections.dart';
 import 'package:joblagbe/main.dart';
 
-
 class AppRouter {
   static GoRouter router = GoRouter(
       navigatorKey: navigatorKey,
@@ -48,6 +47,7 @@ class AppRouter {
           routes: [
             AppPages.applicantHomePage,
             AppPages.applicantJobsPage,
+            AppPages.applicantCoursePage,
             AppPages.applicantProfilePage,
           ],
         ),
