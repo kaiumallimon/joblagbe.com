@@ -131,4 +131,47 @@ class ApplicantCourseService {
       throw Exception('Failed to enroll in course: $e');
     }
   }
+
+  // Mark a lesson as completed and update course progress
+  Future<void> markLessonAsCompleted(String courseId, String lessonId) async {
+    try {
+      final userId = FirebaseAuth.instance.currentUser?.uid;
+      if (userId == null) throw Exception('User not logged in');
+
+      // Get current progress
+      final progress = await getCourseProgress(courseId);
+      if (progress == null) throw Exception('Course progress not found');
+
+      // Get all lessons for the course
+      final lessons = await getAllLessonsForCourse(courseId);
+      if (lessons == null || lessons.isEmpty)
+        throw Exception('No lessons found');
+
+      // Update lesson progress map
+      final updatedLessonProgress =
+          Map<String, dynamic>.from(progress.lessonProgress);
+      updatedLessonProgress[lessonId] = {
+        'completed': true,
+        'completedAt': DateTime.now().toIso8601String(),
+      };
+
+      // Calculate new progress percentage
+      final totalLessons = lessons.length;
+      final completedLessons = updatedLessonProgress.values
+          .where((v) => v is Map && v['completed'] == true)
+          .length;
+      final newProgress = (completedLessons / totalLessons) * 100;
+      final isCourseCompleted = completedLessons == totalLessons;
+
+      // Update progress in Firestore
+      await courseProgressCollection.doc(progress.id).update({
+        'lessonProgress': updatedLessonProgress,
+        'progressPercentage': newProgress,
+        'isCompleted': isCourseCompleted,
+        if (isCourseCompleted) 'completedAt': DateTime.now().toIso8601String(),
+      });
+    } catch (e) {
+      throw Exception('Failed to mark lesson as completed: $e');
+    }
+  }
 }

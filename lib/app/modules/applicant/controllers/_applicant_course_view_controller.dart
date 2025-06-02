@@ -196,4 +196,23 @@ class ApplicantCourseViewController extends GetxController {
     }
     return '';
   }
+
+  var isMarkingAsCompleted = false.obs;
+
+  Future<void> markLessonAsCompleted() async {
+    if (selectedLesson.value == null || courseProgress.value == null) return;
+    isMarkingAsCompleted.value = true;
+    try {
+      await _courseService.markLessonAsCompleted(
+        course.id!,
+        selectedLesson.value!.id!,
+      );
+      // Reload course progress after marking lesson as completed
+      await loadCourseProgress();
+    } catch (e) {
+      customDialog("Error", e.toString());
+    } finally {
+      isMarkingAsCompleted.value = false;
+    }
+  }
 }

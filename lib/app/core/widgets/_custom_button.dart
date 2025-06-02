@@ -22,7 +22,7 @@ class CustomButton extends StatefulWidget {
   });
 
   final String text;
-  final VoidCallback onPressed;
+  final VoidCallback? onPressed;
   final Color color;
   final Color textColor;
   final double width;

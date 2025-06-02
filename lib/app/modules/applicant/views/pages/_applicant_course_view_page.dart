@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
+import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/core/widgets/_dashboard_appbar.dart';
 import 'package:joblagbe/app/data/models/_course_model.dart';
 import 'package:joblagbe/app/data/services/_applicant_course_service.dart';
@@ -217,13 +218,26 @@ class ApplicantCourseViewPage extends StatelessWidget {
                                         : Colors.grey[200],
                                     shape: BoxShape.circle,
                                   ),
-                                  child: Icon(
-                                    Icons.play_arrow,
-                                    color: isSelected
-                                        ? Colors.white
-                                        : Colors.grey[600],
-                                    size: 20,
-                                  ),
+                                  child: Obx(() {
+                                    return controller.courseProgress.value!
+                                                    .lessonProgress[lesson.id!]
+                                                ['completed'] ==
+                                            true
+                                        ? Icon(
+                                            Icons.check_circle,
+                                            color: isSelected
+                                                ? Colors.white
+                                                : Colors.grey[600],
+                                            size: 20,
+                                          )
+                                        : Icon(
+                                            Icons.play_arrow,
+                                            color: isSelected
+                                                ? Colors.white
+                                                : Colors.grey[600],
+                                            size: 20,
+                                          );
+                                  }),
                                 ),
                                 title: Text(
                                   lesson.title,
@@ -387,6 +401,53 @@ class ApplicantCourseViewPage extends StatelessWidget {
                                         height: 1.5,
                                       ),
                                     ),
+                                    const SizedBox(height: 16),
+                                    Obx(() {
+                                      return controller.courseProgress.value!
+                                                      .lessonProgress[
+                                                  lesson.id!]['completed'] ==
+                                              true
+                                          ? Container(
+                                              padding: EdgeInsets.symmetric(
+                                                  horizontal: 20, vertical: 5),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.white,
+                                                borderRadius:
+                                                    BorderRadius.circular(8),
+                                                border: Border.all(
+                                                  color: AppColors.darkPrimary
+                                                      .withOpacity(.3),
+                                                  width: 1,
+                                                ),
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                spacing: 5,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Icon(
+                                                    Icons.check_circle,
+                                                    color:
+                                                        AppColors.darkPrimary,
+                                                  ),
+                                                  Text(
+                                                    'Completed',
+                                                  ),
+                                                ],
+                                              ))
+                                          : CustomButton(
+                                              text: "Mark as complete",
+                                              height: 40,
+                                              width: 200,
+                                              isLoading: controller
+                                                  .isMarkingAsCompleted.value,
+                                              leadingIcon: Icon(Icons.check),
+                                              onPressed: () async {
+                                                await controller
+                                                    .markLessonAsCompleted();
+                                              });
+                                    })
                                   ],
                                 ),
                               ),
