@@ -11,6 +11,9 @@ class ApplicantCourseService {
   final lessonCollection =
       FirebaseFirestore.instance.collection('db_course_lessons');
 
+  final jobApplicationProgressCollection =
+      FirebaseFirestore.instance.collection('db_job_progress');
+
   // Get all courses
   Future<List<Course>> getAllCourses() async {
     try {
@@ -133,7 +136,7 @@ class ApplicantCourseService {
   }
 
   // Mark a lesson as completed and update course progress
-  Future<void> markLessonAsCompleted(String courseId, String lessonId) async {
+  Future<bool> markLessonAsCompleted(String courseId, String lessonId) async {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) throw Exception('User not logged in');
@@ -170,6 +173,26 @@ class ApplicantCourseService {
         'isCompleted': isCourseCompleted,
         if (isCourseCompleted) 'completedAt': DateTime.now().toIso8601String(),
       });
+
+      if (newProgress == 100.0) {
+        await jobApplicationProgressCollection
+            .where('applicantId', isEqualTo: userId)
+            .where('assignedCourseId', isEqualTo: courseId)
+            .get()
+            .then((snapshot) {
+          if (snapshot.docs.isNotEmpty) {
+            snapshot.docs.first.reference.update({
+              'assignedCourseId': null,
+              'courseProgress': 100,
+            });
+          }
+        });
+
+        // delete course progress
+        await courseProgressCollection.doc(progress.id).delete();
+        return true;
+      }
+      return false;
     } catch (e) {
       throw Exception('Failed to mark lesson as completed: $e');
     }

@@ -203,11 +203,16 @@ class ApplicantCourseViewController extends GetxController {
     if (selectedLesson.value == null || courseProgress.value == null) return;
     isMarkingAsCompleted.value = true;
     try {
-      await _courseService.markLessonAsCompleted(
+      bool isComplete = await _courseService.markLessonAsCompleted(
         course.id!,
         selectedLesson.value!.id!,
       );
       // Reload course progress after marking lesson as completed
+
+      if (isComplete) {
+        return;
+      }
+
       await loadCourseProgress();
     } catch (e) {
       customDialog("Error", e.toString());

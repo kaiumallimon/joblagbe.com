@@ -15,6 +15,7 @@ class ApplicationProgressModel {
   final int? passMarkForTest;
   final bool? usedFirstChance;
   final bool? usedSecondChance;
+  final int? courseProgress;
 
   ApplicationProgressModel({
     this.id,
@@ -31,6 +32,7 @@ class ApplicationProgressModel {
     this.passMarkForTest,
     this.usedFirstChance = false,
     this.usedSecondChance = false,
+    this.courseProgress,
   });
 
   factory ApplicationProgressModel.fromJson(
@@ -50,12 +52,12 @@ class ApplicationProgressModel {
         createdAt: json['createdAt'] != null
             ? DateTime.parse(json['createdAt'])
             : null,
-
         testScore: json['testScore'] as int?,
         recruiterFeedback: json['recruiterFeedback'] as String?,
         passMarkForTest: json['passMarkForTest'] as int?,
         usedFirstChance: json['usedFirstChance'] as bool? ?? false,
-        usedSecondChance: json['usedSecondChance'] as bool? ?? false);
+        usedSecondChance: json['usedSecondChance'] as bool? ?? false,
+        courseProgress: json['courseProgress'] as int?);
   }
 
   Map<String, dynamic> toJson() {
@@ -73,6 +75,44 @@ class ApplicationProgressModel {
       'passMarkForTest': passMarkForTest,
       'usedFirstChance': usedFirstChance,
       'usedSecondChance': usedSecondChance,
+      'courseProgress': courseProgress,
     };
   }
+  ApplicationProgressModel copyWith({
+    String? id,
+    String? jobId,
+    String? applicantId,
+    bool? testPassed,
+    int? chancesLeft,
+    int? maxChances,
+    String? assignedCourseId,
+    ApplicationStatus? status,
+    DateTime? createdAt,
+    int? testScore,
+    String? recruiterFeedback,
+    int? passMarkForTest,
+    bool? usedFirstChance,
+    bool? usedSecondChance,
+    int? courseProgress,
+  }) {
+    return ApplicationProgressModel(
+      id: id ?? this.id,
+      jobId: jobId ?? this.jobId,
+      applicantId: applicantId ?? this.applicantId,
+      testPassed: testPassed ?? this.testPassed,
+      chancesLeft: chancesLeft ?? this.chancesLeft,
+      maxChances: maxChances ?? this.maxChances,
+      assignedCourseId: assignedCourseId ?? this.assignedCourseId,
+      status: status ?? this.status,
+      createdAt: createdAt ?? this.createdAt,
+      testScore: testScore ?? this.testScore,
+      recruiterFeedback: recruiterFeedback ?? this.recruiterFeedback,
+      passMarkForTest: passMarkForTest ?? this.passMarkForTest,
+      usedFirstChance: usedFirstChance ?? this.usedFirstChance,
+      usedSecondChance: usedSecondChance ?? this.usedSecondChance,
+      courseProgress: courseProgress ?? this.courseProgress,
+    );
+  }
+
+  
 }

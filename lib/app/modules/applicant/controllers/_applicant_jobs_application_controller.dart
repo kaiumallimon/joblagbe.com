@@ -116,22 +116,53 @@ class ApplicantJobsApplicationController extends GetxController {
       // Check if passed
       bool passed = marks >= getPassMark()!;
 
+      debugPrint('Test submitted. Marks: $marks, Pass Mark: ${getPassMark()}');
+
+      decrementChancesLeft();
+      debugPrint('Chances left after test submission: ${chancesLeft.value}');
+
       // Update progress based on test result
       await applicantJobApplicationService.updateJobProgress(
         progress.id!,
         testPassed: passed,
-        chancesLeft: chancesLeft.value - 1,
+        chancesLeft: chancesLeft.value,
         status:
             passed ? ApplicationStatus.submitted : ApplicationStatus.inProgress,
         updatedAt: DateTime.now(),
-        usedFirstChance: true,
-        usedSecondChance: progress.usedSecondChance,
+        usedFirstChance:
+            chancesLeft.value < 2 ? true : progress.usedFirstChance,
+        usedSecondChance:
+            progress.usedFirstChance == true && chancesLeft.value < 1
+                ? true
+                : progress.usedSecondChance,
         testScore: marks,
       );
 
       // If not passed, fetch relevant courses first
-      if (!passed) {
+      if (!passed && chancesLeft.value > 0) {
+        debugPrint(
+            'Test not passed but have chances. Fetching relevant courses for improvement...');
         await getRelevantCourses();
+      } else {
+        debugPrint('Test passed or no chances left. Not fetching courses.');
+
+        applicationProgress.value = progress.copyWith(
+          testPassed: passed,
+          chancesLeft: chancesLeft.value,
+          status: passed
+              ? ApplicationStatus.submitted
+              : ApplicationStatus.inProgress,
+          usedFirstChance: applicationProgress.value?.chancesLeft == 1 ||
+                  applicationProgress.value?.chancesLeft == 0
+              ? true
+              : applicationProgress.value?.usedFirstChance,
+          usedSecondChance: applicationProgress.value?.chancesLeft == 0
+              ? true
+              : applicationProgress.value?.usedSecondChance,
+        );
+
+        debugPrint(
+            'Application progress updated: ${applicationProgress.value!.chancesLeft}');
       }
 
       isTestCompleted.value = true;
@@ -218,20 +249,16 @@ class ApplicantJobsApplicationController extends GetxController {
 
   RxInt get chancesLeft {
     final progress = applicationProgress.value;
+    return RxInt(progress?.chancesLeft ?? 2);
+  }
 
-    if (progress == null) {
-      return 2.obs;
-    }
-
-    final usedFirst = progress.usedFirstChance ?? false;
-    final usedSecond = progress.usedSecondChance ?? false;
-
-    if (!usedFirst && !usedSecond) {
-      return 2.obs;
-    } else if (usedFirst && !usedSecond) {
-      return 1.obs;
-    } else {
-      return 0.obs;
+  void decrementChancesLeft() {
+    final progress = applicationProgress.value;
+    if (progress != null && progress.chancesLeft > 0) {
+      final newChances = progress.chancesLeft - 1;
+      applicationProgress.value = progress.copyWith(chancesLeft: newChances);
+      update(['chancesLeft']);
+      debugPrint('Chances decremented. Now: $newChances');
     }
   }
 
@@ -242,7 +269,7 @@ class ApplicantJobsApplicationController extends GetxController {
   // Add getter to check if we should show the test
   bool get shouldShowTest {
     if (chancesLeft.value == 1 &&
-        applicationProgress.value?.assignedCourseId == null) {
+        applicationProgress.value?.courseProgress != 100) {
       return false;
     }
     return true;
@@ -260,32 +287,12 @@ class ApplicantJobsApplicationController extends GetxController {
 
   // Add getter to check if all chances are used
   bool get areAllChancesUsed {
-    final progress = applicationProgress.value;
-    if (progress == null) return false;
-    return (progress.usedFirstChance ?? false) &&
-        (progress.usedSecondChance ?? false);
+    return chancesLeft.value <= 0;
   }
 
   // Add getter to check if course is completed
   Future<bool> isCourseCompleted() async {
-    final progress = applicationProgress.value;
-    if (progress == null || progress.assignedCourseId == null) return false;
-
-    final userId = FirebaseAuth.instance.currentUser?.uid;
-    if (userId == null) return false;
-
-    try {
-      final courseProgress =
-          await applicantJobApplicationService.getCourseProgress(
-        progress.assignedCourseId!,
-        userId,
-      );
-
-      return courseProgress?.isCompleted ?? false;
-    } catch (error) {
-      debugPrint('Error checking course progress: $error');
-      return false;
-    }
+    return applicationProgress.value!.courseProgress == 100;
   }
 
   // Add observable for course completion status
