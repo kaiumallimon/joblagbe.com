@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
@@ -5,7 +6,6 @@ import 'package:joblagbe/app/core/widgets/_dashboard_appbar.dart';
 import 'package:joblagbe/app/modules/applicant/controllers/_applicant_jobs_controller.dart';
 import 'package:joblagbe/app/modules/applicant/views/widgets/_detailed_applicant_job_card.dart';
 import 'package:joblagbe/app/modules/recruiter/views/widgets/_recruiter_job_post_card.dart';
-import 'package:loading_animation_widget/loading_animation_widget.dart';
 
 class ApplicantJobs extends StatelessWidget {
   const ApplicantJobs({super.key});
@@ -79,9 +79,8 @@ class ApplicantJobs extends StatelessWidget {
                         if (jobsController.isLoading.value &&
                             jobsController.jobs.isEmpty) {
                           return Center(
-                            child: LoadingAnimationWidget.twoRotatingArc(
+                            child: CupertinoActivityIndicator(
                               color: AppColors.primary,
-                              size: 50,
                             ),
                           );
                         }
@@ -118,10 +117,8 @@ class ApplicantJobs extends StatelessWidget {
                                 return Center(
                                   child: Padding(
                                     padding: const EdgeInsets.all(16.0),
-                                    child:
-                                        LoadingAnimationWidget.twoRotatingArc(
+                                    child: CupertinoActivityIndicator(
                                       color: AppColors.primary,
-                                      size: 30,
                                     ),
                                   ),
                                 );

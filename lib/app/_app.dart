@@ -11,15 +11,13 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'joblagbe',
+      title: 'joblagbe.com - Find Your Dream Job based in Bangladesh',
       theme: AppTheme.theme(),
       routerDelegate: AppRouter.router.routerDelegate,
       routeInformationParser: AppRouter.router.routeInformationParser,
       routeInformationProvider: AppRouter.router.routeInformationProvider,
       scrollBehavior: NoThumbScrollBehavior().copyWith(scrollbars: false),
       defaultTransition: Transition.fade,
-
-      
     );
   }
 }
