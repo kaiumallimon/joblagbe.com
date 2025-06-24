@@ -197,7 +197,7 @@ class AddJobPage2 extends StatelessWidget {
                               );
                             }),
                             Obx(() => Text(
-                                '/  ${addjobController.mcqList.length * 10}',
+                                '/ ${addjobController.mcqList.length * 10}',
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold))),
