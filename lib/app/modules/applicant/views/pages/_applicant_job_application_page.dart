@@ -3,7 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
+import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/core/widgets/_dashboard_appbar.dart';
+import 'package:joblagbe/app/modules/applicant/controllers/_applicant_course_controller.dart';
 import 'package:joblagbe/app/modules/applicant/controllers/_applicant_jobs_application_controller.dart';
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 
@@ -105,64 +107,123 @@ class ApplicantJobApplicationPage extends StatelessWidget {
 
         // Show message if all chances are used
         if (controller.areAllChancesUsed) {
-          return Center(
-            child: Container(
-              padding: const EdgeInsets.all(24),
-              margin: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: AppColors.primary.withOpacity(0.05),
-                borderRadius: BorderRadius.circular(12),
-                border: Border.all(
-                  color: AppColors.primary.withOpacity(0.2),
-                  width: 1,
-                ),
-              ),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Icon(
-                    Icons.error_outline,
-                    size: 64,
-                    color: Colors.red,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    'Maximum Attempts Reached',
-                    style: TextStyle(
-                      fontSize: 24,
-                      fontWeight: FontWeight.bold,
-                      color: AppColors.black,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Text(
-                    'You have used all your attempts for this job. Please try applying for other job positions.',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: AppColors.black.withOpacity(0.7),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () => Get.back(),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: AppColors.primary,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8),
+          return controller.applicationProgress.value?.testPassed == true
+              ? Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    margin: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.primary.withOpacity(0.2),
+                        width: 1,
                       ),
                     ),
-                    child: const Text('Find Other Jobs'),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.check_circle,
+                          size: 64,
+                          color: Colors.green,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Test Completed Successfully',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'You have successfully completed the test for this job. Your application is submitted and will be reviewed by the recruiter. Please wait for further updates via email.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: AppColors.black.withOpacity(0.7),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: () => Get.back(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text('Find Other Jobs'),
+                        ),
+                      ],
+                    ),
                   ),
-                ],
-              ),
-            ),
-          );
+                )
+              : Center(
+                  child: Container(
+                    padding: const EdgeInsets.all(24),
+                    margin: const EdgeInsets.all(16),
+                    decoration: BoxDecoration(
+                      color: AppColors.primary.withOpacity(0.05),
+                      borderRadius: BorderRadius.circular(12),
+                      border: Border.all(
+                        color: AppColors.primary.withOpacity(0.2),
+                        width: 1,
+                      ),
+                    ),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Icon(
+                          Icons.error_outline,
+                          size: 64,
+                          color: Colors.red,
+                        ),
+                        const SizedBox(height: 16),
+                        Text(
+                          'Maximum Attempts Reached',
+                          style: TextStyle(
+                            fontSize: 24,
+                            fontWeight: FontWeight.bold,
+                            color: AppColors.black,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'You have used all your attempts for this job. Please try applying for other job positions.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: AppColors.black.withOpacity(0.7),
+                          ),
+                        ),
+                        const SizedBox(height: 24),
+                        ElevatedButton(
+                          onPressed: () => Get.back(),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primary,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 12,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: const Text('Find Other Jobs'),
+                        ),
+                      ],
+                    ),
+                  ),
+                );
         }
 
         // Show warning if course is not completed
@@ -211,6 +272,9 @@ class ApplicantJobApplicationPage extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       context.go('/dashboard/applicant/courses');
+                      Get.find<ApplicantCourseController>()
+                          .selectedTabIndex
+                          .value = 1;
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.primary,
@@ -443,22 +507,12 @@ class ApplicantJobApplicationPage extends StatelessWidget {
                                           ),
                                         ),
                                         const SizedBox(height: 16),
-                                        ElevatedButton(
+                                        CustomButton(
                                           onPressed: () => controller
                                               .enrollInCourse(course.id!),
-                                          style: ElevatedButton.styleFrom(
-                                            backgroundColor: AppColors.primary,
-                                            foregroundColor: Colors.white,
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 16,
-                                              vertical: 8,
-                                            ),
-                                            shape: RoundedRectangleBorder(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                            ),
-                                          ),
-                                          child: const Text('Enroll Now'),
+                                          isLoading:
+                                              controller.isEnrolling.value,
+                                          text: 'Enroll Now',
                                         ),
                                       ],
                                     ),

@@ -331,11 +331,15 @@ class ApplicantJobsApplicationController extends GetxController {
     }
   }
 
+  var isEnrolling = false.obs;
+
   // Enroll in a course
   Future<void> enrollInCourse(String courseId) async {
     try {
+      isEnrolling.value = true;
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) {
+        isEnrolling.value = false;
         throw Exception('User not logged in');
       }
 
@@ -343,13 +347,18 @@ class ApplicantJobsApplicationController extends GetxController {
 
       // Refresh application progress to get updated assigned course
       await addApplicationProgress();
+      isEnrolling.value = false;
 
       customDialog(
         'Success',
         'Successfully enrolled in the course! You can now access it from your dashboard.',
       );
     } catch (error) {
+      isEnrolling.value = false;
       customDialog('Error', error.toString());
+    } finally {
+      // Ensure isEnrolling is reset after operation
+      isEnrolling.value = false;
     }
   }
 }

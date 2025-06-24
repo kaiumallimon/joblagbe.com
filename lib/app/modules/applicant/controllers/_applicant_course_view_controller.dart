@@ -1,10 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/core/widgets/_custom_loading.dart';
 import 'package:joblagbe/app/data/models/_course_model.dart';
 import 'package:joblagbe/app/data/models/_course_lesson_model.dart';
 import 'package:joblagbe/app/data/models/_course_progress_model.dart';
 import 'package:joblagbe/app/data/services/_applicant_course_service.dart';
+import 'package:joblagbe/app/modules/applicant/controllers/_applicant_course_controller.dart';
+import 'package:joblagbe/app/routes/_routing_imports.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:flutter/foundation.dart';
+// Only import dart:html if on web
+// ignore: avoid_web_libraries_in_flutter
+import 'dart:html' as html;
 
 class ApplicantCourseViewController extends GetxController {
   final ApplicantCourseService _courseService = ApplicantCourseService();
@@ -199,21 +206,31 @@ class ApplicantCourseViewController extends GetxController {
 
   var isMarkingAsCompleted = false.obs;
 
-  Future<void> markLessonAsCompleted() async {
+  Future<void> markLessonAsCompleted(BuildContext context) async {
     if (selectedLesson.value == null || courseProgress.value == null) return;
     isMarkingAsCompleted.value = true;
     try {
-      bool isComplete = await _courseService.markLessonAsCompleted(
+      String status = await _courseService.markLessonAsCompleted(
         course.id!,
         selectedLesson.value!.id!,
       );
-      // Reload course progress after marking lesson as completed
+      await loadCourseProgress();
+      if (status == 'completed') {
+        // Navigate back from the page using go router
+        // ignore: use_build_context_synchronously
+        context.go('/dashboard/applicant/courses');
+        Get.find<ApplicantCourseController>().selectedTabIndex.value = 1;
+        // Delete course progress after completion
+        if (courseProgress.value != null && courseProgress.value!.id != null) {
+          await _courseService.deleteCourseProgress(courseProgress.value!.id!);
+        }
 
-      if (isComplete) {
+        // Reload the page if on web
+        if (kIsWeb) {
+          html.window.location.reload();
+        }
         return;
       }
-
-      await loadCourseProgress();
     } catch (e) {
       customDialog("Error", e.toString());
     } finally {

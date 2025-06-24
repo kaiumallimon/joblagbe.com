@@ -136,7 +136,7 @@ class ApplicantCourseService {
   }
 
   // Mark a lesson as completed and update course progress
-  Future<bool> markLessonAsCompleted(String courseId, String lessonId) async {
+  Future<String> markLessonAsCompleted(String courseId, String lessonId) async {
     try {
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) throw Exception('User not logged in');
@@ -187,14 +187,20 @@ class ApplicantCourseService {
             });
           }
         });
-
-        // delete course progress
-        await courseProgressCollection.doc(progress.id).delete();
-        return true;
+        // Do NOT delete course progress here. Let the UI handle any final state.
+        return 'completed';
       }
-      return false;
+      return 'in_progress';
     } catch (e) {
       throw Exception('Failed to mark lesson as completed: $e');
+    }
+  }
+
+  Future<void> deleteCourseProgress(String progressId) async {
+    try {
+      await courseProgressCollection.doc(progressId).delete();
+    } catch (e) {
+      throw Exception('Failed to delete course progress: $e');
     }
   }
 }

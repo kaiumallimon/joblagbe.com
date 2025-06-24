@@ -403,50 +403,92 @@ class ApplicantCourseViewPage extends StatelessWidget {
                                     ),
                                     const SizedBox(height: 16),
                                     Obx(() {
-                                      return controller.courseProgress.value!
-                                                      .lessonProgress[
-                                                  lesson.id!]['completed'] ==
-                                              true
-                                          ? Container(
-                                              padding: EdgeInsets.symmetric(
-                                                  horizontal: 20, vertical: 5),
-                                              decoration: BoxDecoration(
-                                                color: AppColors.white,
-                                                borderRadius:
-                                                    BorderRadius.circular(8),
-                                                border: Border.all(
-                                                  color: AppColors.darkPrimary
-                                                      .withOpacity(.3),
-                                                  width: 1,
+                                      final progress =
+                                          controller.courseProgress.value;
+                                      final lessonCompleted =
+                                          progress?.lessonProgress[lesson.id!]
+                                                  ['completed'] ==
+                                              true;
+                                      final courseCompleted =
+                                          (progress?.progressPercentage ?? 0) >=
+                                              100.0;
+                                      if (lessonCompleted) {
+                                        return Container(
+                                            padding: EdgeInsets.symmetric(
+                                                horizontal: 20, vertical: 5),
+                                            decoration: BoxDecoration(
+                                              color: AppColors.white,
+                                              borderRadius:
+                                                  BorderRadius.circular(8),
+                                              border: Border.all(
+                                                color: AppColors.darkPrimary
+                                                    .withOpacity(.3),
+                                                width: 1,
+                                              ),
+                                            ),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Icon(
+                                                  Icons.check_circle,
+                                                  color: AppColors.darkPrimary,
+                                                ),
+                                                SizedBox(width: 5),
+                                                Text(
+                                                  'Completed',
+                                                ),
+                                              ],
+                                            ));
+                                      } else if (courseCompleted) {
+                                        return Container(
+                                          padding: EdgeInsets.symmetric(
+                                              horizontal: 20, vertical: 5),
+                                          decoration: BoxDecoration(
+                                            color: AppColors.primary
+                                                .withOpacity(0.1),
+                                            borderRadius:
+                                                BorderRadius.circular(8),
+                                            border: Border.all(
+                                              color: AppColors.primary
+                                                  .withOpacity(.3),
+                                              width: 1,
+                                            ),
+                                          ),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.min,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              Icon(
+                                                Icons.emoji_events,
+                                                color: AppColors.primary,
+                                              ),
+                                              SizedBox(width: 5),
+                                              Text(
+                                                'Course Completed!',
+                                                style: TextStyle(
+                                                  color: AppColors.primary,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                               ),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                spacing: 5,
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment.center,
-                                                children: [
-                                                  Icon(
-                                                    Icons.check_circle,
-                                                    color:
-                                                        AppColors.darkPrimary,
-                                                  ),
-                                                  Text(
-                                                    'Completed',
-                                                  ),
-                                                ],
-                                              ))
-                                          : CustomButton(
-                                              text: "Mark as complete",
-                                              height: 40,
-                                              width: 200,
-                                              isLoading: controller
-                                                  .isMarkingAsCompleted.value,
-                                              leadingIcon: Icon(Icons.check),
-                                              onPressed: () async {
-                                                await controller
-                                                    .markLessonAsCompleted();
-                                              });
+                                            ],
+                                          ),
+                                        );
+                                      } else {
+                                        return CustomButton(
+                                            text: "Mark as complete",
+                                            height: 40,
+                                            width: 200,
+                                            isLoading: controller
+                                                .isMarkingAsCompleted.value,
+                                            leadingIcon: Icon(Icons.check),
+                                            onPressed: () async {
+                                              await controller
+                                                  .markLessonAsCompleted(context);
+                                            });
+                                      }
                                     })
                                   ],
                                 ),
