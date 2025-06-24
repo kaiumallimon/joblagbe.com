@@ -22,7 +22,7 @@ class ApplicantHome extends StatelessWidget {
       backgroundColor: AppColors.white,
       appBar: dashboardAppbar('Dashboard'),
       body: Padding(
-        padding: EdgeInsetsGeometry.all(12),
+        padding: EdgeInsets.all(12),
         child: Obx(() {
           if (homeController.isLoading.value) {
             return Center(
