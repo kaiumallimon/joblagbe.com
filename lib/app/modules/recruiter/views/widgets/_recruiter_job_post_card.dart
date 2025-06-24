@@ -101,9 +101,9 @@ class JobPostCard extends StatelessWidget {
                           radius: 26,
                           backgroundImage: NetworkImage(
                             job.companyLogoUrl,
-                            headers: {
-                              "Access-Control-Allow-Origin": "*",
-                            },
+                            // headers: {
+                            //   "Access-Control-Allow-Origin": "*",
+                            // },
                           ),
                         ),
                         Expanded(
