@@ -13,9 +13,10 @@ import 'package:joblagbe/main.dart';
 class AppRouter {
   static GoRouter router = GoRouter(
       navigatorKey: navigatorKey,
-      initialLocation: '/',
+      initialLocation: '/landing',
       refreshListenable: Get.find<LoginController>().userRoleNotifier,
       routes: [
+        AppPages.rootRedirect,
         // ✅ Landing page
         ShellRoute(
           builder: (context, state, child) => LandingLayout(child: child),

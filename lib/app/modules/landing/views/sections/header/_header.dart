@@ -38,11 +38,10 @@ class Header extends StatelessWidget {
                   children: [
                     // logo
                     AppLogo(onTap: () {
-                      GoRouter.of(context).push('/');
+                      context.go('/landing');
                     }),
 
                     // menu
-                    HeaderMenu(headerController: headerController),
 
                     // login
                     CustomButton(
@@ -66,6 +65,5 @@ class Header extends StatelessWidget {
         ),
       ),
     );
-    
   }
 }

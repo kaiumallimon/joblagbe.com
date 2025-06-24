@@ -6,6 +6,7 @@ import 'package:joblagbe/app/core/constants/_strings.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/utils/_sizer.dart';
 import 'package:joblagbe/app/core/widgets/_custom_button.dart';
+import 'package:joblagbe/app/routes/_routing_imports.dart';
 
 class HeroSection extends StatelessWidget {
   const HeroSection({super.key});
@@ -78,7 +79,9 @@ class HeroSection extends StatelessWidget {
                                 borderRadius: 120,
                                 text: 'Join now',
                                 fontFamily: 'Poppins',
-                                onPressed: () {}),
+                                onPressed: () {
+                                  context.go('/register');
+                                }),
                           ],
                         ),
                       ),

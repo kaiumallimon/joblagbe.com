@@ -15,7 +15,9 @@ class AppRoutingRedirections {
     // Allow users to visit the login and register pages freely
     if (state.matchedLocation == '/login' ||
         state.matchedLocation == '/register' ||
-        state.matchedLocation == '/forgot-password') {
+        state.matchedLocation == '/forgot-password' ||
+        state.matchedLocation == '/landing' ||
+        state.matchedLocation == '/jobs') {
       return null;
     }
 
@@ -37,7 +39,7 @@ class AppRoutingRedirections {
             ? null
             : '/dashboard/admin/home';
       default:
-        return '/'; // Redirect unknown roles to home
+        return '/landing'; // Redirect unknown roles to home
     }
   }
 }

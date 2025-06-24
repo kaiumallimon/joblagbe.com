@@ -180,8 +180,8 @@ class AddJobPage2 extends StatelessWidget {
                                     int? newVal = int.tryParse(val);
                                     if (newVal != null &&
                                         newVal <=
-                                            addjobController.mcqList.length) {
-                                      addjobController.passMark.value = newVal;
+                                            addjobController.mcqList.length*10) {
+                                      addjobController.passMark.value = newVal*10;
                                     } else if (newVal != null) {
                                       addjobController.passMark.value =
                                           addjobController.mcqList.length;

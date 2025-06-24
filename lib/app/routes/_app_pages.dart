@@ -12,9 +12,15 @@ import 'package:joblagbe/app/modules/applicant/views/pages/_applicant_job_applic
 import 'package:joblagbe/app/routes/_routing_imports.dart';
 
 class AppPages {
+  // ✅ Root redirect
+  static GoRoute rootRedirect = GoRoute(
+    path: '/',
+    redirect: (_, __) => '/landing',
+  );
+
   // ✅ Landing Page
   static GoRoute landingPage = GoRoute(
-    path: '/',
+    path: '/landing',
     builder: (context, state) => const LandingPage(),
   );
 
