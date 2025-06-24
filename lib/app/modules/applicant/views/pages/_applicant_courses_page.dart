@@ -101,40 +101,7 @@ class ApplicantCoursePage extends StatelessWidget {
                   : controller.filteredEnrolledCourses;
 
               if (courses.isEmpty) {
-                return Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.school_outlined,
-                        size: 64,
-                        color: AppColors.black.withOpacity(0.5),
-                      ),
-                      const SizedBox(height: 16),
-                      Text(
-                        controller.selectedTabIndex.value == 0
-                            ? 'No Courses Found'
-                            : 'No Enrolled Courses',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.black,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        controller.selectedTabIndex.value == 0
-                            ? 'Try adjusting your search or browse all courses.'
-                            : 'You haven\'t enrolled in any courses yet.',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: AppColors.black.withOpacity(0.7),
-                        ),
-                      ),
-                    ],
-                  ),
-                );
+                return EmptyCoursesTab(controller: controller);
               }
 
               return DynMouseScroll(
@@ -307,59 +274,7 @@ class ApplicantCoursePage extends StatelessWidget {
                                                 ],
                                               ),
                                             )
-                                          : SizedBox(
-                                              width: double.infinity,
-                                              child: Obx(() => ElevatedButton(
-                                                    onPressed: controller
-                                                            .isEnrolling.value
-                                                        ? null
-                                                        : () => controller
-                                                            .enrollInCourse(
-                                                                course.id ??
-                                                                    ''),
-                                                    style: ElevatedButton
-                                                        .styleFrom(
-                                                      backgroundColor:
-                                                          Colors.white,
-                                                      foregroundColor:
-                                                          AppColors.primary,
-                                                      padding: const EdgeInsets
-                                                          .symmetric(
-                                                        vertical: 12,
-                                                      ),
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                        borderRadius:
-                                                            BorderRadius
-                                                                .circular(8),
-                                                      ),
-                                                    ),
-                                                    child: controller
-                                                            .isEnrolling.value
-                                                        ? const SizedBox(
-                                                            height: 20,
-                                                            width: 20,
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                              strokeWidth: 2,
-                                                              valueColor:
-                                                                  AlwaysStoppedAnimation<
-                                                                          Color>(
-                                                                      AppColors
-                                                                          .primary),
-                                                            ),
-                                                          )
-                                                        : const Text(
-                                                            'Enroll Now',
-                                                            style: TextStyle(
-                                                              fontSize: 14,
-                                                              fontWeight:
-                                                                  FontWeight
-                                                                      .bold,
-                                                            ),
-                                                          ),
-                                                  )),
-                                            )
+                                          : SizedBox.shrink()
                                     else
                                       SizedBox(
                                         width: double.infinity,
@@ -423,6 +338,53 @@ class ApplicantCoursePage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
+      ),
+    );
+  }
+}
+
+class EmptyCoursesTab extends StatelessWidget {
+  const EmptyCoursesTab({
+    super.key,
+    required this.controller,
+  });
+
+  final ApplicantCourseController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.school_outlined,
+            size: 64,
+            color: AppColors.black.withOpacity(0.5),
+          ),
+          const SizedBox(height: 16),
+          Text(
+            controller.selectedTabIndex.value == 0
+                ? 'No Courses Found'
+                : 'No Enrolled Courses',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.black,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Text(
+            controller.selectedTabIndex.value == 0
+                ? 'Try adjusting your search or browse all courses.'
+                : 'You haven\'t enrolled in any courses yet.',
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              fontSize: 16,
+              color: AppColors.black.withOpacity(0.7),
+            ),
+          ),
+        ],
       ),
     );
   }
