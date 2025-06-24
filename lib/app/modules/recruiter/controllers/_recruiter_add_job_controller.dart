@@ -156,8 +156,13 @@ class AddJobController extends GetxController {
   }
 
   void updatePassMark() {
-    if (passMark.value > mcqList.length) {
-      passMark.value = mcqList.length;
+    int maxMark = mcqList.length * 10;
+    // Clamp passMark to the nearest lower multiple of 10, and not above maxMark
+    if (passMark.value > maxMark) {
+      passMark.value = maxMark;
+    }
+    if (passMark.value % 10 != 0) {
+      passMark.value = (passMark.value ~/ 10) * 10;
     }
   }
 
@@ -185,7 +190,17 @@ class AddJobController extends GetxController {
 
   void postJob(BuildContext context) async {
     if (!validateAllFields(context) || !validateMCQFields(context)) return;
-
+    // Validate passMark
+    int maxMark = mcqList.length * 10;
+    if (passMark.value < 0 ||
+        passMark.value > maxMark ||
+        passMark.value % 10 != 0) {
+      customDialog(
+        "Error",
+        "Pass mark must be a multiple of 10 and between 0 and ${maxMark}.",
+      );
+      return;
+    }
     // Show loading dialog
     startLoading();
 

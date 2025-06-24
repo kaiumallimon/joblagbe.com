@@ -171,29 +171,33 @@ class AddJobPage2 extends StatelessWidget {
                               style: TextStyle(
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
-                            Obx(() => MCQTextfield(
-                                  width: 100,
-                                  inputFormatters: [
-                                    FilteringTextInputFormatter.digitsOnly
-                                  ],
+                            Obx(() {
+                              int maxMark =
+                                  addjobController.mcqList.length * 10;
+                              List<int> passMarkOptions = List.generate(
+                                  addjobController.mcqList.length + 1,
+                                  (i) => i * 10);
+                              return Container(
+                                width: 100,
+                                child: DropdownButton<int>(
+                                  value: addjobController.passMark.value,
+                                  items: passMarkOptions
+                                      .map((val) => DropdownMenuItem<int>(
+                                            value: val,
+                                            child: Text(val.toString()),
+                                          ))
+                                      .toList(),
                                   onChanged: (val) {
-                                    int? newVal = int.tryParse(val);
-                                    if (newVal != null &&
-                                        newVal <=
-                                            addjobController.mcqList.length*10) {
-                                      addjobController.passMark.value = newVal*10;
-                                    } else if (newVal != null) {
-                                      addjobController.passMark.value =
-                                          addjobController.mcqList.length;
+                                    if (val != null) {
+                                      addjobController.passMark.value = val;
                                     }
                                   },
-                                  controller: TextEditingController(
-                                    text: addjobController.passMark.value
-                                        .toString(),
-                                  ),
-                                )),
+                                  isExpanded: true,
+                                ),
+                              );
+                            }),
                             Obx(() => Text(
-                                '/ ${addjobController.mcqList.length}',
+                                '/  ${addjobController.mcqList.length * 10}',
                                 style: TextStyle(
                                     fontSize: 16,
                                     fontWeight: FontWeight.bold))),
