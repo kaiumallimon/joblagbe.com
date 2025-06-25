@@ -59,6 +59,7 @@ dependencies:
   youtube_player_iframe: ^5.2.1
   webview_flutter_web: ^0.2.3+4
   fl_chart: ^1.0.0
+  transparent_image: ^2.0.1
 
 dev_dependencies:
   flutter_test:

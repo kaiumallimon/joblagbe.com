@@ -1,7 +1,8 @@
-import 'package:blur/blur.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/utils/_sizer.dart';
+import 'package:joblagbe/app/routes/_routing_imports.dart';
 
 class HeroSection3 extends StatelessWidget {
   const HeroSection3({super.key});
@@ -54,36 +55,91 @@ class HeroSection3 extends StatelessWidget {
                       width: Sizer.getDynamicWidth(context),
                       fit: BoxFit.cover,
                     ),
-                    Center(
-                      child: Container(
-                        width: 90,
-                        height: 90,
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: Colors.transparent,
-                          shape: BoxShape.circle,
-                        ),
-                        child: Text(
-                          'Explore',
-                          style: TextStyle(
-                            fontFamily: 'Poppins',
-                            color: AppColors.black,
-                            fontSize: Sizer.getFontSize(context),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ).frosted(
-                          blur: 10.0,
-                          frostColor: AppColors.black.withOpacity(0.2),
-                          borderRadius: BorderRadius.circular(45),
-                        ),
-                      ),
-                    )
+                    FrostedCircleButton()
                   ],
-                ),
+                )
               ],
             ),
           ),
         ],
+      ),
+    );
+  }
+}
+
+class FrostedCircleButton extends StatefulWidget {
+  const FrostedCircleButton({super.key});
+
+  @override
+  State<FrostedCircleButton> createState() => _FrostedCircleButtonState();
+}
+
+class _FrostedCircleButtonState extends State<FrostedCircleButton> {
+  bool _isHovered = false;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: GestureDetector(
+        onTap: () {
+          context.go('/login');
+        },
+        child: MouseRegion(
+          onEnter: (_) => setState(() => _isHovered = true),
+          onExit: (_) => setState(() => _isHovered = false),
+          child: ClipOval(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 15.0, sigmaY: 15.0),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+                width: 120,
+                height: 120,
+                decoration: BoxDecoration(
+                  color: Colors.white.withOpacity(0.2),
+                  shape: BoxShape.circle,
+                  border: Border.all(
+                    color: _isHovered
+                        ? AppColors.primary
+                        : Colors.white.withOpacity(0.3),
+                    width: 2,
+                  ),
+                ),
+                alignment: Alignment.center,
+                child: AnimatedSwitcher(
+                  duration: const Duration(milliseconds: 300),
+                  transitionBuilder: (child, animation) => FadeTransition(
+                    opacity: animation,
+                    child: SlideTransition(
+                      position: Tween<Offset>(
+                        begin: const Offset(0.2, 0),
+                        end: Offset.zero,
+                      ).animate(animation),
+                      child: child,
+                    ),
+                  ),
+                  child: _isHovered
+                      ? const Icon(
+                          Icons.open_in_new,
+                          key: ValueKey('icon'),
+                          color: AppColors.darkPrimary,
+                          size: 25,
+                        )
+                      : const Text(
+                          'Explore',
+                          key: ValueKey('text'),
+                          style: TextStyle(
+                            fontFamily: 'Poppins',
+                            color: Colors.black,
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
     );
   }

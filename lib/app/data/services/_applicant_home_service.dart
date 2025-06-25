@@ -38,7 +38,7 @@ class ApplicantHomeService {
       final snapshot = await jobsCollection
           .where('deadline', isGreaterThan: Timestamp.now())
           .orderBy('createdAt', descending: true)
-          .limit(5)
+          .limit(4)
           .get();
 
       return snapshot.docs.map((doc) {
