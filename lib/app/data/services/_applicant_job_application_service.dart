@@ -312,7 +312,7 @@ class ApplicantJobApplicationService {
   }
 
   // ✅ Enroll in a course
-  Future<void> enrollInCourse(String courseId, String userId) async {
+  Future<void> enrollInCourse(String courseId, String userId, String jobId) async {
     try {
       // create lesson progress map with lesson id as key:
       final lessons =
@@ -344,6 +344,7 @@ class ApplicantJobApplicationService {
       // Update job application progress with assigned course
       final jobProgress = await jobProgressCollection
           .where('applicantId', isEqualTo: userId)
+          .where('jobId', isEqualTo: jobId)
           .where('assignedCourseId', isNull: true)
           .get();
 
@@ -352,9 +353,12 @@ class ApplicantJobApplicationService {
           'assignedCourseId': courseId,
           'updatedAt': FieldValue.serverTimestamp(),
         });
-      }
 
-      debugPrint("Successfully enrolled in course!");
+        debugPrint("Successfully enrolled in course!");
+        debugPrint("Job Progress: ${jobProgress.docs.first.data()}");
+      } else {
+        debugPrint("No job progress found for user $userId to update course.");
+      }
     } catch (e) {
       throw Exception('Failed to enroll in course: $e');
     }

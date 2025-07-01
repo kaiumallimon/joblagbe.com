@@ -508,10 +508,12 @@ class ApplicantJobApplicationPage extends StatelessWidget {
                                         ),
                                         const SizedBox(height: 16),
                                         CustomButton(
-                                          onPressed: () => controller
-                                              .enrollInCourse(course.id!),
-                                          isLoading:
-                                              controller.isEnrolling.value,
+                                          onPressed: () =>
+                                              controller.enrollInCourse(
+                                                  course.id!, jobId),
+                                          isLoading: controller
+                                              .enrollingCourseIds
+                                              .contains(course.id),
                                           text: 'Enroll Now',
                                         ),
                                       ],

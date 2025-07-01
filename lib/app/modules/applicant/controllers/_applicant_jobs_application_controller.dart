@@ -315,7 +315,7 @@ class ApplicantJobsApplicationController extends GetxController {
 
       debugPrint('Courses fetched: ${courses?.length ?? 0}');
 
-      if (courses != null && courses.isNotEmpty) {
+      if (courses.isNotEmpty) {
         relevantCourses.value = courses;
         debugPrint('Courses set to state: ${relevantCourses.length}');
       } else {
@@ -331,34 +331,32 @@ class ApplicantJobsApplicationController extends GetxController {
     }
   }
 
-  var isEnrolling = false.obs;
+  final enrollingCourseIds = <String>{}.obs;
 
   // Enroll in a course
-  Future<void> enrollInCourse(String courseId) async {
+  Future<void> enrollInCourse(String courseId, String jobId) async {
+    enrollingCourseIds.add(courseId);
     try {
-      isEnrolling.value = true;
       final userId = FirebaseAuth.instance.currentUser?.uid;
       if (userId == null) {
-        isEnrolling.value = false;
+        enrollingCourseIds.remove(courseId);
         throw Exception('User not logged in');
       }
 
-      await applicantJobApplicationService.enrollInCourse(courseId, userId);
+      await applicantJobApplicationService.enrollInCourse(
+          courseId, userId, jobId);
 
       // Refresh application progress to get updated assigned course
       await addApplicationProgress();
-      isEnrolling.value = false;
 
       customDialog(
         'Success',
         'Successfully enrolled in the course! You can now access it from your dashboard.',
       );
     } catch (error) {
-      isEnrolling.value = false;
       customDialog('Error', error.toString());
     } finally {
-      // Ensure isEnrolling is reset after operation
-      isEnrolling.value = false;
+      enrollingCourseIds.remove(courseId);
     }
   }
 }
