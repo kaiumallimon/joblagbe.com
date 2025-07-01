@@ -148,7 +148,9 @@ class ApplicantJobApplicationPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 24),
                         ElevatedButton(
-                          onPressed: () => Get.back(),
+                          onPressed: () => context.go(
+                            '/dashboard/applicant/jobs',
+                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: Colors.white,
@@ -206,7 +208,9 @@ class ApplicantJobApplicationPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 24),
                         ElevatedButton(
-                          onPressed: () => Get.back(),
+                          onPressed: () => context.go(
+                            '/dashboard/applicant/jobs',
+                          ),
                           style: ElevatedButton.styleFrom(
                             backgroundColor: AppColors.primary,
                             foregroundColor: Colors.white,
