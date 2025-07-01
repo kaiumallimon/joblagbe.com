@@ -10,6 +10,7 @@ import 'package:joblagbe/app/modules/applicant/views/pages/_applicant_course_vie
 import 'package:joblagbe/app/modules/applicant/views/pages/_applicant_courses_page.dart';
 import 'package:joblagbe/app/modules/applicant/views/pages/_applicant_job_application_page.dart';
 import 'package:joblagbe/app/routes/_routing_imports.dart';
+import 'package:joblagbe/app/modules/recruiter/views/pages/_recruiter_applicant_profile_page.dart';
 
 class AppPages {
   // ✅ Root redirect
@@ -225,5 +226,17 @@ class AppPages {
   static GoRoute adminCategoriesPage = GoRoute(
     path: '/dashboard/admin/categories',
     builder: (context, state) => const AdminCategoriesPage(),
+  );
+
+  // ✅ recruiter applicant profile view page
+  static GoRoute recruiterApplicantProfilePage = GoRoute(
+    path: '/dashboard/recruiter/applicant-profile/:applicantId',
+    pageBuilder: (context, state) {
+      final applicantId = state.pathParameters['applicantId']!;
+      return RoutingEffects.buildFadeTransition(
+        state,
+        RecruiterApplicantProfilePage(applicantId: applicantId),
+      );
+    },
   );
 }

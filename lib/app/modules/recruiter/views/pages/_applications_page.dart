@@ -8,6 +8,7 @@ import 'package:joblagbe/app/core/theming/colors/_colors.dart';
 import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/data/models/_applicant_profile_model.dart';
 import 'dart:html' as html;
+import 'package:go_router/go_router.dart';
 
 class ApplicationsPage extends StatelessWidget {
   const ApplicationsPage({super.key});
@@ -56,9 +57,9 @@ class ApplicationsPage extends StatelessWidget {
                   Text(
                     'Total Applications: ${applicationController.applications.length}',
                     style: const TextStyle(
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.bold,
-                      color: AppColors.primary,
+                      color: AppColors.darkPrimary,
                     ),
                   ),
                   CustomButton(
@@ -243,8 +244,8 @@ class ApplicationsPage extends StatelessWidget {
                                 CustomButton(
                                   text: 'View Profile',
                                   onPressed: () {
-                                    // TODO: Navigate to recruiter-facing applicant profile page
-                                    // context.go('/dashboard/recruiter/applicant-profile/${app.applicantId}');
+                                    context.go(
+                                        '/dashboard/recruiter/applicant-profile/${app.applicantId}');
                                   },
                                   color: AppColors.secondary,
                                 ),

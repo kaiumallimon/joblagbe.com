@@ -38,6 +38,7 @@ class AppRouter {
             AppPages.recruiterAddJobPage,
             AppPages.recruiterApplicationsPage,
             AppPages.recruiterProfilePage,
+            AppPages.recruiterApplicantProfilePage,
           ],
         ),
 
