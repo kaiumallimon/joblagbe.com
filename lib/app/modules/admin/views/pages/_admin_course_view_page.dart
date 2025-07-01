@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:go_router/go_router.dart';
@@ -51,7 +52,7 @@ class AdminCourseViewPage extends StatelessWidget {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CupertinoActivityIndicator());
         }
         return Row(
           children: [
@@ -124,7 +125,7 @@ class AdminCourseViewPage extends StatelessWidget {
                   Expanded(
                     child: Obx(() {
                       if (controller.isLoading.value) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(child: CupertinoActivityIndicator());
                       }
                       if (controller.lessons.isEmpty) {
                         return Center(
@@ -217,7 +218,7 @@ class AdminCourseViewPage extends StatelessWidget {
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CupertinoActivityIndicator());
                 }
                 if (controller.selectedLesson.value == null) {
                   return Center(
@@ -273,7 +274,7 @@ class AdminCourseViewPage extends StatelessWidget {
                               width: double.infinity,
                               color: Colors.black,
                               child: Center(
-                                child: CircularProgressIndicator(
+                                child: CupertinoActivityIndicator(
                                   color: Colors.white,
                                 ),
                               ),
@@ -438,7 +439,7 @@ class AdminCourseViewPageWithId extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: Center(child: CupertinoActivityIndicator()),
           );
         }
 

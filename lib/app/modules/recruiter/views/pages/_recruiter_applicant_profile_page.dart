@@ -5,6 +5,7 @@ import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/data/models/_applicant_profile_model.dart';
 import 'package:joblagbe/app/data/services/_recruiter_applications_service.dart';
 import 'dart:html' as html;
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:joblagbe/app/modules/recruiter/controllers/_recruiter_wrapper_controller.dart';
 
@@ -32,7 +33,7 @@ class RecruiterApplicantProfilePage extends StatelessWidget {
         future: service.getApplicantProfileModel(applicantId),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
+            return const Center(child: CupertinoActivityIndicator());
           }
           if (snapshot.hasError) {
             return Center(

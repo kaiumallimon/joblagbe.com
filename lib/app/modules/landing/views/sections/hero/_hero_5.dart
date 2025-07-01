@@ -82,14 +82,18 @@ class HeroSection5 extends StatelessWidget {
                               Row(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  FadeInImage(
-                                    placeholder: MemoryImage(kTransparentImage),
-                                    image: NetworkImage(job.companyLogoUrl),
-                                    width: 50,
-                                    height: 50,
-                                    fit: BoxFit.cover,
-                                    fadeInDuration:
-                                        const Duration(milliseconds: 500),
+                                  ClipRRect(
+                                    borderRadius: BorderRadius.circular(100),
+                                    child: FadeInImage(
+                                      placeholder:
+                                          MemoryImage(kTransparentImage),
+                                      image: NetworkImage(job.companyLogoUrl),
+                                      width: 50,
+                                      height: 50,
+                                      fit: BoxFit.cover,
+                                      fadeInDuration:
+                                          const Duration(milliseconds: 500),
+                                    ),
                                   ),
                                   SizedBox(width: 10),
                                   Column(
@@ -137,7 +141,7 @@ class HeroSection5 extends StatelessWidget {
                               SizedBox(height: 15),
                               Text(
                                 job.description,
-                                maxLines: 3,
+                                maxLines: 2,
                                 overflow: TextOverflow.ellipsis,
                                 style: TextStyle(
                                   fontSize: Sizer.getFontSize(context) - 2,

@@ -8,6 +8,7 @@ import 'package:joblagbe/app/data/models/_course_model.dart';
 import 'package:joblagbe/app/data/services/_applicant_course_service.dart';
 import 'package:joblagbe/app/modules/applicant/controllers/_applicant_course_view_controller.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
+import 'package:flutter/cupertino.dart';
 
 class ApplicantCourseViewPage extends StatelessWidget {
   const ApplicantCourseViewPage({super.key, required this.course});
@@ -52,7 +53,7 @@ class ApplicantCourseViewPage extends StatelessWidget {
       ),
       body: Obx(() {
         if (controller.isLoading.value) {
-          return Center(child: CircularProgressIndicator());
+          return Center(child: CupertinoActivityIndicator());
         }
         return Row(
           children: [
@@ -159,7 +160,7 @@ class ApplicantCourseViewPage extends StatelessWidget {
                   Expanded(
                     child: Obx(() {
                       if (controller.isLoading.value) {
-                        return Center(child: CircularProgressIndicator());
+                        return Center(child: CupertinoActivityIndicator());
                       }
                       if (controller.lessons.isEmpty) {
                         return Center(
@@ -265,7 +266,7 @@ class ApplicantCourseViewPage extends StatelessWidget {
             Expanded(
               child: Obx(() {
                 if (controller.isLoading.value) {
-                  return Center(child: CircularProgressIndicator());
+                  return Center(child: CupertinoActivityIndicator());
                 }
                 if (controller.selectedLesson.value == null) {
                   return Center(
@@ -321,7 +322,7 @@ class ApplicantCourseViewPage extends StatelessWidget {
                               width: double.infinity,
                               color: Colors.black,
                               child: Center(
-                                child: CircularProgressIndicator(
+                                child: CupertinoActivityIndicator(
                                   color: Colors.white,
                                 ),
                               ),
@@ -486,7 +487,8 @@ class ApplicantCourseViewPage extends StatelessWidget {
                                             leadingIcon: Icon(Icons.check),
                                             onPressed: () async {
                                               await controller
-                                                  .markLessonAsCompleted(context);
+                                                  .markLessonAsCompleted(
+                                                      context);
                                             });
                                       }
                                     })
@@ -574,7 +576,7 @@ class ApplicantCourseViewPageWithId extends StatelessWidget {
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return Scaffold(
-            body: Center(child: CircularProgressIndicator()),
+            body: Center(child: CupertinoActivityIndicator()),
           );
         }
 

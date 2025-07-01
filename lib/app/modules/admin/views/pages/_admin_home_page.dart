@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:joblagbe/app/core/theming/colors/_colors.dart';
@@ -294,7 +295,7 @@ class AdminHomePage extends StatelessWidget {
                             child: Obx(() {
                               if (adminController.isLoading.value) {
                                 return const Center(
-                                  child: CircularProgressIndicator(),
+                                  child: CupertinoActivityIndicator(),
                                 );
                               }
 

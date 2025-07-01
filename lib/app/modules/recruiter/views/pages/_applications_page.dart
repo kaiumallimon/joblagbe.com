@@ -9,6 +9,7 @@ import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/data/models/_applicant_profile_model.dart';
 import 'dart:html' as html;
 import 'package:go_router/go_router.dart';
+import 'package:flutter/cupertino.dart';
 
 class ApplicationsPage extends StatelessWidget {
   const ApplicationsPage({super.key});
@@ -39,7 +40,7 @@ class ApplicationsPage extends StatelessWidget {
       appBar: dashboardAppbar('Applications Received'),
       body: Obx(() {
         if (applicationController.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
+          return const Center(child: CupertinoActivityIndicator());
         }
         if (applicationController.applications.isEmpty) {
           return const Center(child: Text('No applications received.'));
@@ -118,7 +119,7 @@ class ApplicationsPage extends StatelessWidget {
                               ),
                             ),
                             child: const Center(
-                                child: CircularProgressIndicator()),
+                                child: CupertinoActivityIndicator()),
                           );
                         }
                         if (snapshot.hasError) {

@@ -6,7 +6,7 @@ import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/modules/landing/controllers/_scroll_controller.dart';
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 import '../../../controllers/_category_controller.dart';
-
+import 'package:flutter/cupertino.dart';
 class CategoriesPage extends StatelessWidget {
   const CategoriesPage({super.key});
 
@@ -72,7 +72,7 @@ class CategoriesPage extends StatelessWidget {
                   if (categoryController.isCategoryLoading.value) {
                     return SliverFillRemaining(
                       child: Center(
-                        child: CircularProgressIndicator(),
+                        child: CupertinoActivityIndicator(),
                       ),
                     );
                   } else if (categoryController.categories.isEmpty) {
@@ -138,7 +138,7 @@ class CategoriesPage extends StatelessWidget {
                   if (categoryController.isJobsLoading.value) {
                     return SliverFillRemaining(
                       child: Center(
-                        child: CircularProgressIndicator(),
+                        child: CupertinoActivityIndicator(),
                       ),
                     );
                   } else if (categoryController
