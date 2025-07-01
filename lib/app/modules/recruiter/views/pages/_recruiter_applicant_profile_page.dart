@@ -5,6 +5,8 @@ import 'package:joblagbe/app/core/widgets/_custom_button.dart';
 import 'package:joblagbe/app/data/models/_applicant_profile_model.dart';
 import 'package:joblagbe/app/data/services/_recruiter_applications_service.dart';
 import 'dart:html' as html;
+import 'package:get/get.dart';
+import 'package:joblagbe/app/modules/recruiter/controllers/_recruiter_wrapper_controller.dart';
 
 import 'package:smooth_scroll_multiplatform/smooth_scroll_multiplatform.dart';
 
@@ -21,6 +23,8 @@ class RecruiterApplicantProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final service = RecruiterApplicationService();
+    // Sync sidebar with current URL
+    Get.put(RecruiterWrapperController()).syncMenuWithRoute(context);
     return Scaffold(
       backgroundColor: AppColors.white,
       appBar: dashboardAppbar('Applicant Profile'),

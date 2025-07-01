@@ -44,7 +44,12 @@ class RecruiterWrapperController extends GetxController {
     String currentRoute = GoRouter.of(context).state.path!;
 
     for (int i = 0; i < sideMenus.length; i++) {
-      if (currentRoute == sideMenus[i]["route"]) {
+      final menuRoute = sideMenus[i]["route"] as String;
+      if (currentRoute == menuRoute ||
+          (menuRoute == "/dashboard/recruiter/applications" &&
+              (currentRoute.startsWith("/dashboard/recruiter/applications") ||
+                  currentRoute
+                      .startsWith("/dashboard/recruiter/applicant-profile")))) {
         selectedMenuIndex.value = i;
         break;
       }
