@@ -1,129 +1,98 @@
 <!--image: logo-->
   ![App logo](./assets/logo/logo_org.svg)
-# 🚀 Joblagbe.com  
+# 🚀 Joblagbe.com
 
-A **skill-based job-finding platform** where applicants must pass an **MCQ exam** based on the job they want to apply for.  
-Each applicant gets a **maximum of 2 chances** to pass the MCQ round:  
-- **First attempt**: Available for all applicants.  
-- **Second attempt**: Available only if the applicant completes the suggested course for the test.  
+A **skill-based job-finding platform** where applicants must pass an **MCQ exam** based on the job they want to apply for. Each applicant gets a **maximum of 2 chances** to pass the MCQ round:
+- **First attempt**: Available for all applicants.
+- **Second attempt**: Available only if the applicant completes the suggested course for the test.
 
-The **courses** are managed by the **admins** of the **joblagbe.com** site.  
+The **courses** are managed by the **admins** of the **joblagbe.com** site.
 
-## 📊 Dashboards:  
-- **Applicant**  
-- **Recruiter**  
-- **Admin**  
+## 📊 Dashboards
+- **Applicant** (Coming Soon)
+- **Recruiter**
+- **Admin** (Coming Soon)
 
-## ✨ Features:  
+## ✨ Features
 
-### 🔹 Role-based Authentication  
+### 🔹 Role-based Authentication
+- Separate dashboards and access for Applicants, Recruiters, and Admins.
 
-### 🔹 Recruiter:  
-- View & Explore all available jobs (posted by themselves or others).  
-- View & Explore available courses.  
-- **Add & Manage Job Posts** (Recruiters must complete their profile before posting a job. If incomplete, they will receive a warning).  
-- View & Manage applications received for job posts.  
-- Manage their profile.  
+### 🔹 Recruiter
+- View & explore all available jobs (posted by themselves or others).
+- View & explore available courses.
+- **Add & manage job posts** (Recruiters must complete their profile before posting a job. If incomplete, they will receive a warning).
+- View & manage applications received for job posts.
+- Manage their profile.
 
-### 🔹 Applicant: (**Coming Soon**)  
+### 🔹 Applicant (Coming Soon)
+- MCQ-based job application process.
+- Course completion for second MCQ attempt.
+- Profile management.
 
-### 🔹 Admin: (**Coming Soon**)  
+### 🔹 Admin (Coming Soon)
+- Manage courses and job categories.
+- Oversee platform activity.
 
-## Project Structure
+## 🗂️ Project Structure
 ```
-joblagbe
-├──assets
-├──lib
-│   ├──app
-│   │   ├──core
-│   │   │   ├──constants
-│   │   │   ├──middleware
-│   │   │   ├──routes
-│   │   │   ├──theming
-│   │   │   │   ├──colors
-│   │   │   │   └──theme
-│   │   │   ├──utils
-│   │   │   └──widgets
-│   │   ├──modules
-│   │   │   ├──404
-│   │   │   │   └──views
-│   │   │   ├──auth
-│   │   │   │   ├──controllers
-│   │   │   │   ├──models
-│   │   │   │   ├──services
-│   │   │   │   ├──state
-│   │   │   │   └──views
-│   │   │   │   │   ├──login
-│   │   │   │   │   │   ├──parts
-│   │   │   │   │   └──register
-│   │   │   │   │   │   └──views
-│   │   │   │   │   │   │   └──pages
-│   │   │   │   │   │   │   │   ├──parts
-│   │   │   ├──dashboard
-│   │   │   │   ├──applicant
-│   │   │   │   │   ├──home
-│   │   │   │   │   │   └──pages
-│   │   │   │   │   ├──jobs
-│   │   │   │   │   │   └──pages
-│   │   │   │   │   └──wrapper
-│   │   │   │   │   │   ├──controller
-│   │   │   │   │   │   └──pages
-│   │   │   │   └──recruiter
-│   │   │   │   │   ├──add-job
-│   │   │   │   │   │   ├──controllers
-│   │   │   │   │   │   ├──models
-│   │   │   │   │   │   ├──pages
-│   │   │   │   │   │   │   ├──parts
-│   │   │   │   │   │   └──services
-│   │   │   │   │   ├──applications
-│   │   │   │   │   │   └──pages
-│   │   │   │   │   ├──home
-│   │   │   │   │   │   └──pages
-│   │   │   │   │   ├──jobs
-│   │   │   │   │   │   └──pages
-│   │   │   │   │   ├──profile
-│   │   │   │   │   │   ├──controllers
-│   │   │   │   │   │   ├──models
-│   │   │   │   │   │   ├──pages
-│   │   │   │   │   │   │   ├──parts
-│   │   │   │   │   │   └──services
-│   │   │   │   │   └──wrapper
-│   │   │   │   │   │   ├──controllers
-│   │   │   │   │   │   └──pages
-│   │   │   ├──forgot_password
-│   │   │   │   ├──controller
-│   │   │   │   ├──services
-│   │   │   │   └──views
-│   │   │   │   │   └──pages
-│   │   └──_app.dart
-│   ├──firebase_options.dart
-│   └──main.dart
-├──test
-│   └──widget_test.dart
-├──analysis_options.yaml
-├──cors.json
-├──pubspec.lock
-├──pubspec.yaml
-├──README.md
-├──.gitignore
-└──.metadata
+joblagbe.com/
+├── assets/
+│   ├── fonts/
+│   ├── images/
+│   ├── logo/
+│   ├── lottie/
+│   └── svgs/
+├── lib/
+│   ├── app/
+│   │   ├── core/
+│   │   │   ├── constants/
+│   │   │   ├── theming/
+│   │   │   │   ├── colors/
+│   │   │   │   └── theme/
+│   │   │   ├── utils/
+│   │   │   └── widgets/
+│   │   ├── data/
+│   │   │   ├── models/
+│   │   │   └── services/
+│   │   ├── modules/
+│   │   │   ├── 404/
+│   │   │   ├── admin/
+│   │   │   ├── applicant/
+│   │   │   ├── auth/
+│   │   │   ├── forgot_password/
+│   │   │   ├── landing/
+│   │   │   └── recruiter/
+│   │   └── routes/
+│   ├── firebase_options.dart
+│   └── main.dart
+├── test/
+├── web/
+├── pubspec.yaml
+├── pubspec.lock
+├── README.md
+├── analysis_options.yaml
+├── cors.json
+├── firebase.json
+├── fix-cors.md
+└── .gitignore
 ```
 
-## 🛠️ Technologies Used  
-| Component        | Technology |
-|-----------------|------------|
-| **Frontend**    | Flutter    |
-| **Backend**     | Firebase   |
-| **State Management** | GetX  |
-| **Routing**     | Go-Router  |
-| **Local Storage** | Get-Storage |
+## 🛠️ Technologies Used
+| Component           | Technology |
+|---------------------|------------|
+| **Frontend**        | Flutter    |
+| **Backend**         | Firebase   |
+| **State Management**| GetX       |
+| **Routing**         | Go-Router  |
+| **Local Storage**   | Get-Storage|
 
 ---
 
-## 🧑‍💻 Author  
-**Kaium Al Limon**  
+## 🧑‍💻 Author
+**Kaium Al Limon**
 
 ---
 
-## 📝 License  
+## 📝 License
 This project is licensed under the **MIT License**.  
